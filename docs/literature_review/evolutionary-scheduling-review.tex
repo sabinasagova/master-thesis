@@ -1,0 +1,74 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\setlist{nosep}
+\setlength{\emergencystretch}{3em} % prevents overfull boxes gracefully
+
+\title{Literature Review: Evolutionary Scheduling of Courses or Work Shifts}
+\author{Sabína Ságová\\ Charles University}
+\date{27 October 2025}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Write a short summary (150–200 words) describing the focus of your literature review — evolutionary approaches to scheduling (courses or work shifts), time frame (from 2021 onward), and main themes.
+\end{abstract}
+
+\section{Introduction}
+Introduce the general topic of scheduling problems (courses, shifts), motivation, why evolutionary algorithms are suitable, and what this review aims to achieve.
+
+\section{Older Trends in Scheduling Research}
+
+\subsection{Older Publications}
+Here are details of older key papers:
+\begin{enumerate}[leftmargin=2em, labelwidth=1em, labelsep=0.5em, itemsep=1ex]
+  \item Application of Evolutionary Algorithms in Project Management \\
+    \textbf{Authors/Year:} Christos Kyriklidis and Georgios Dounias (2014) \\  
+    \textbf{Problem Type:} Resource Leveling Problem\\
+    (Time-Constrained Project Scheduling) \\  
+    \textbf{Dataset / Instances:} Small and medium benchmark projects\\
+    from public project datasets (e.g., PSPLIB) \\  
+    \textbf{Evaluation Method / Metrics:} Objectives include maximum resource usage (Gf),\\
+    resource leveling index (RLI), and standard deviation (StD); 50 runs\\
+    with statistical evaluation of near-optimality \\  
+    \textbf{Algorithm Type:} Genetic Algorithm (GA) \\  
+    \textbf{Encoding / Individual Design:} Chromosome encodes start-times\\
+    of non-critical activities; critical ones fixed \\  
+    \textbf{Operators:} Two-point crossover (70\%), mutation (20\%), elitism (10\%);\\
+    local search around elite chromosomes to avoid premature convergence \\  
+    \textbf{Comparison Methods:} Exhaustive enumeration for small problems;\\
+    compared with heuristic, ACO, ANN, and PSO methods \\  
+    \textbf{Key Findings:} GA efficiently finds near-optimal resource profiles,\\
+    outperforming traditional methods and scaling well for large projects \\  
+    \textbf{Citation Count (to date):} 9 (Google Scholar, 2025) \\[2ex]
+\end{enumerate}
+
+\section{Recent Trends in Scheduling Research (2021 – Now)}
+Here are details of key papers from 2021:
+\begin{enumerate}[leftmargin=2em, labelwidth=1em, labelsep=0.5em, itemsep=1ex]
+  \item Paper 2 \\
+    \textbf{Authors/Year:} \\  
+    \textbf{Problem Type:} \\  
+    \textbf{Dataset / Instances:} \\  
+    \textbf{Evaluation Method / Metrics:} \\  
+    \textbf{Algorithm Type:} \\  
+    \textbf{Encoding / Individual Design:} \\  
+    \textbf{Operators:} \\  
+    \textbf{Comparison Methods:} \\  
+    \textbf{Key Findings:} \\  
+    \textbf{Citation Count (to date):} \\[2ex]
+\end{enumerate}
+
+% ... (rest of your sections stay unchanged)
+
+\section*{References}
+\bibliographystyle{plain}
+\bibliography{yourbibfile}
+
+\end{document}

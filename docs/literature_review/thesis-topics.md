@@ -1,0 +1,25 @@
+# Thesis Topics
+
+- Evolutionary Scheduling of Courses or Work Shifts
+- Multi-Objective Optimization of Task Allocation in Agile Teams Using Evolutionary Algorithms  
+- Adaptive Project Scheduling Using Multi-Objective Evolutionary Algorithms  
+- Evolutionary Algorithms for Adaptive Planning in Agile Environments  
+- Resource-Constrained Project Scheduling Using Evolutionary Algorithms  
+- Evolutionary Optimization of Workload Balancing in Multi-Team Agile Projects  
+- Automated Sprint Planning Using Genetic Algorithms  
+- Evolutionary Multi-Objective Optimization of Resource Allocation in Software Projects  
+- Comparative Analysis of Evolutionary Algorithms for Project Time-Cost Optimization  
+- GPU-Accelerated Evolutionary Algorithms for Resource-Constrained Project Scheduling (RCPSP)  
+- Surrogate-Assisted Evolutionary Scheduling for Complex Project Plans  
+- Co-Evolution of Project Plans and Adaptive Control Strategies  
+- Evolutionary Multi-Objective Optimization for Agile Sprint Planning  
+- Evolving Prompts for Large Language Models Using Evolutionary Algorithms  
+- Using Large Language Models to Generate and Evaluate Heuristics for Evolutionary Optimization  
+- Evolutionary Scheduling of Courses or Work Shifts  
+- Multi-Objective Optimization of ML Models  
+- Analysis of Population Diversity in Evolutionary Algorithms  
+- Evolutionary Feature Selection for Tabular Data  
+- Benchmarking Mutation Operators in Evolutionary Algorithms  
+- Empirical Comparison of Selection Mechanisms in Genetic Algorithms  
+- Adaptive Population Sizing in Genetic Algorithms  
+- Operator Benchmarking for Binary Mutation (Mixed Binomial)
