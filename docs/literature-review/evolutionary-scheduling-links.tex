@@ -1,0 +1,165 @@
+\documentclass[a4paper,12pt]{article}
+
+% =========================================================
+% --- Encoding, Fonts, Language ---
+% =========================================================
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{xurl}
+
+% --- Typography and layout ---
+\usepackage{microtype}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{parskip}
+\setlength{\parskip}{0.4em}
+\setlength{\parindent}{0pt}
+
+% --- Fonts ---
+\usepackage{lmodern}
+\linespread{1.05}
+
+% --- Lists, URLs, Links ---
+\usepackage{enumitem}
+\setlist{itemsep=0.2em, topsep=0.3em}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=blue,
+  citecolor=black,
+  pdfauthor={},
+  pdftitle={Master's Thesis Ideas}
+}
+
+% --- Section formatting (Martin Mares style) ---
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection.}{0.5em}{}
+\titleformat{\paragraph}[runin]{\bfseries}{\theparagraph}{1em}{}[.]
+
+% --- Document metadata ---
+\title{\vspace{-2em}\bfseries Evolutionary Scheduling Links}
+\author{}
+\date{}
+
+% =========================================================
+\begin{document}
+\maketitle
+\vspace{-1em}
+
+% =========================================================
+
+\paragraph{Literature (illustrative)}
+\begin{enumerate}
+  \item Application of Evolutionary Algorithms in Project Management \url{https://link.springer.com/chapter/10.1007/978-3-662-44654-6_33}
+  \item Genetic algorithm based probabilistic model for agile project success in global software development \url{https://www.sciencedirect.com/science/article/pii/S1568494623000169}
+  \item Multi-objective optimization in the agile software project scheduling using decomposition  \url{https://dl.acm.org/doi/10.1145/3377929.3398146}
+  \item Evolutionary Algorithm Performance Evaluation in Project Time-Cost Optimization \url{https://www.jsoftcivil.com/article_89544_5a5a9c9adb4a2807ea4b19bfadd0cad7.pdf}
+  \item Reinforcement learning-assisted evolutionary algorithm: A survey and research opportunities \url{https://arxiv.org/abs/2308.13420}
+  \item Evolutionary Algorithms for Parameter Optimization—Thirty Years Later \url{https://scholarlypublications.universiteitleiden.nl/handle/1887/3719875}
+  \item A multi-objective agile project planning model and a comparative meta-heuristic approach \url{https://www.sciencedirect.com/science/article/pii/S0950584922001458}
+  \item Multi-objective optimization for improved project management: Current status and future directions \url{https://www.sciencedirect.com/science/article/pii/S0926580522001297}
+  \item Software project management with GAs \url{https://www.sciencedirect.com/science/article/pii/S0020025507000175}
+  \item Software project rescheduling with genetic algorithms 25, 2009 \url{https://ieeexplore.ieee.org/abstract/document/5376259}
+  \item Dynamic Staffing and Rescheduling in Software Project Management: A Hybrid Approach \url{https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0157104}
+  \item A Hybrid Approach to Quantitative Software Project Scheduling within Agile Frameworks \url{https://journals.sagepub.com/doi/abs/10.1002/pmj.21411}
+  \item Software project planning for robustness and completion time in the presence of uncertainty using multi objective search based software engineering 106, 2009 \url{https://dl.acm.org/doi/abs/10.1145/1569901.1570125}
+  \item Adaptive policies for multi-mode project scheduling under uncertainty 40, 2012\url{https://www.sciencedirect.com/science/article/pii/S0377221711007296}
+  \item Modified multi-objective evolutionary programming algorithm for solving project scheduling problems \url{https://www.sciencedirect.com/science/article/pii/S0957417421007673}
+  \item Multi-objective Dynamic Software Project Scheduling: An Evolutionary Approach for Uncertain Environments 4, 2020 \url{https://etheses.bham.ac.uk/id/eprint/11839/7/Nigar2021PhD.pdf}
+  \item A competitive genetic algorithm for resource‐constrained project scheduling 905, 1998 \url{https://www.hsba.de/fileadmin/user_upload/bereiche/_dokumente/6-forschung/profs-publikationen/Hartmann_1998_A_competitive_genetic_algorithm_for_resource-constrained_project_scheduling.pdf}
+  \item Gradual Optimization of University Course Scheduling Problem Using Genetic Algorithm and Dynamic Programming \url{https://www.mdpi.com/1999-4893/18/3/158}
+  \item Meta-heuristic approaches for the university course timetabling problem \url{https://www.sciencedirect.com/science/article/pii/S2667305323000789}
+  \item Development of a new personalized staff-scheduling method with a work-life balance perspective: case of a hospital \url{https://pmc.ncbi.nlm.nih.gov/articles/PMC9972317/}
+  \item Class schedule generation using evolutionary algorithms \url{https://www.researchgate.net/publication/353748967_Class_Schedule_Generation_using_Evolutionary_Algorithms}
+  \item A hybrid genetic algorithm for nurse scheduling problem considering the fatigue factor \url{https://pmc.ncbi.nlm.nih.gov/articles/PMC8034424/}
+  \item An optimized case-based software project effort estimation using genetic algorithm \url{https://www.sciencedirect.com/science/article/pii/S0950584922001975}
+  \item Optimizing multi-mode time-cost-quality trade-off of construction project using opposition multiple objective difference evolution \url{https://www.tandfonline.com/doi/full/10.1080/15623599.2018.1526630#d1e1336}
+  \item Evolutionary algorithms applied to project scheduling problems—a survey of the state-of-the-art 65, 2007 \url{https://www.tandfonline.com/doi/full/10.1080/00207540600800326?needAccess=true#d1e276}
+  \item Evolutionary optimization of model specification searches between project management knowledge and construction engineering performance 21, 2013 \url{https://www.sciencedirect.com/science/article/pii/S0957417413000808}
+  \item Evolutionary Algorithms in Engineering Applications 914, 2013 \url{https://books.google.cz/books?hl=en&lr=&id=g4urCAAAQBAJ&oi=fnd&pg=PA3&dq=evolutionary+algorithms+project+management&ots=sULdhIfbGY&sig=03WggZN64Ye6-KMDyW3z6mYsFqU&redir_esc=y#v=onepage&q=evolutionary%20algorithms%20project%20management&f=false}
+  \item Optimizing time–cost trade-offs in product development projects with a multi-objective evolutionary algorithm 27, 2016 \url{https://link.springer.com/article/10.1007/s00163-016-0222-7}
+  \item Genetic algorithm-based multi-criteria project portfolio selection 167, 2012 \url{https://link.springer.com/article/10.1007/s10479-010-0819-6}
+  \item A modified shuffled frog-leaping optimization algorithm: applications to project management 300, 2007 \url{https://www.tandfonline.com/doi/abs/10.1080/15732470500254535}
+  \item Time/cost optimization using hybrid evolutionary algorithm in construction project scheduling 182, 2008 \url{https://www.sciencedirect.com/science/article/pii/S0926580508000666}
+  \item Improved evolutionary algorithm design for the project scheduling problem based on runtime analysis 70, 2013 \url{https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6648326}
+  \item A critical chain project scheduling method based on a differential evolution algorithm 73, 2013 \url{https://www.tandfonline.com/doi/full/10.1080/00207543.2013.865091}
+  \item Extraction of decision alternatives in construction management projects: Application and adaptation of NSGA-II and MOPSO 144, 2012 \url{https://www.sciencedirect.com/science/article/pii/S095741741101270X}
+  \item Project scheduling with limited resources using an efficient differential evolution algorithm 20, 2015\url{https://www.sciencedirect.com/science/article/pii/S1018363913000421}
+  \item Project scheduling: A multi-objective evolutionary algorithm that optimizes the effectiveness of human resources and the project makespan 44, 2013 \url{https://www.tandfonline.com/doi/full/10.1080/0305215X.2012.658782#d1e269}
+  \item Optimizing non-unit repetitive project resource and scheduling by evolutionary algorithms 25, 2020 \url{https://link.springer.com/article/10.1007/s12351-019-00544-7}
+  \item Hybridizing a multi-objective simulated annealing algorithm with a multi-objective evolutionary algorithm to solve a multi-objective project scheduling problem 84, 2013 \url{https://www.sciencedirect.com/science/article/pii/S0957417412011827}
+  \item Software project portfolio optimization with advanced multiobjective evolutionary algorithms 93, 2011 \url{https://www.sciencedirect.com/science/article/pii/S156849461000089X}
+  \item Optimizing trade-off between time, cost, and carbon emissions in construction using NSGA-III: an integrated approach for sustainable development \url{https://link.springer.com/article/10.1007/s42107-024-01176-9}
+  \item Development of time–cost trade-off optimization model for construction projects with MOPSO technique \url{https://link.springer.com/article/10.1007/s42107-024-01063-3}
+  \item Time-cost trade-off optimization model for retrofitting planning projects using MOGA \url{https://link.springer.com/article/10.1007/s42107-024-01014-y}
+  \item Quantum-Inspired Genetic Algorithm for Resource-Constrained Project-Scheduling 77, 2021\url{https://ieeexplore.ieee.org/abstract/document/9364969}
+  \item Genetic Algorithms and Their Applications 201, 2023 \url{https://link.springer.com/chapter/10.1007/978-1-4471-7503-2_33}
+  \item An efficient interval many-objective evolutionary algorithm for cloud task scheduling problem under uncertainty \url{https://www.sciencedirect.com/science/article/pii/S0020025521011476?casa_token=-s9yHYJBWM0AAAAA:wyCG8jeNXO6L-1gMJYtWQMAu_8gIJYzqSQAWXjOsgDSekHkH275Pk8odZmkxNThmq3a2rnHfRw}
+  \item A knowledge-guided bi-population evolutionary algorithm for energy-efficient scheduling of distributed flexible job shop problem \url{https://www.sciencedirect.com/science/article/pii/S0952197623016421?casa_token=rG-gMr3HW8oAAAAA:3Hl-QoHwWcftvAYs0iC89umF3NoalMF70PFJFDGU4Q0ip9OmBzqueMa6KlDZNRHCJP_B3sUCJw}
+  \item An effective collaboration evolutionary algorithm for multi-robot task allocation and scheduling in a smart farm \url{https://www.sciencedirect.com/science/article/pii/S0950705124001096?casa_token=t7kBnj4QMbEAAAAA:Xz9oGETO8FDXPc_8sOHwikIWE7O7WNgIpxl55S4whu9SCPoPEIizB3IyJ-xlz1zD9V6brwIyPg}
+  \item Generalized Model and Deep Reinforcement Learning-Based Evolutionary Method for Multitype Satellite Observation Scheduling 46, 2024\url{https://ieeexplore.ieee.org/abstract/document/10399872}
+  \item Self-adaptive multi-objective evolutionary algorithm for flexible job shop scheduling with fuzzy processing time \url{https://www.sciencedirect.com/science/article/pii/S0360835222001693?casa_token=QUe0cZ060jwAAAAA:X05zGN1HYfGHyGZ_GyXaArsgAMN1NaIMHpKKhRXId32CuM8pEO6vjUuc1ItJPHpsL4bU7Ws6ig}
+  \item Multi-objective evolutionary approach based on K-means clustering for home health care routing and scheduling problem \url{https://www.sciencedirect.com/science/article/pii/S095741742202053X?casa_token=htJapLbvrh0AAAAA:ow8Q2Hb-6QUK2kwJl90OTDR2ePCXjTY4_UxuKEyCF_VAQmkiyM-tyTAuUgUJmANqQmmLUkn5Lw}
+  \item A Q-learning-based hyper-heuristic evolutionary algorithm for the distributed flexible job-shop scheduling problem with crane transportation \url{https://www.sciencedirect.com/science/article/pii/S095741742301552X?casa_token=upOOjU_3NQEAAAAA:_Gl-MdLkIrhmxy1tzqrYLTaRRjotT9nvWkIddW38sqbq076FasVylsmjGpb1y1O6tskFf85kDw}
+  \item A multi-objective mathematical model and evolutionary algorithm for the dual-resource flexible job-shop scheduling problem with sequencing flexibility 130, 2022 \url{https://link.springer.com/article/10.1007/s10696-022-09446-x}
+  \item Solving Multiobjective Fuzzy Job-Shop Scheduling Problem by a Hybrid Adaptive Differential Evolution Algorithm 293, 2022 \url{https://ieeexplore.ieee.org/abstract/document/9751346}
+  \item \url{https://www.sciencedirect.com/science/article/pii/S0952197623016421?casa_token=-8MILRwvwyEAAAAA:uDLwMq-QWYOHR1zPPqAbpUJCRIQpc93_goaf1NS1o7qO4EyH8Ihru6pxb45d1LGQlfzkSnocHQs}
+  \item \url{https://www.learntechlib.org/p/218642/}
+  \item \url{https://www.sciencedirect.com/science/article/pii/S2210650223002390?casa_token=U35d_om9Qn0AAAAA:0rsCFXw0Yc-BbmyIu8u042MHZfDxvn5JHsMryM2KAFiJyt8_zYtv1JkrXyqnMF9QFGuX5l7bZQ}
+  \item \url{https://www.sciencedirect.com/science/article/pii/S0360835222001693?casa_token=qfk_MuPleE4AAAAA:wKiNb2a7yFIL6mJ0l05D7e6q3cAreqONkv6OoXlmWwRwLz6NrPRk6JFzVdHhFurVEPLCP6hR1A}
+  \item \url{https://www.sciencedirect.com/science/article/pii/S2210650222001092?casa_token=S6oc1uH4PF8AAAAA:MgVgPm5KWsnuIOADPi7h7xIiqa_nSn2MsUSqCqkTvGHCY4L0WsrDesR-tojcmUhemCbk-O6VpQ}
+  \item \url{https://www.sciencedirect.com/science/article/pii/S095741742301552X?casa_token=f_MRwOlF4D0AAAAA:fAp7ubBAANEAXXykfXZ2buHgpLlaIk6cl8By-wyVtq8___HtF04TRr8STmeC6o58QbJX1y0COg}
+  \item \url{https://www.sciencedirect.com/science/article/pii/S0736584523000108?casa_token=76lNNNLOjdkAAAAA:Nyvv0yxCTd27JVd7ybsRKfqncwBPDf0z66W6hWkqsMcLshbhyBajCFSNrtLEqPk4EgtpX8wo6A}
+  \item \url{https://www.sciencedirect.com/science/article/pii/S0952197624001325?casa_token=QvIhRO5DPlwAAAAA:OGTmB7_Q8j4TRGSwwpP2CnKauzS5dUrOxeeDK9NqziIlt-kuhq2AuUgmkmheEs0mHt_PnjPUCg}
+  \item \url{https://www.sciencedirect.com/science/article/pii/S1474034624002957?casa_token=DODOcNrtYsAAAAAA:YVL72kmYFo9y1Xu4NhYn04aKBdU_zjKwfNC1Ne5_9HMPqTLgEU35Dm4nNFyoYHDHFM5U7Pr_fg}
+  \item \url{https://www.sciencedirect.com/science/article/pii/S2210650222001092?casa_token=1bQfTn6g6fUAAAAA:KftxkdkVrqYDJVBPjxsqhEWiRn6Z0db6vXMVWLZbBAaQ6G_ESd-nK5NwopdcIZRXWgQak4njpQ}
+  \item \url{https://www.sciencedirect.com/science/article/pii/S0360835222001693?casa_token=TJWI1SSb5vcAAAAA:RhPFxcFQyIfZiDb5JK8PqFycHOPUj4nQj8u6AuoFwW4PBKSls_JY6-7HA_rxK5msCHcy0dltggs}
+  \item \url{https://www.sciencedirect.com/science/article/pii/S095741742301552X?casa_token=VkO8EXdMyf0AAAAA:a-X_zVXofbxIf3bxzcTd-3ierxZH0mZxCcJjd-ysQMKyz8qml6gsdvGOjqODLt2O_1SMdFfdAA}
+  \item \url{https://www.sciencedirect.com/science/article/pii/S0925527321003182}
+  \item \url{https://www.sciencedirect.com/science/article/pii/S0278612523001760?casa_token=c46TBKvCV0YAAAAA:B9xEAGDavGSW4tr8_KV8o7eWTBSvDhcxdViaLP0EwPyWFwC4wDiBrvrWVpVSKXp3JqbOwmHPWg}
+  \item \url{https://www.sciencedirect.com/science/article/pii/S0957417421017450?casa_token=rTIiU0sZv68AAAAA:UsEgmKHs4l9FvNSyuEsmfIYcsxUfeVhlFgbnmT-XV-aObQ7MXVLV_sKy2UBrxgUOdHuZLbUZ1A}
+  \item \url{https://www.sciencedirect.com/science/article/pii/S221065022300010X?casa_token=vzhfwBOte40AAAAA:EcLEveSHJR0QyuNROvETXtUtI01GXoLdRYMnzEWEDvAsbIRaKI7sxtXkGjyl-IRUK8gDh1ZUTQ}
+  \item \url{https://www.sciencedirect.com/science/article/pii/S1319157821002287}
+  \item \url{https://www.sciencedirect.com/science/article/pii/S0957417422023776?casa_token=UgwsPpLBSR0AAAAA:7tmBnZmg1hn0CHe8FbHSpRfxRUt2bp2VHzOgbFwLor2dT8cPBLRO3a643Rr0uxbQOp7X3EnNdg}
+  \item \url{https://link.springer.com/article/10.1007/s00521-021-06289-9}
+  \item \url{https://www.sciencedirect.com/science/article/pii/S0045790621003839?casa_token=X2PDb6ciyvcAAAAA:Xhxz8jbe_W0sWy3Hi_8Q8g4Dyz4g95X93w9ILW9ou3f-RdWZOJXJnB-nxxA2O6FKFcKMsEkl-A}
+  \item \url{https://www.sciencedirect.com/science/article/pii/S1568494621006955?casa_token=VItu27u4LiwAAAAA:IZi5c-IcD53vw_9Npdb3fu69POlc-EcGAHJwGxfgd32URSOgqAJ1CEwOUxMkeh0ZJILOUENysAs}
+  \item \url{https://link.springer.com/article/10.1007/s12065-023-00822-6s}
+  \item \url{https://onlinelibrary.wiley.com/doi/abs/10.1111/itor.12878?casa_token=DfDyyu5eeT0AAAAA%3AaHgBRIHErsceFnyCg4v20UI3JzNphI53bay7SzZzAJJQH7vDcvKCDru4MalkC0PRqAB1FT1Ejbd4H6Ys}
+  \item \url{https://openurl.ebsco.com/EPDB%3Agcd%3A13%3A21903325/detailv2?sid=ebsco%3Aplink%3Ascholar&id=ebsco%3Agcd%3A148678586&crl=c&link_origin=nones}
+  \item \url{https://link.springer.com/article/10.1007/s00366-021-01545-x}
+  \item \url{https://www.sciencedirect.com/science/article/pii/S0377221707000616?casa_token=RzCrqzFoEy4AAAAA:0gg152Mv9LiwTB5BCs5-UC0Gw04i4mM-tZijyjvsoX-0d_6iN9cgn8xinVSv_GPB1-dtkin6eg}
+  \item \url{https://onlinelibrary.wiley.com/doi/abs/10.1002/(SICI)1520-6750(199810)45:7%3C733::AID-NAV5%3E3.0.CO;2-C?casa_token=he1E_jh3hbwAAAAA:N2HNAlSmFqOrIY2SlZj1jKNWyKOLSXzbgWG2J7H4wV2rsbEFvM7aYKipv9L6y9g92pGN8mMcKHAO7nE}
+  \item \url{https://pubsonline.informs.org/doi/abs/10.1287/opre.1060.0358}
+  \item \url{https://www.sciencedirect.com/science/article/pii/S0377221707005929?casa_token=9o0ha-Z3lz8AAAAA:0ffuay3a9xw_1pZyQrv9r18kgXomTdMzq-OQTv1T90uTGq1Ez_hydylBRqDU5Jsrxo47DZyE_Q}
+  \item \url{https://www.sciencedirect.com/science/article/pii/S0305054807001359?casa_token=0RRBh1-ooG0AAAAA:mCbeqFlvoH19nXSZpwmAiNu76QAt4keNC1V0wtiIxZePe0yFA9k91Pt2aMWrVSn8EMKiizKmBQ}
+  \item \url{https://www.sciencedirect.com/science/article/pii/S0377221796001804}
+  \item \url{https://www.sciencedirect.com/science/article/pii/S0377221717306549?casa_token=wWbNuzotbR0AAAAA:R-LSHP-jzXtgo80KydpkLl5MmBl7kmNuwrGPpflwXpl9TFYvWL1w1wnBV4GbYVbZPZvm2KbCuA}
+  \item \url{https://www.sciencedirect.com/science/article/pii/S0377221713002130?casa_token=nx5HCqDCKiEAAAAA:a6SkHf_fpI9e-eCVwAAMVijTzhqLksxfMc-9i21Tbf59P04pgpjLiCZ2aD-mT2DdJvLV0yuNbw}
+  \item \url{https://www.tandfonline.com/doi/full/10.1057/palgrave.jors.2601563?casa_token=nBSjRNRtf88AAAAA%3Awgvgxec2T-qkKgCEKL8QDavINTiJ2BjKRUp4wWpyOUZe2Ez2ZlirA7rW7rUjc2T04fd4Z6iGC2Rts}
+  \item \url{https://www.sciencedirect.com/science/article/pii/S037722170900191X?casa_token=qNC4v1ZqvIoAAAAA:ldaDgr3ZDSPOciHpc-ud_2q_yElM6ZpAL9eC5oS3p_67jxRAC8J561-6_6GLAAnKEIDYA9QTtw}
+  \item \url{https://ascelibrary.org/doi/abs/10.1061/(ASCE)ME.1943-5479.0000323}
+  \item \url{https://www.sciencedirect.com/science/article/pii/S1568494602000650?casa_token=OSFL34OnZLsAAAAA:TK2nOzD3U8xrLcAPcDhwtaLFnZ_vk5gyFSgC4E31KnD2vMxwoH1SnR6_yW4y3PJNUE9cN2l0yQ}
+  \item \url{https://onlinelibrary.wiley.com/doi/abs/10.1002/nav.10029?casa_token=-3p7IQ32gFEAAAAA:ZQBoBR8LT2nraciUqhDa8j13nOeXjxm3dupjnwvKqcg4tIA4TgmhlWhzV3LgjdNXVTE3xrzBLa8F6j0}
+  \item \url{https://www.sciencedirect.com/science/article/pii/S0166361504000971?casa_token=NaKwFYT-0cQAAAAA:G57hwfGUTY9gzzwt6vB6F9PECsDQs48QNBaBjoYmaUZsx8fFcYdze2QlqUX2E03M2k0yb7S4kg}
+  \item \url{https://www.sciencedirect.com/science/article/pii/S0926580512002099?casa_token=8pgmhTdmNWIAAAAA:L8ZKr4Zv0U729nXENzvaJxQMrbpn0UGH9wkC4No-csyKbE-V9vOH61fz0u6frr679kj5cFSHTg}
+  \item \url{https://www.sciencedirect.com/science/article/pii/S0167739X1732441X?casa_token=iPFMQiomYY0AAAAA:pIQIZVYZPC57XVTfMNMsWB9q6tn2Au54unfutsf4X1ozJsszXpnfJf8m1S3c7HhIUl9BqHeBMQ}
+  \item \url{https://link.springer.com/article/10.1023/A:1010949931021}
+  \item \url{https://link.springer.com/article/10.1007/s10732-010-9142-2}
+  \item \url{https://ascelibrary.org/doi/abs/10.1061/(ASCE)0733-9364(2004)130:6(869)}
+  \item \url{https://www.tandfonline.com/doi/abs/10.1080/095119298130804?casa_token=7nx4gNlr2jsAAAAA:kcAYDC1V-elrLzXON1zvMkupJc3rGqx-vB0pHgIo_NUqADs84tPQaEiCIsn7nggVdwDmwTWD-7HE}
+  \item \url{https://dspace.mit.edu/bitstream/handle/1721.1/10259/37016532-MIT.pdf?sequence=2}
+\end{enumerate}
+
+% =========================================================
+\section*{Disclaimer}
+The numbers shown  after each reference represent the \textit{number of citations} and the \textit{year of publication}, respectively. These citation counts were obtained through a Google Scholar search using keywords such as \textit{project management}, \textit{project scheduling}, \textit{evolutionary scheduling}, \textit{evolutionary algorithms}, \textit{genetic algorithms},\textit{time-cost trade-off}, \textit{nurse scheduling}, and \textit{job shop problem}. The citation numbers are approximate and may vary over time as Google Scholar updates its database.
+\\
+References that include these citation and year indicators were identified during the initial search phase but were \textbf{not used in the subsequent detailed literature review}.
+% =========================================================
+
+
+\end{document}
