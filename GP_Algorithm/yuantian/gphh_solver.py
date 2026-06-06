@@ -42,11 +42,12 @@ print(f"Available Memory: {psutil.virtual_memory().available}")
 logger = logging.getLogger(__name__)
 
 
-def if_then_else(input1, output1, output2):
-    if input1:
-        return output1
-    else:
-        return output2
+def if_then_else_operator(cond, out1, out2):
+    def if_then_else():
+        # Treats values > 0 (like IS_ON_CRITICAL_PATH) as True
+        # If the activity is critical, evaluate it with Formula A to rush it. If it is not critical, evaluate it with Formula B to save resources.
+        return out1() if cond() > 0 else out2()
+    return if_then_else
 
 
 def protected_div(left, right):
@@ -188,12 +189,15 @@ class ParametersGPHH:
         FeatureEnum.EARLIEST_FINISH_DATE,
         FeatureEnum.LATEST_START_DATE,
         FeatureEnum.LATEST_FINISH_DATE,
+        FeatureEnum.SLACK,                
+        FeatureEnum.IS_ON_CRITICAL_PATH,
     ]
     dynamic_CPM_features = [
         FeatureEnum.DYNAMIC_EARLIEST_START_DATE,
         FeatureEnum.DYNAMIC_EARLIEST_FINISH_DATE,
         FeatureEnum.DYNAMIC_LATEST_START_DATE,
         FeatureEnum.DYNAMIC_LATEST_FINISH_DATE,
+        FeatureEnum.DYNAMIC_SLACK
     ]
 
     @staticmethod
@@ -348,6 +352,8 @@ class ParametersGPHH:
             pset[terminal_type].addPrimitive(protected_div_operator, 2, name="div")
             pset[terminal_type].addPrimitive(min_operator, 2, name="min")
             pset[terminal_type].addPrimitive(max_operator, 2, name="max")
+            pset[terminal_type].addPrimitive(if_then_else_operator, 3, name="if_else")
+            pset[terminal_type].addPrimitive(negative_operator, 1, name="neg")
 
         if decision_type == DecisionTypeEnum.SIMULTANEOUS:
             init_min_tree_depth = {TerminalTypeEnum.INTEGRATED.value: 2}
@@ -1111,7 +1117,7 @@ if __name__ == "__main__":
     test_set: list = read_instances(test_set_files)
     test_data_provider: list = StaticDatasetProvider(test_set)
 
-    CPU_CORES = 30 if MULTI_PROCESS else 1
+    CPU_CORES = 8 if MULTI_PROCESS else 1
 
     # set up parameters
 

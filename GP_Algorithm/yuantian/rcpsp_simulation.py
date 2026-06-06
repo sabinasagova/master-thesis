@@ -61,6 +61,10 @@ class FeatureEnum(Enum):
     AVG_RESOURCE_CAPACITY = "avg_ResCap"
     MAX_RESOURCE_CAPACITY = "max_ResCap"
     MIN_RESOURCE_CAPACITY = "min_ResCap"
+    SLACK = "Slack"  # Latest Start - Earliest Start
+    IS_ON_CRITICAL_PATH = "Is_On_Critical_Path" 
+    # Dynamic version that calculates if delaying it *now* based on current state prolongs makespan
+    DYNAMIC_SLACK = "Dynamic_Slack"
 
 
 class Simulator(object):
@@ -117,6 +121,10 @@ class Simulator(object):
             FeatureEnum.MAX_RESOURCE_REQUIREMENT_ACROSS_MODES: self.feature_max_resource_requirement_across_modes,
             FeatureEnum.MIN_RESOURCE_REQUIREMENT_ACROSS_MODES: self.feature_min_resource_requirement_across_modes,
             FeatureEnum.DYNAMIC_LATEST_START_AND_FINISH_TIME: self.heuristic_latest_start_and_finish_time,
+            
+            FeatureEnum.SLACK: self.feature_slack,
+            FeatureEnum.IS_ON_CRITICAL_PATH: self.feature_is_on_critical_path,
+            FeatureEnum.DYNAMIC_SLACK: self.feature_dynamic_slack,
         }
 
     @classmethod
@@ -450,6 +458,22 @@ class Simulator(object):
             self.rcpsp_problem.resources_list
         )
 
+    def feature_slack(self) -> Union[int, float]:
+        """Total slack based on static CPM: Latest Start - Earliest Start"""
+        return self.rcpsp_problem.cpm[self.cur_act]._LSD - self.rcpsp_problem.cpm[self.cur_act]._ESD
+
+    def feature_is_on_critical_path(self) -> Union[int, float]:
+        """Returns 1.0 if the activity is on the static critical path (slack == 0), else 0.0"""
+        slack = self.rcpsp_problem.cpm[self.cur_act]._LSD - self.rcpsp_problem.cpm[self.cur_act]._ESD
+        return 1.0 if slack == 0 else 0.0
+
+    def feature_dynamic_slack(self) -> Union[int, float]:
+        """
+        Total slack based on dynamic CPM (updating as the schedule is built):
+        Dynamic Latest Start - Dynamic Earliest Start
+        """
+        return self.dynamic_cpm[self.cur_act]._LSD - self.dynamic_cpm[self.cur_act]._ESD
+    
     @abstractmethod
     def heuristic_earliest_feasible_finish_time(self) -> Union[int, float]:
         """
