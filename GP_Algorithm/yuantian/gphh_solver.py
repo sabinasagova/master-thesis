@@ -33,6 +33,7 @@ from yuantian.rcpsp_dataset import (DatasetProvider, EvenlyDividedDatasetProvide
                                     StaticDatasetProvider)
 from yuantian.rcpsp_simulation import (DecisionTypeEnum, FeatureEnum, ParallelSimulator,
                                        SerialSimulator, Simulator, SimulatorTypeEnum)
+from yuantian.modifications import ACTIVE_MODIFICATIONS
 
 print(f"Current Working Directory: {os.getcwd()}")
 print(f"Total CPUs: {psutil.cpu_count()}")
@@ -42,12 +43,12 @@ print(f"Available Memory: {psutil.virtual_memory().available}")
 logger = logging.getLogger(__name__)
 
 
-def if_then_else_operator(cond, out1, out2):
-    def if_then_else():
-        # Treats values > 0 (like IS_ON_CRITICAL_PATH) as True
-        # If the activity is critical, evaluate it with Formula A to rush it. If it is not critical, evaluate it with Formula B to save resources.
-        return out1() if cond() > 0 else out2()
-    return if_then_else
+# ── Baseline operator (Yuan Tian, CEC 2024) ───────────────────────────────
+def if_then_else_operator(input1, output1, output2):
+    if input1:
+        return output1
+    else:
+        return output2
 
 
 def protected_div(left, right):
@@ -173,6 +174,7 @@ class ParametersGPHH:
         self.simulator = simulator
         self.decision_type = decision_type
         self.cpu_cores = cpu_cores
+        self.use_modifications = False  # set by default()/fast() after construction
 
     @staticmethod
     def init_simulator_pset(
@@ -317,6 +319,7 @@ class ParametersGPHH:
             fixed_activity_rule="",
             fixed_mode_rule="",
             cpu=1,
+            use_modifications: bool = False,
     ):
         simulator = ParametersGPHH.init_simulator_pset(simulator_type)
         set_feature = ParametersGPHH.init_feature_set(
@@ -352,7 +355,8 @@ class ParametersGPHH:
             pset[terminal_type].addPrimitive(protected_div_operator, 2, name="div")
             pset[terminal_type].addPrimitive(min_operator, 2, name="min")
             pset[terminal_type].addPrimitive(max_operator, 2, name="max")
-            pset[terminal_type].addPrimitive(if_then_else_operator, 3, name="if_else")
+            if_else_op = ACTIVE_MODIFICATIONS.get("if_else", if_then_else_operator) if use_modifications else if_then_else_operator
+            pset[terminal_type].addPrimitive(if_else_op, 3, name="if_else")
             pset[terminal_type].addPrimitive(negative_operator, 1, name="neg")
 
         if decision_type == DecisionTypeEnum.SIMULTANEOUS:
@@ -398,7 +402,7 @@ class ParametersGPHH:
                 mut_max_depth[TerminalTypeEnum.MODE.value] = 1
                 max_program_depth[TerminalTypeEnum.MODE.value] = 1
 
-        return ParametersGPHH(
+        params = ParametersGPHH(
             set_feature=set_feature,
             set_primitves=pset,
             n_tournament=7,
@@ -417,6 +421,71 @@ class ParametersGPHH:
             decision_type=decision_type,
             cpu_cores=cpu,
         )
+        params.use_modifications = use_modifications
+        return params
+
+    @staticmethod
+    def medium(
+            simulator_type: SimulatorTypeEnum = SimulatorTypeEnum.SERIAL_SGS,
+            decision_type: DecisionTypeEnum = DecisionTypeEnum.ACTIVITY_THEN_MODE,
+            dynamic_CPM_feature: bool = False,
+            cpus=1,
+            use_modifications: bool = False,
+    ):
+        """Intermediate config: pop=50, gen=10. Quick experiment runs with ETA logging."""
+        simulator = ParametersGPHH.init_simulator_pset(simulator_type)
+        set_feature = ParametersGPHH.init_feature_set(
+            decision_type, simulator_type, dynamic_CPM_feature
+        )
+        pset: Dict[TerminalTypeEnum, PrimitiveSet] = {}
+        for terminal_type in set_feature:
+            pset[terminal_type] = PrimitiveSet(decision_type, 0)
+            pset[terminal_type].addPrimitive(add_operator, 2, name="add")
+            pset[terminal_type].addPrimitive(sub_operator, 2, name="sub")
+            pset[terminal_type].addPrimitive(mul_operator, 2, name="mul")
+            pset[terminal_type].addPrimitive(protected_div_operator, 2, name="div")
+            pset[terminal_type].addPrimitive(min_operator, 2, name="min")
+            pset[terminal_type].addPrimitive(max_operator, 2, name="max")
+            if_else_op = ACTIVE_MODIFICATIONS.get("if_else", if_then_else_operator) if use_modifications else if_then_else_operator
+            pset[terminal_type].addPrimitive(if_else_op, 3, name="if_else")
+            for feature in set_feature[terminal_type]:
+                pset[terminal_type].addTerminal(
+                    simulator.feature_function_map[feature], feature.value
+                )
+        if decision_type == DecisionTypeEnum.SIMULTANEOUS:
+            init_min_tree_depth = {TerminalTypeEnum.INTEGRATED.value: 2}
+            init_max_tree_depth = {TerminalTypeEnum.INTEGRATED.value: 6}
+            mut_min_depth       = {TerminalTypeEnum.INTEGRATED.value: 4}
+            mut_max_depth       = {TerminalTypeEnum.INTEGRATED.value: 4}
+            max_program_depth   = {TerminalTypeEnum.INTEGRATED.value: 8}
+        else:
+            init_min_tree_depth = {TerminalTypeEnum.ACTIVITY.value: 2, TerminalTypeEnum.MODE.value: 2}
+            init_max_tree_depth = {TerminalTypeEnum.ACTIVITY.value: 6, TerminalTypeEnum.MODE.value: 6}
+            mut_min_depth       = {TerminalTypeEnum.ACTIVITY.value: 4, TerminalTypeEnum.MODE.value: 4}
+            mut_max_depth       = {TerminalTypeEnum.ACTIVITY.value: 4, TerminalTypeEnum.MODE.value: 4}
+            max_program_depth   = {TerminalTypeEnum.ACTIVITY.value: 8, TerminalTypeEnum.MODE.value: 8}
+
+        params = ParametersGPHH(
+            set_feature=set_feature,
+            set_primitves=pset,
+            n_tournament=5,
+            pop_size=50,
+            n_elite=5,
+            n_gen=10,
+            max_program_depth=max_program_depth,
+            init_min_tree_depth=init_min_tree_depth,
+            init_max_tree_depth=init_max_tree_depth,
+            crossover_rate=0.8,
+            mutation_rate=0.15,
+            mut_min_depth=mut_min_depth,
+            mut_max_depth=mut_max_depth,
+            deap_verbose=True,
+            simulator=simulator,
+            decision_type=decision_type,
+            cpu_cores=cpus,
+        )
+        params.use_modifications = use_modifications
+        return params
 
     @staticmethod
     def fast(
@@ -424,6 +493,7 @@ class ParametersGPHH:
             decision_type: DecisionTypeEnum = DecisionTypeEnum.ACTIVITY_THEN_MODE,
             dynamic_CPM_feature: bool = False,
             cpus=1,
+            use_modifications: bool = False,
     ):
         simulator = ParametersGPHH.init_simulator_pset(simulator_type)
         set_feature = ParametersGPHH.init_feature_set(
@@ -440,6 +510,8 @@ class ParametersGPHH:
             pset[terminal_type].addPrimitive(protected_div_operator, 2, name="div")
             pset[terminal_type].addPrimitive(min_operator, 2, name="min")
             pset[terminal_type].addPrimitive(max_operator, 2, name="max")
+            if_else_op = ACTIVE_MODIFICATIONS.get("if_else", if_then_else_operator) if use_modifications else if_then_else_operator
+            pset[terminal_type].addPrimitive(if_else_op, 3, name="if_else")
             # add terminal set
             for feature in set_feature[terminal_type]:
                 pset[terminal_type].addTerminal(
@@ -476,7 +548,7 @@ class ParametersGPHH:
                 TerminalTypeEnum.MODE.value: 8,
             }
 
-        return ParametersGPHH(
+        params = ParametersGPHH(
             set_feature=set_feature,
             set_primitves=pset,
             n_tournament=2,
@@ -495,6 +567,8 @@ class ParametersGPHH:
             decision_type=decision_type,
             cpu_cores=cpus,
         )
+        params.use_modifications = use_modifications
+        return params
 
     @staticmethod
     def get_complete_primitive_set(simulator: Simulator) -> PrimitiveSet:
@@ -1051,6 +1125,22 @@ if __name__ == "__main__":
         type="int",
         default=1,
     )
+    parse.add_option(
+        "--medium",
+        action="store_true",
+        dest="medium",
+        help="Use medium parameters (pop=50, gen=10). Faster than --default, "
+             "more reliable than the smoke-test default.",
+        default=False,
+    )
+    parse.add_option(
+        "--modifications",
+        action="store_true",
+        dest="use_modifications",
+        help="Enable modifications from modifications.py (proposed approach). "
+             "Without this flag the original baseline is used.",
+        default=False,
+    )
     (options, args) = parse.parse_args()
     print(options)
     SIMULATOR_TYPE = SimulatorTypeEnum(options.sgs)
@@ -1058,6 +1148,7 @@ if __name__ == "__main__":
     FIXED_ACTIVITY_RULE = options.fixed_activity_rule
     FIXED_MODE_RULE = options.fixed_mode_rule
     DEFAULT_PARAMETER = options.default
+    MEDIUM_PARAMETER = options.medium
     START_INDEX = options.start_index
     N_RUNS = options.n_runs
     DATASET = options.dataset
@@ -1066,6 +1157,7 @@ if __name__ == "__main__":
     MULTI_PROCESS = options.multi_process
     OUTPUT_DIR = options.output_dir
     SEED: int = options.seed
+    USE_MODIFICATIONS: bool = options.use_modifications
 
     match DATASET:
         case "MMLIB50":
@@ -1122,7 +1214,6 @@ if __name__ == "__main__":
     # set up parameters
 
     if DEFAULT_PARAMETER:
-        # standard GP setting
         params: ParametersGPHH = ParametersGPHH.default(
             decision_type=DECISION_TYPE,
             simulator_type=SIMULATOR_TYPE,
@@ -1130,14 +1221,23 @@ if __name__ == "__main__":
             dynamic_CPM_feature=DYNAMIC_TERMINAL,
             fixed_activity_rule=FIXED_ACTIVITY_RULE,
             fixed_mode_rule=FIXED_MODE_RULE,
+            use_modifications=USE_MODIFICATIONS,
+        )
+    elif MEDIUM_PARAMETER:
+        params: ParametersGPHH = ParametersGPHH.medium(
+            decision_type=DECISION_TYPE,
+            simulator_type=SIMULATOR_TYPE,
+            cpus=CPU_CORES,
+            dynamic_CPM_feature=DYNAMIC_TERMINAL,
+            use_modifications=USE_MODIFICATIONS,
         )
     else:
-        # quick setting
         params: ParametersGPHH = ParametersGPHH.fast(
             decision_type=DECISION_TYPE,
             simulator_type=SIMULATOR_TYPE,
             cpus=CPU_CORES,
             dynamic_CPM_feature=DYNAMIC_TERMINAL,
+            use_modifications=USE_MODIFICATIONS,
         )
 
     solver = GPHH(

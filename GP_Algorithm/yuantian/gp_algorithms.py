@@ -2,6 +2,7 @@
 
 from deap import tools, base, gp
 import random
+import time
 from typing import Union, Iterable
 import sys
 from yuantian.rcpsp_dataset import DatasetProvider
@@ -134,81 +135,80 @@ def standard_gp(
     logbook = tools.Logbook()
     logbook.header = ["gen", "nevals"] + (stats.fields if stats else [])
 
-    # Evaluate the individuals with an invalid fitness under training set
+    run_start = time.time()
+    gen_times = []
+
+    def _log(gen: int, best_fit: float, elapsed_gen: float):
+        gen_times.append(elapsed_gen)
+        avg_gen = sum(gen_times) / len(gen_times)
+        remaining = avg_gen * (ngen - gen)
+        elapsed_total = time.time() - run_start
+        print(
+            f"  gen {gen:>3}/{ngen}  best={best_fit:>8.4f}  "
+            f"gen_time={elapsed_gen:>5.1f}s  "
+            f"elapsed={elapsed_total:>6.0f}s  "
+            f"ETA={remaining:>6.0f}s",
+            flush=True,
+        )
+
+    # Gen 0: evaluate initial population
+    t0 = time.time()
     invalid_ind = [ind for ind in population if not ind.fitness.valid]
-    # update training data set each generation
     training_data = training_data_provider.next()
     evaluate = partial(toolbox.evaluate, domains=training_data)
     fitnesses = toolbox.map(evaluate, invalid_ind)
     for ind, fit in zip(invalid_ind, fitnesses):
         ind.fitness.values = fit
-    # Add current pop into pop_archive
     pop_archive.append([toolbox.clone(ind) for ind in population])
 
-    # Update hall of fame and do the validation test
     if halloffame is not None:
         halloffame.update(population)
     best_ind_record = {}
     best_ind_record["fitness"] = halloffame[0].fitness.values[0]
     best_ind_record["tree"] = str(halloffame[0])
 
-    # if validation set is specified, run the validation test
     if validation_data_provider:
-       validation_set = validation_data_provider.next()
-       validation_evaluate = partial(toolbox.evaluate, domains=validation_set)
-       best_ind_record["validation_fitness"] = validation_evaluate(halloffame[0])[0]
+        validation_set = validation_data_provider.next()
+        validation_evaluate = partial(toolbox.evaluate, domains=validation_set)
+        best_ind_record["validation_fitness"] = validation_evaluate(halloffame[0])[0]
 
     record = stats.compile(population) if stats else {}
-    # Add other records to logbook
     record["generation_best"] = best_ind_record
-    # Write record to logbook
     logbook.record(gen=0, nevals=len(invalid_ind), **record)
-    if verbose:
-        print(logbook.stream)
+    _log(0, best_ind_record["fitness"], time.time() - t0)
 
-    # Begin the generational process
+    # Generational loop
     for gen in range(1, ngen + 1):
-        # Select the next generation individuals
+        t0 = time.time()
+
         offspring = toolbox.select(population, len(population) - n_elite)
-        # Vary the pool of individuals
         offspring = varOr(offspring, toolbox, cxpb, mutpb)
         offspring += load_elites(population, n_elite)
 
-        # Evaluate the individuals with an invalid fitness
-        # invalid_ind = [ind for ind in offspring if not ind.fitness.valid]
-        # update training data set each generation
         training_data = training_data_provider.next()
         evaluate = partial(toolbox.evaluate, domains=training_data)
         fitnesses = toolbox.map(evaluate, offspring)
         for ind, fit in zip(offspring, fitnesses):
             ind.fitness.values = fit
 
-        # Update the hall of fame with the generated individuals
         if halloffame is not None:
             halloffame.update(offspring)
         best_ind_record = {}
         best_ind_record["fitness"] = halloffame[0].fitness.values[0]
         best_ind_record["tree"] = str(halloffame[0])
 
-        # if validation set is specified, run the validation test
         if validation_data_provider:
-           validation_set = validation_data_provider.next()
-           validation_evaluate = partial(toolbox.evaluate, domains=validation_set)
-           best_ind_record["validation_fitness"] = validation_evaluate(halloffame[0])[0]
+            validation_set = validation_data_provider.next()
+            validation_evaluate = partial(toolbox.evaluate, domains=validation_set)
+            best_ind_record["validation_fitness"] = validation_evaluate(halloffame[0])[0]
 
-        # Replace the current population by the offspring
         population[:] = offspring
-        # Add current pop into pop_archive
         pop_archive.append([toolbox.clone(ind) for ind in population])
 
-        # Append the current generation statistics to the logbook
         record = stats.compile(population) if stats else {}
-        # Add other records to logbook
         record["generation_best"] = best_ind_record
-
         logbook.record(gen=gen, nevals=len(invalid_ind), **record)
-        if verbose:
-            print(logbook.stream)
+        _log(gen, best_ind_record["fitness"], time.time() - t0)
 
     return population, logbook
 
