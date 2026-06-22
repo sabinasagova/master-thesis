@@ -10,3 +10,8 @@ scipy
 matplotlib
 seaborn
 psutil
+numba
+shapely
+deprecation
+minizinc
+mip
