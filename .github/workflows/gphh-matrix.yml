@@ -1,4 +1,4 @@
-name: GPHH matrix experiment
+name: Workflow run 1 — PSPLIB J20
 
 # Manually triggered. Fans out one job per (dataset, config, seed) combination
 # so each GPHH/DMGE run gets its own runner instead of sharing local cores.
