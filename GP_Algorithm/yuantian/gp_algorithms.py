@@ -55,6 +55,56 @@ def pick_node(
             return random.choice(terminals)
 
 
+CP_TERMINAL_NAMES = {"Is_On_Critical_Path", "Slack", "Dynamic_Slack"}
+
+
+def _cp_protected_indices(individual: gp.PrimitiveTree) -> set:
+    """Return the set of indices whose subtree contains at least one critical-path terminal.
+
+    Any node whose subtree includes IS_ON_CRITICAL_PATH, Slack, or Dynamic_Slack is
+    considered 'protected' — mutating it would risk destroying a useful CP-aware
+    subexpression that evolution has already discovered.
+    """
+    protected = set()
+    for i in range(len(individual)):
+        sl = individual.searchSubtree(i)
+        for node in individual[sl]:
+            if isinstance(node, gp.Terminal) and node.name in CP_TERMINAL_NAMES:
+                protected.add(i)
+                break
+    return protected
+
+
+def mutCriticalPathPreserving(
+    individual: gp.PrimitiveTree,
+    expr,
+    pset,
+    nonterminal_prob: float = 0.5,
+    terminal_prob: float = 0.5,
+    root_prob: float = 0,
+):
+    """Subtree mutation that avoids replacing any subtree that already contains a
+    critical-path terminal (IS_ON_CRITICAL_PATH, Slack, Dynamic_Slack).
+
+    This preserves CP-aware subexpressions that evolution has discovered, while
+    still allowing the rest of the tree to be modified freely.  If the entire tree
+    is CP-related (e.g. if_then_else(IS_ON_CRITICAL_PATH, ...) at the root), falls
+    back to ordinary biased mutation so the operator never gets stuck.
+    """
+    protected = _cp_protected_indices(individual)
+    candidates = [i for i in range(len(individual)) if i not in protected]
+
+    if not candidates:
+        # whole tree is CP-related — fall back to regular biased mutation
+        return mutBiased(individual, expr, pset, nonterminal_prob, terminal_prob, root_prob)
+
+    index = random.choice(candidates)
+    slice_ = individual.searchSubtree(index)
+    type_ = individual[index].ret
+    individual[slice_] = expr(pset=pset, type_=type_)
+    return (individual,)
+
+
 def mutBiased(
     individual,
     expr,

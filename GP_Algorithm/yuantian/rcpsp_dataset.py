@@ -20,7 +20,10 @@ class RCPSPDatabase:
     It supports MMLIB50, MMLIB100, and MMLIB+ datasets
     """
     DATA_FOLDER = r"discrete_optimization_data/mm/"
-    PSPLIB_DIR = DATA_FOLDER + r"/PSPLIB/"
+    # PSPLIB lives directly under discrete_optimization_data/, NOT under mm/
+    # (unlike MMLIB) -- PSPLIB_DIR previously pointed at a nonexistent path
+    # and every get_psplib_*_files() call silently returned [].
+    PSPLIB_DIR = r"discrete_optimization_data/PSPLIB/"
     MMLIB_DIR = DATA_FOLDER + r"/MMLIB/"
     MMLIB_50_DIR = MMLIB_DIR + r"/MMLIB50/"
     MMLIB_100_DIR = MMLIB_DIR + r"/MMLIB100/"
@@ -305,6 +308,61 @@ class RCPSPDatabase:
             for class_id in range(first, last + 1)
             for case_id in range(start, end, step)
         ]
+
+    # ── PSPLIB loaders ────────────────────────────────────────────────────
+    # PSPLIB naming: {prefix}{class_id}_{instance_id}.mm
+    # j20: MRCPSP 20-activity 3-mode, up to 64 classes × 10 instances = 554 files
+    # j30: RCPSP  30-activity,         64 classes × 10 instances = 640 files
+    # m5:  MRCPSP 5-mode,              64 classes × up to 10 instances = 558 files
+    PSPLIB_J20_DIR = PSPLIB_DIR + "j20/"
+    PSPLIB_J30_DIR = PSPLIB_DIR + "j30/"
+    PSPLIB_M5_DIR  = PSPLIB_DIR + "m5/"
+
+    @classmethod
+    def get_psplib_j20_files(cls, start: int = 1, end: int = 5, step: int = 1) -> list[str]:
+        """MRCPSP 20-activity 3-mode benchmark (j20). Up to 64 classes × 10 instances.
+
+        Args:
+            start: instance index within each class, inclusive (1–10).
+            end:   instance index, exclusive.
+        """
+        files = []
+        for c in range(1, 65):
+            for i in range(start, end, step):
+                fp = os.path.join(cls.PSPLIB_J20_DIR, f"j20{c}_{i}.mm")
+                if os.path.exists(fp):
+                    files.append(fp)
+        return files
+
+    @classmethod
+    def get_psplib_j30_files(cls, start: int = 1, end: int = 5, step: int = 1) -> list[str]:
+        """RCPSP 30-activity benchmark (j30). 64 classes, 10 instances each.
+
+        Args:
+            start: instance index within each class, inclusive (1–10).
+            end:   instance index, exclusive.
+        """
+        return [
+            os.path.join(cls.PSPLIB_J30_DIR, f"j30{c}_{i}.mm")
+            for c in range(1, 65)
+            for i in range(start, end, step)
+        ]
+
+    @classmethod
+    def get_psplib_m5_files(cls, start: int = 1, end: int = 5, step: int = 1) -> list[str]:
+        """MRCPSP 5-mode benchmark (m5). 64 classes, up to 10 instances each.
+
+        Args:
+            start: instance index within each class, inclusive (1–10).
+            end:   instance index, exclusive.
+        """
+        files = []
+        for c in range(1, 65):
+            for i in range(start, end, step):
+                fp = os.path.join(cls.PSPLIB_M5_DIR, f"m5{c}_{i}.mm")
+                if os.path.exists(fp):
+                    files.append(fp)
+        return files
 
     @classmethod
     def get_some_MMLIB_each_class_instances(

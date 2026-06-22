@@ -1,0 +1,118 @@
+name: GPHH matrix experiment
+
+# Manually triggered. Fans out one job per (dataset, config, seed) combination
+# so each GPHH/DMGE run gets its own runner instead of sharing local cores.
+# Each job uploads a one-row CSV; the merge job concatenates them into the
+# usual raw.csv/summary.csv shape used by the local experiment scripts.
+
+on:
+  workflow_dispatch:
+    inputs:
+      datasets:
+        description: "Comma-separated dataset keys (PSPLIB_J20, MMLIBPLUS_NR_50, MMLIBPLUS_NR_100)"
+        default: "PSPLIB_J20"
+        required: true
+      configs:
+        description: "Comma-separated config labels (baseline_gphh, custom_ea, custom_ea_opportunity)"
+        default: "baseline_gphh,custom_ea,custom_ea_opportunity"
+        required: true
+      n_seeds:
+        description: "Number of seeds per (dataset, config)"
+        default: "10"
+        required: true
+      base_seed:
+        description: "First seed value; subsequent seeds are base_seed + 100*i"
+        default: "42"
+        required: true
+      pop:
+        description: "Population size (1000 matches Tian et al. 2024)"
+        default: "1000"
+        required: true
+      gen:
+        description: "Number of generations (50 matches Tian et al. 2024)"
+        default: "50"
+        required: true
+      train:
+        description: "Training-set size"
+        default: "16"
+        required: true
+      val:
+        description: "Validation-set size"
+        default: "8"
+        required: true
+      test:
+        description: "Test-set size"
+        default: "16"
+        required: true
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.build.outputs.matrix }}
+    steps:
+      - id: build
+        run: |
+          python3 - <<'EOF' >> "$GITHUB_OUTPUT"
+          import json, os
+          datasets = "${{ inputs.datasets }}".split(",")
+          configs = "${{ inputs.configs }}".split(",")
+          n_seeds = int("${{ inputs.n_seeds }}")
+          base_seed = int("${{ inputs.base_seed }}")
+          seeds = [base_seed + 100 * i for i in range(n_seeds)]
+          combos = [
+              {"dataset": d.strip(), "config": c.strip(), "seed": s}
+              for d in datasets for c in configs for s in seeds
+          ]
+          print("matrix=" + json.dumps({"include": combos}))
+          EOF
+
+  run:
+    needs: plan
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix: ${{ fromJson(needs.plan.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        working-directory: GP_Algorithm
+        run: pip install -r requirements.txt
+      - name: Run one (dataset, config, seed) combination
+        working-directory: GP_Algorithm
+        run: |
+          python -m yuantian.ci_single_run \
+            --dataset "${{ matrix.dataset }}" \
+            --config "${{ matrix.config }}" \
+            --seed "${{ matrix.seed }}" \
+            --pop "${{ inputs.pop }}" --gen "${{ inputs.gen }}" \
+            --train "${{ inputs.train }}" --val "${{ inputs.val }}" --test "${{ inputs.test }}" \
+            --out "result.csv"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: result-${{ matrix.dataset }}-${{ matrix.config }}-${{ matrix.seed }}
+          path: GP_Algorithm/result.csv
+
+  merge:
+    needs: run
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: result-*
+          path: artifacts
+      - name: Merge into raw.csv / summary.csv
+        working-directory: GP_Algorithm
+        run: python -m yuantian.ci_merge_results --in-dir ../artifacts --out results/ci_matrix
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ci-matrix-summary
+          path: GP_Algorithm/results/ci_matrix

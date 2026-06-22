@@ -31,14 +31,12 @@ from yuantian.gp_algorithms import mutBiased, standard_gp
 from yuantian.multitreegp import TerminalTypeEnum
 from yuantian.rcpsp_dataset import (DatasetProvider, EvenlyDividedDatasetProvider, RCPSPDatabase,
                                     StaticDatasetProvider)
-from yuantian.rcpsp_simulation import (DecisionTypeEnum, FeatureEnum, ParallelSimulator,
-                                       SerialSimulator, Simulator, SimulatorTypeEnum)
-from yuantian.modifications import ACTIVE_MODIFICATIONS
-
-print(f"Current Working Directory: {os.getcwd()}")
-print(f"Total CPUs: {psutil.cpu_count()}")
-print(f"Total Memory: {psutil.virtual_memory().total}")
-print(f"Available Memory: {psutil.virtual_memory().available}")
+from yuantian.rcpsp_simulation import (BackwardSerialSimulator, DecisionTypeEnum,
+                                       FeatureEnum, ParallelSimulator, SerialSimulator,
+                                       Simulator, SimulatorTypeEnum)
+from yuantian.modifications import (ACTIVE_MODIFICATIONS, MUTATION_MODIFICATIONS,
+                                    NR_TERMINALS, SCHEDULING_STATE_TERMINALS,
+                                    OPPORTUNITY_TERMINALS)
 
 logger = logging.getLogger(__name__)
 
@@ -174,7 +172,11 @@ class ParametersGPHH:
         self.simulator = simulator
         self.decision_type = decision_type
         self.cpu_cores = cpu_cores
-        self.use_modifications = False  # set by default()/fast() after construction
+        self.use_modifications = False
+        self.use_nr_terminals = False
+        self.use_scheduling_state_terminals = False
+        self.use_cp_mutation = False
+        self.use_opportunity_terminals = False
 
     @staticmethod
     def init_simulator_pset(
@@ -184,6 +186,10 @@ class ParametersGPHH:
             simulator = SerialSimulator()
         elif simulator_type == SimulatorTypeEnum.PARALLEL_SGS:
             simulator = ParallelSimulator()
+        elif simulator_type == SimulatorTypeEnum.BACKWARD_SERIAL_SGS:
+            simulator = BackwardSerialSimulator()
+        else:
+            simulator = SerialSimulator()
         return simulator
 
     static_CPM_features = [
@@ -320,6 +326,10 @@ class ParametersGPHH:
             fixed_mode_rule="",
             cpu=1,
             use_modifications: bool = False,
+            use_nr_terminals: bool = False,
+            use_scheduling_state_terminals: bool = False,
+            use_cp_mutation: bool = False,
+            use_opportunity_terminals: bool = False,
     ):
         simulator = ParametersGPHH.init_simulator_pset(simulator_type)
         set_feature = ParametersGPHH.init_feature_set(
@@ -344,6 +354,24 @@ class ParametersGPHH:
                 pset[terminal_type].addTerminal(
                     simulator.feature_function_map[feature], feature.value
                 )
+            # inject NR-awareness terminals (Modification 2)
+            if use_nr_terminals:
+                for feature in NR_TERMINALS.get(terminal_type, []):
+                    pset[terminal_type].addTerminal(
+                        simulator.feature_function_map[feature], feature.value
+                    )
+            # inject scheduling-state terminals (Modification 3)
+            if use_scheduling_state_terminals:
+                for feature in SCHEDULING_STATE_TERMINALS.get(terminal_type, []):
+                    pset[terminal_type].addTerminal(
+                        simulator.feature_function_map[feature], feature.value
+                    )
+            # inject dynamic urgency / mode-regret terminals (Modification 7, exploratory)
+            if use_opportunity_terminals:
+                for feature in OPPORTUNITY_TERMINALS.get(terminal_type, []):
+                    pset[terminal_type].addTerminal(
+                        simulator.feature_function_map[feature], feature.value
+                    )
             # add function set
             pset[terminal_type].addPrimitive(add_operator, 2, name="add")
             if fixed_activity_rule and terminal_type == TerminalTypeEnum.ACTIVITY.value:
@@ -422,6 +450,10 @@ class ParametersGPHH:
             cpu_cores=cpu,
         )
         params.use_modifications = use_modifications
+        params.use_nr_terminals = use_nr_terminals
+        params.use_scheduling_state_terminals = use_scheduling_state_terminals
+        params.use_cp_mutation = use_cp_mutation
+        params.use_opportunity_terminals = use_opportunity_terminals
         return params
 
     @staticmethod
@@ -431,6 +463,10 @@ class ParametersGPHH:
             dynamic_CPM_feature: bool = False,
             cpus=1,
             use_modifications: bool = False,
+            use_nr_terminals: bool = False,
+            use_scheduling_state_terminals: bool = False,
+            use_cp_mutation: bool = False,
+            use_opportunity_terminals: bool = False,
     ):
         """Intermediate config: pop=50, gen=10. Quick experiment runs with ETA logging."""
         simulator = ParametersGPHH.init_simulator_pset(simulator_type)
@@ -452,6 +488,21 @@ class ParametersGPHH:
                 pset[terminal_type].addTerminal(
                     simulator.feature_function_map[feature], feature.value
                 )
+            if use_nr_terminals:
+                for feature in NR_TERMINALS.get(terminal_type, []):
+                    pset[terminal_type].addTerminal(
+                        simulator.feature_function_map[feature], feature.value
+                    )
+            if use_scheduling_state_terminals:
+                for feature in SCHEDULING_STATE_TERMINALS.get(terminal_type, []):
+                    pset[terminal_type].addTerminal(
+                        simulator.feature_function_map[feature], feature.value
+                    )
+            if use_opportunity_terminals:
+                for feature in OPPORTUNITY_TERMINALS.get(terminal_type, []):
+                    pset[terminal_type].addTerminal(
+                        simulator.feature_function_map[feature], feature.value
+                    )
         if decision_type == DecisionTypeEnum.SIMULTANEOUS:
             init_min_tree_depth = {TerminalTypeEnum.INTEGRATED.value: 2}
             init_max_tree_depth = {TerminalTypeEnum.INTEGRATED.value: 6}
@@ -485,6 +536,10 @@ class ParametersGPHH:
             cpu_cores=cpus,
         )
         params.use_modifications = use_modifications
+        params.use_nr_terminals = use_nr_terminals
+        params.use_scheduling_state_terminals = use_scheduling_state_terminals
+        params.use_opportunity_terminals = use_opportunity_terminals
+        params.use_cp_mutation = use_cp_mutation
         return params
 
     @staticmethod
@@ -494,6 +549,9 @@ class ParametersGPHH:
             dynamic_CPM_feature: bool = False,
             cpus=1,
             use_modifications: bool = False,
+            use_nr_terminals: bool = False,
+            use_scheduling_state_terminals: bool = False,
+            use_cp_mutation: bool = False,
     ):
         simulator = ParametersGPHH.init_simulator_pset(simulator_type)
         set_feature = ParametersGPHH.init_feature_set(
@@ -517,6 +575,16 @@ class ParametersGPHH:
                 pset[terminal_type].addTerminal(
                     simulator.feature_function_map[feature], feature.value
                 )
+            if use_nr_terminals:
+                for feature in NR_TERMINALS.get(terminal_type, []):
+                    pset[terminal_type].addTerminal(
+                        simulator.feature_function_map[feature], feature.value
+                    )
+            if use_scheduling_state_terminals:
+                for feature in SCHEDULING_STATE_TERMINALS.get(terminal_type, []):
+                    pset[terminal_type].addTerminal(
+                        simulator.feature_function_map[feature], feature.value
+                    )
         if decision_type == DecisionTypeEnum.SIMULTANEOUS:
             init_min_tree_depth = {TerminalTypeEnum.INTEGRATED.value: 2}
             init_max_tree_depth = {TerminalTypeEnum.INTEGRATED.value: 6}
@@ -568,6 +636,9 @@ class ParametersGPHH:
             cpu_cores=cpus,
         )
         params.use_modifications = use_modifications
+        params.use_nr_terminals = use_nr_terminals
+        params.use_scheduling_state_terminals = use_scheduling_state_terminals
+        params.use_cp_mutation = use_cp_mutation
         return params
 
     @staticmethod
@@ -675,9 +746,11 @@ class GPHH(SolverGenericRCPSP):
                 min_=mut_min_depth[TerminalTypeEnum.INTEGRATED.value],
                 max_=mut_max_depth[TerminalTypeEnum.INTEGRATED.value],
             )
+            _mut_fn = (MUTATION_MODIFICATIONS.get("mutate", mutBiased)
+                       if self.params_gphh.use_cp_mutation else mutBiased)
             self.toolbox.register(
                 "mutate",
-                mutBiased,
+                _mut_fn,
                 expr=self.toolbox.expr_mut,
                 pset=self.pset[TerminalTypeEnum.INTEGRATED.value],
                 nonterminal_prob=0.9,
@@ -752,13 +825,15 @@ class GPHH(SolverGenericRCPSP):
                     max_=mut_max_depth[TerminalTypeEnum.MODE.value],
                 ),
             }
+            _mut_fn = (MUTATION_MODIFICATIONS.get("mutate", mutBiased)
+                       if self.params_gphh.use_cp_mutation else mutBiased)
             self.toolbox.register(
                 "mutate",
                 multitreegp.multi_tree_mutate,
                 expr=expr_mut,
                 pset=self.pset,
                 mutate_func=partial(
-                    mutBiased,
+                    _mut_fn,
                     nonterminal_prob=0.9,
                     terminal_prob=0.1,
                     root_prob=0,
@@ -1018,6 +1093,27 @@ def read_instances(filepaths: list[str]) -> list[RCPSPModel]:
     instances: List[RCPSPModel] = [
         to_renewable_only_rcpsp_model(parse_file(f)) for f in filepaths
     ]
+    for problem in instances:
+        problem.cpm, problem.cpm_esd = compute_cpm(problem)
+        problem.graph.full_predecessors = problem.graph.ancestors_map()
+        problem.graph.full_successors = problem.graph.descendants_map()
+    return instances
+
+
+def read_instances_with_nr(filepaths: list[str]) -> list[RCPSPModel]:
+    """Load MRCPSP instances preserving nonrenewable resources.
+
+    Unlike read_instances(), this does NOT call to_renewable_only_rcpsp_model,
+    so NR resources (N1, N2, …) remain in the model.  The Serial/Parallel SGS
+    already handles NR feasibility tracking in resource_avail_in_time; the NR
+    terminals NR_STOCK_RATIO and NR_MODE_DEMAND_RATIO then have real signal to
+    work with.
+
+    Use with MMLIB+ files (Jall*.mm), which carry both renewable and
+    nonrenewable resources.  Standard MMLIB50/100 files have no NR resources
+    and behave identically to read_instances().
+    """
+    instances: List[RCPSPModel] = [parse_file(f) for f in filepaths]
     for problem in instances:
         problem.cpm, problem.cpm_esd = compute_cpm(problem)
         problem.graph.full_predecessors = problem.graph.ancestors_map()
