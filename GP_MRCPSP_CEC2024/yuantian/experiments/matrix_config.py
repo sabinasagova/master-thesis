@@ -102,6 +102,20 @@ PRESETS = {
         datasets=["MMLIB50"], n_seeds=1, seed_base=99000,
         pop_size=20, n_gen=3, n_classes=3,
     ),
+    # Focused subset: all 5 conditions x all 3 strategies x both SGS x
+    # MMLIB50/MMLIB100 only (no MMLIB+ -- those are the cells that need the
+    # 168h+ oven queue in paper_full, see CELL_EXCLUSIONS/SEED_OVERRIDES
+    # above). 5*3*2*2*10 = 600 cells. Pairs with generate_pbs_jobs.py's
+    # THESIS_CORE_WALLTIME_HOURS (fixed per-dataset walltime, not the
+    # dynamic cost-tiering paper_full uses) and --multiprocess --cpu_cores 8
+    # baked into its PBS template for this preset specifically -- see that
+    # module's docstring for why multiprocess is required here, not just a
+    # speedup.
+    "thesis_core": dict(
+        conditions=CONDITIONS, strategies=STRATEGIES, sgs_types=SGS_TYPES,
+        datasets=["MMLIB50", "MMLIB100"], n_seeds=10, seed_base=12000,
+        pop_size=PAPER_POP_SIZE, n_gen=PAPER_N_GEN, n_classes=PAPER_N_CLASSES,
+    ),
 }
 
 

@@ -22,7 +22,7 @@ from typing import Optional
 import numpy as np
 from deap import tools
 
-from yuantian.gp_algorithms import load_elites, varOr
+from yuantian.gp_algorithms import evaluate_population, load_elites, varOr
 from yuantian.local_search import RefinementStrategyEnum, apply_local_search_to_elite
 from yuantian.rcpsp_dataset import DatasetProvider
 
@@ -153,9 +153,7 @@ def lexicase_memetic_gp(
     invalid_ind = [ind for ind in population if not ind.fitness.valid]
     training_data = training_data_provider.next()
     evaluate = partial(toolbox.evaluate, domains=training_data)
-    fitnesses = toolbox.map(evaluate, invalid_ind)
-    for ind, fit in zip(invalid_ind, fitnesses):
-        ind.fitness.values = fit
+    evaluate_population(toolbox, evaluate, invalid_ind)
 
     elites = _local_search_elites(
         population,
@@ -197,9 +195,7 @@ def lexicase_memetic_gp(
 
         training_data = training_data_provider.next()
         evaluate = partial(toolbox.evaluate, domains=training_data)
-        fitnesses = toolbox.map(evaluate, offspring)
-        for ind, fit in zip(offspring, fitnesses):
-            ind.fitness.values = fit
+        evaluate_population(toolbox, evaluate, offspring)
 
         elites = _local_search_elites(
             offspring,

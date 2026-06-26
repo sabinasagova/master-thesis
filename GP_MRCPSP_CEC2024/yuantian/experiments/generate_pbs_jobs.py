@@ -90,6 +90,22 @@ from yuantian.experiments.matrix_config import (
 DEFAULT_QUEUE_TIERS = [2, 6, 24]
 OVEN_QUEUE_TIERS = [48, 168, 720]  # 2 days, 1 week, the 720h max
 
+# thesis_core preset only (see matrix_config.PRESETS["thesis_core"]): fixed,
+# generous per-dataset walltimes instead of the dynamic cost-tiering above.
+# A single-core baseline/AF/serial/MMLIB50 cell already exceeded a 2h
+# walltime and was killed by PBS on a busy MetaCentrum node -- 4x the
+# Table VII number measured in practice. --multiprocess --cpu_cores 8 (see
+# THESIS_CORE_PBS_TEMPLATE) cuts that back down to ~30min, but walltime
+# margin here is free (PBS only charges actual runtime), so these stay well
+# above the measured cost rather than retesting how tight is too tight.
+# MMLIB100 MF/S serial are the slowest cells in this subset (no MMLIB+ here
+# at all -- those stay in paper_full only), hence the wider margin there.
+THESIS_CORE_WALLTIME_HOURS = {
+    "MMLIB50": 4,
+    "MMLIB100": 12,
+}
+THESIS_CORE_CPU_CORES = 8
+
 # Placeholders -- fill in once per MetaCentrum account, not per script. No
 # DATA_HOME here on purpose: that env var is only read by
 # rcpsp_dataset.py's get_instance_list_from_txt, which this pipeline never
@@ -113,6 +129,28 @@ def bucket_for(safe_hours: float):
         if safe_hours <= tier:
             return "oven", tier
     return "oven", OVEN_QUEUE_TIERS[-1]
+
+
+def build_thesis_core_manifest(preset: dict):
+    """Same row shape as build_manifest, but queue/walltime come from
+    THESIS_CORE_WALLTIME_HOURS (fixed per dataset) instead of
+    estimate_cell_seconds -- see that constant's comment for why a fixed,
+    generous walltime replaces the dynamic cost-tiering here."""
+    rows = []
+    for condition, strategy, sgs, dataset in matrix_cells(preset):
+        walltime_h = THESIS_CORE_WALLTIME_HOURS[dataset]
+        estimate_s = estimate_cell_seconds(
+            condition, dataset, sgs, strategy, preset["pop_size"], preset["n_gen"]
+        )
+        for i in range(n_seeds_for(preset, sgs, dataset, strategy)):
+            seed = preset["seed_base"] + i
+            rows.append(dict(
+                condition=condition, strategy=strategy, sgs=sgs, dataset=dataset,
+                seed=seed, pop=preset["pop_size"], gen=preset["n_gen"],
+                n_classes=preset["n_classes"], queue="default", walltime_h=walltime_h,
+                estimate_h=estimate_s / 3600,
+            ))
+    return rows
 
 
 def build_manifest(preset: dict):
@@ -181,6 +219,61 @@ cp "$SCRATCHDIR/results/"*.json "$PERSISTENT_OUT/" 2>/dev/null || true
 """
 
 
+# thesis_core only: 8 cores (ncpus=8/mem=8gb/scratch_local=8gb) and
+# --multiprocess --cpu_cores 8 baked in -- multiprocess is REQUIRED here,
+# not just a speedup, to keep cells reliably under walltime (see
+# THESIS_CORE_WALLTIME_HOURS's comment). Also loads python/3.11 explicitly
+# BEFORE activating the venv: the default `module add python` on
+# MetaCentrum loads 3.9, which fails with SyntaxError on this repo's 3.10+
+# `match` statements (gphh_solver.py's __main__ block).
+THESIS_CORE_PBS_TEMPLATE = """#!/bin/bash
+#PBS -N thesis_core_{walltime_h}h
+#PBS -l walltime={walltime_h}:00:00
+#PBS -l select=1:ncpus={cpu_cores}:mem=8gb:scratch_local=8gb
+#PBS -q default
+#PBS -j oe
+
+# --- fill these in once per MetaCentrum account, not per script ---
+PROJECT_DIR="{project_dir}"
+VENV_PATH="{venv_path}"
+PERSISTENT_OUT="{persistent_out}"
+MANIFEST="$PROJECT_DIR/yuantian/experiments/pbs_jobs/{manifest_name}"
+# --------------------------------------------------------------------
+
+set -e
+trap 'clean_scratch' TERM EXIT
+
+LINE=$(sed -n "${{PBS_ARRAY_INDEX}}p" "$MANIFEST")
+IFS=',' read -r CONDITION STRATEGY SGS DATASET SEED POP GEN NCLASSES <<< "$LINE"
+RESULT_NAME="${{DATASET}}__${{SGS}}__${{STRATEGY}}__${{CONDITION}}__seed${{SEED}}.json"
+
+# idempotent: bail before touching scratch at all if the persistent result
+# already exists -- a resubmitted/relaunched array element shouldn't redo
+# finished cells, and shouldn't even pay for the scratch copy to find that out.
+if [ -f "$PERSISTENT_OUT/$RESULT_NAME" ]; then
+    echo "SKIP (already exists): $PERSISTENT_OUT/$RESULT_NAME"
+    exit 0
+fi
+
+module add python/3.11.11-gcc-10.2.1-555dlyc
+
+cp -r "$PROJECT_DIR" "$SCRATCHDIR/repo"
+cd "$SCRATCHDIR/repo"
+source "$VENV_PATH/bin/activate"
+export PYTHONPATH="$SCRATCHDIR/repo:$SCRATCHDIR/repo/yuantian:$PYTHONPATH"
+mkdir -p "$SCRATCHDIR/results"
+
+python3 -O -m yuantian.experiments.matrix_runner \\
+    --condition "$CONDITION" --strategy "$STRATEGY" --sgs "$SGS" --dataset "$DATASET" \\
+    --pop "$POP" --gen "$GEN" --seed "$SEED" --n_classes "$NCLASSES" \\
+    --multiprocess --cpu_cores {cpu_cores} \\
+    --out "$SCRATCHDIR/results"
+
+mkdir -p "$PERSISTENT_OUT"
+cp "$SCRATCHDIR/results/"*.json "$PERSISTENT_OUT/" 2>/dev/null || true
+"""
+
+
 def write_tier_files(queue: str, walltime_h: int, rows: list, out_dir: Path):
     manifest_name = f"matrix_{queue}_{walltime_h}h.manifest.csv"
     pbs_name = f"matrix_{queue}_{walltime_h}h.pbs"
@@ -201,6 +294,27 @@ def write_tier_files(queue: str, walltime_h: int, rows: list, out_dir: Path):
     return pbs_name, manifest_name, len(rows)
 
 
+def write_thesis_core_tier_files(dataset: str, walltime_h: int, rows: list, out_dir: Path):
+    manifest_name = f"thesis_core_{dataset}_{walltime_h}h.manifest.csv"
+    pbs_name = f"thesis_core_{dataset}_{walltime_h}h.pbs"
+
+    with open(out_dir / manifest_name, "w", newline="") as f:
+        w = csv.writer(f)
+        for r in rows:
+            w.writerow([r["condition"], r["strategy"], r["sgs"], r["dataset"],
+                        r["seed"], r["pop"], r["gen"], r["n_classes"]])
+
+    script = THESIS_CORE_PBS_TEMPLATE.format(
+        walltime_h=walltime_h, manifest_name=manifest_name,
+        cpu_cores=THESIS_CORE_CPU_CORES,
+        project_dir=PROJECT_DIR_PLACEHOLDER, venv_path=VENV_PLACEHOLDER,
+        persistent_out=PERSISTENT_OUT_PLACEHOLDER,
+    )
+    with open(out_dir / pbs_name, "w") as f:
+        f.write(script)
+    return pbs_name, manifest_name, len(rows)
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--preset", required=True, choices=list(PRESETS))
@@ -210,6 +324,42 @@ def main():
     preset = PRESETS[args.preset]
     out_dir = Path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
+
+    if args.preset == "thesis_core":
+        # Clear only this preset's previously generated files -- scoped to
+        # its own naming prefix so a re-generate doesn't touch paper_full's
+        # matrix_*.pbs files sitting in the same out_dir.
+        for stale in out_dir.glob("thesis_core_*.pbs"):
+            stale.unlink()
+        for stale in out_dir.glob("thesis_core_*.manifest.csv"):
+            stale.unlink()
+
+        rows = build_thesis_core_manifest(preset)
+        by_tier = {}
+        for r in rows:
+            by_tier.setdefault((r["dataset"], r["walltime_h"]), []).append(r)
+
+        print(f"Preset 'thesis_core': {len(rows)} total cell x seed runs, "
+              f"{len(by_tier)} dataset tiers, ncpus={THESIS_CORE_CPU_CORES} (--multiprocess) per cell.\n")
+        total_core_hours = 0.0
+        for (dataset, walltime_h), tier_rows in sorted(by_tier.items()):
+            pbs_name, manifest_name, n = write_thesis_core_tier_files(dataset, walltime_h, tier_rows, out_dir)
+            # ncpus=8 now, so core-hours = 8 x wallclock-hours actually requested
+            # (the walltime ceiling, not the Table-VII-based estimate, since that
+            # estimate is single-core and not what's being requested here).
+            tier_core_hours = n * walltime_h * THESIS_CORE_CPU_CORES
+            total_core_hours += tier_core_hours
+            print(
+                f"  dataset={dataset:<10} walltime={walltime_h:>3}h  n_elements={n:<5} "
+                f"core_hours_at_ceiling={tier_core_hours:>9.1f}  -> {pbs_name} / {manifest_name}"
+            )
+        print(f"\nTOTAL core-hours at the walltime ceiling (worst case, not expected): "
+              f"{total_core_hours:.1f} (~{total_core_hours / 24:.1f} core-days)")
+        print(
+            "\nFill in PROJECT_DIR / VENV_PATH / PERSISTENT_OUT at the top of "
+            "each .pbs script before submitting (qsub -J 1-N script.pbs, N = n_elements above)."
+        )
+        return
 
     # Clear previously generated tier files first -- otherwise a tier that
     # no longer has any cells (e.g. after a CELL_EXCLUSIONS change) leaves

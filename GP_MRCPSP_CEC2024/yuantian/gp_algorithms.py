@@ -103,6 +103,47 @@ def varOr(population, toolbox, cxpb: float, mutpb: float):
     return offspring
 
 
+def evaluate_and_capture_case_data(individual, evaluate):
+    """Run `evaluate(individual=individual)` and return (fitness,
+    case_fitness, case_records, case_feasible) together.
+
+    gphh_solver.evaluate_heuristic sets case_fitness/case_records/
+    case_feasible as side-effect attributes on `individual`, not as part of
+    its return value. That's invisible to the caller once toolbox.map
+    routes through a multiprocessing.Pool: each worker mutates its own
+    unpickled copy of `individual`, and pool.map only sends the function's
+    *return value* back, not the mutated argument -- so `ind.case_fitness`
+    on the original population member is simply never set.
+    epsilon_lexicase_selection (hybrid_gp.py) reads `case_fitness` straight
+    off population members and crashes with AttributeError if it's missing,
+    so this wrapper exists to round-trip that data through the one channel
+    that does survive pool.map: the return value. Module-level (not a
+    lambda/nested def) so it stays picklable under multiprocessing.
+    """
+    fitness = evaluate(individual=individual)
+    return (
+        fitness,
+        getattr(individual, "case_fitness", None),
+        getattr(individual, "case_records", None),
+        getattr(individual, "case_feasible", None),
+    )
+
+
+def evaluate_population(toolbox, evaluate, individuals) -> None:
+    """Evaluate `individuals` via `toolbox.map` and set fitness.values AND
+    case_fitness/case_records/case_feasible on each, surviving
+    multiprocessing (see evaluate_and_capture_case_data) -- shared by
+    standard_gp and hybrid_gp.lexicase_memetic_gp so both feed
+    epsilon_lexicase_selection valid per-case data regardless of
+    --multiprocess."""
+    results = toolbox.map(partial(evaluate_and_capture_case_data, evaluate=evaluate), individuals)
+    for ind, (fit, case_fitness, case_records, case_feasible) in zip(individuals, results):
+        ind.fitness.values = fit
+        ind.case_fitness = case_fitness
+        ind.case_records = case_records
+        ind.case_feasible = case_feasible
+
+
 def load_elites(population, n_elites: int) -> list:
     """
     Return the top n_elites individuals from the population.
@@ -139,9 +180,7 @@ def standard_gp(
     # update training data set each generation
     training_data = training_data_provider.next()
     evaluate = partial(toolbox.evaluate, domains=training_data)
-    fitnesses = toolbox.map(evaluate, invalid_ind)
-    for ind, fit in zip(invalid_ind, fitnesses):
-        ind.fitness.values = fit
+    evaluate_population(toolbox, evaluate, invalid_ind)
     # Add current pop into pop_archive
     pop_archive.append([toolbox.clone(ind) for ind in population])
 
@@ -179,9 +218,7 @@ def standard_gp(
         # update training data set each generation
         training_data = training_data_provider.next()
         evaluate = partial(toolbox.evaluate, domains=training_data)
-        fitnesses = toolbox.map(evaluate, offspring)
-        for ind, fit in zip(offspring, fitnesses):
-            ind.fitness.values = fit
+        evaluate_population(toolbox, evaluate, offspring)
 
         # Update the hall of fame with the generated individuals
         if halloffame is not None:

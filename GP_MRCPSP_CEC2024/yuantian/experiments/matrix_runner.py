@@ -244,11 +244,40 @@ def run_cell(args, training, validation, test, output_path: Path) -> dict:
     # generation (since validation_data_provider is always set above), so
     # by the time the loop returns, case_records reflects validation, not
     # training -- same bug, and same fix, as gphh_solver.GPHH.solve().
+    #
+    # This recompute is also deliberately repair-free (plain toolbox.evaluate,
+    # no CP local search), to stay on the same footing as test evaluation
+    # (evaluate_and_package_test_data never applies repair either) and as
+    # baseline/nr/lexicase (which have no repair step to begin with) -- so
+    # train_case_records means the same thing across all 5 conditions: how
+    # the EVOLVED TREE performs on its own, not tree-plus-runtime-repair.
+    #
+    # For use_local_search, this means train_recheck will NOT equal
+    # best_heuristic.fitness.values[0]: _local_search_elites overwrites the
+    # elite fraction's fitness with the CP-repaired value every generation
+    # (without changing the tree), and that refined fitness is what
+    # halloffame ends up tracking (RefreshHallOfFame rebuilds from the
+    # current, already-refined population each generation) -- so the
+    # recorded fitness legitimately includes a repair benefit a repair-free
+    # recompute cannot reproduce. A strict equality assert here would fire
+    # on every single local_search/hybrid run, unconditionally; the
+    # one-sided check below instead confirms repair only ever helped
+    # (lower deviation == better), catching real data-mismatch bugs (e.g. a
+    # stateful provider returning a different batch) without flagging this
+    # expected, by-design gap.
     train_recheck = solver.toolbox.evaluate(individual=solver.best_heuristic, domains=training)[0]
-    assert abs(train_recheck - solver.best_heuristic.fitness.values[0]) < 1e-6, (
-        f"re-evaluating best_heuristic on training gave {train_recheck}, expected to "
-        f"match the recorded training fitness {solver.best_heuristic.fitness.values[0]}"
-    )
+    if use_local_search:
+        assert train_recheck >= solver.best_heuristic.fitness.values[0] - 1e-6, (
+            f"repair-free re-evaluation on training gave {train_recheck}, which is BETTER "
+            f"than the recorded (repaired) training fitness {solver.best_heuristic.fitness.values[0]} "
+            f"-- repair should only ever improve or match, never worsen, so this points at a real "
+            f"data mismatch, not the expected repair gap"
+        )
+    else:
+        assert abs(train_recheck - solver.best_heuristic.fitness.values[0]) < 1e-6, (
+            f"re-evaluating best_heuristic on training gave {train_recheck}, expected to "
+            f"match the recorded training fitness {solver.best_heuristic.fitness.values[0]}"
+        )
     train_case_records = solver.best_heuristic.case_records
 
     test_data = evaluate_and_package_test_data(
