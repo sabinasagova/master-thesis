@@ -62,8 +62,8 @@ Terminals (added to `FeatureEnum`, registered via `ParametersGPHH` when
     terminal. A forward-looking feasibility-risk proxy: min, across NR
     resource types, of (remaining stock - sum of every not-yet-scheduled
     activity's minimum-demand mode for that resource), normalized by
-    initial stock. This is the simple-sum proxy the spec sanctions in place
-    of a tight bound: a tight bound on NR feasibility risk would need to
+    initial stock. I went with this simple-sum proxy instead of a tight
+    bound: a tight bound on NR feasibility risk would need to
     consider which mode combination is jointly optimal across all
     remaining activities, which is itself an optimization problem. Summing
     each remaining task's own best case independently is an

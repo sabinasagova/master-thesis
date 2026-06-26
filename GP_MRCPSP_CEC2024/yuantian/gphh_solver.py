@@ -908,65 +908,43 @@ class GPHH(SolverGenericRCPSP):
         print(f"Running time: {elapsed}")
         self.best_heuristic = hof[0]
         logger.debug(f"best_heuristic: {self.best_heuristic}")
-        # Whatever evaluation last ran on hof[0] -- i.e. its training
-        # evaluation, since that's the last time anything called evaluate()
-        # on this individual before now. None under --multiprocess: that
-        # attribute gets set inside a worker process, and toolbox.map only
-        # ever sends the fitness values back, not the mutated individual.
-        train_case_records = getattr(self.best_heuristic, "case_records", None)
         output_path = kwargs.get("output_path", "result.json")
 
-        # always present regardless of whether validation/test providers are
-        # configured -- experiment scripts that only set a training provider
-        # and do their own test evaluation separately still get this for free.
-        test_data: dict = {"train_case_records": train_case_records}
-        if all([self.validation_data_provider, self.test_data_provider]):
-            # Put current best_heuristic into test set
-            test_set = self.test_data_provider.next()
-            if test_set:
-                total_dev_percent = self.toolbox.evaluate(
-                    individual=self.best_heuristic, domains=test_set
-                )
-                test_data["best_heuristic"] = {
-                    "tree": str(self.best_heuristic),
-                    "fitness": self.best_heuristic.fitness.values[0],
-                    "test_fitness": total_dev_percent[0],
-                    # per-instance {instance, fitness (None if infeasible),
-                    # feasible} records -- see evaluate_heuristic. Filter on
-                    # "feasible" before averaging "fitness" from these.
-                    # (train_case_records for this same individual is at the
-                    # top level of the result dict, not duplicated here.)
-                    "test_case_records": self.best_heuristic.case_records,
-                }
-                # Apply validation test to choose the best individual
-                min_deviation = 100000
-                best_validated_individual = None
-                validation_case_records = None
-                validation_set = self.validation_data_provider.next()
-                if validation_set:
-                    validation_evaluate = partial(
-                        self.toolbox.evaluate, domains=validation_set
-                    )
-                    validation_fitnesses = self.toolbox.map(validation_evaluate, pop)
-                    for ind, total_dev_percent in zip(pop, validation_fitnesses):
-                        if total_dev_percent[0] < min_deviation:
-                            min_deviation = total_dev_percent[0]
-                            best_validated_individual = ind
-                            # same multiprocess caveat as train_case_records above
-                            validation_case_records = getattr(ind, "case_records", None)
-                    # Put this ind test set
-                    test_set = self.test_data_provider.next()
-                    total_dev_percent = self.toolbox.evaluate(
-                        individual=best_validated_individual, domains=test_set
-                    )
-                    test_data["best_heuristic_validation"] = {
-                        "tree": str(best_validated_individual),
-                        "fitness": best_validated_individual.fitness.values[0],
-                        "validation_fitness": min_deviation,
-                        "validation_case_records": validation_case_records,
-                        "test_fitness": total_dev_percent[0],
-                        "test_case_records": best_validated_individual.case_records,
-                    }
+        # Deliberately re-evaluate against training data ourselves instead
+        # of trusting whatever case_records is already sitting on
+        # best_heuristic -- that's None under --multiprocess (set inside a
+        # worker, never sent back), AND, a real bug this caught: if
+        # validation_data_provider is set, gp_algorithms.standard_gp
+        # directly re-evaluates halloffame[0] against the VALIDATION set at
+        # the end of every generation, so by the time the loop returns,
+        # case_records reflects validation, not training, regardless of
+        # multiprocess. This re-evaluation doesn't touch .fitness.values
+        # (evaluate_heuristic returns it, doesn't set it), so it can't
+        # disturb the value the training loop already recorded; the assert
+        # is a sanity check that training_data_provider.next() actually
+        # gave back the same data the loop trained on (true for
+        # StaticDatasetProvider, NOT guaranteed for the stateful
+        # EvenlyDividedDatasetProvider --split mode, where this would
+        # legitimately fire and is worth knowing about).
+        training_data = self.training_data_provider.next()
+        train_recheck = self.toolbox.evaluate(individual=self.best_heuristic, domains=training_data)[0]
+        assert abs(train_recheck - self.best_heuristic.fitness.values[0]) < 1e-6, (
+            f"re-evaluating best_heuristic on training_data_provider.next() gave "
+            f"{train_recheck}, expected to match the recorded training fitness "
+            f"{self.best_heuristic.fitness.values[0]} -- training_data_provider is "
+            f"probably stateful (e.g. EvenlyDividedDatasetProvider/--split) and "
+            f"returned a different batch than the one actually trained on."
+        )
+        train_case_records = self.best_heuristic.case_records
+
+        test_data = evaluate_and_package_test_data(
+            toolbox=self.toolbox,
+            best_heuristic=self.best_heuristic,
+            pop=pop,
+            validation_data_provider=self.validation_data_provider,
+            test_data_provider=self.test_data_provider,
+            train_case_records=train_case_records,
+        )
 
         self.write_result(
             log, filepath=output_path, pop_archive=pop_archive, elapsed=elapsed, others=test_data
@@ -1046,6 +1024,91 @@ class GPHH(SolverGenericRCPSP):
         for i in range(len(self.list_feature)):
             pset.renameArguments(**{"ARG" + str(i): self.list_feature[i].value})
         return pset
+
+
+def evaluate_and_package_test_data(
+        toolbox: Toolbox,
+        best_heuristic,
+        pop: list,
+        validation_data_provider,
+        test_data_provider,
+        train_case_records=None,
+) -> dict:
+    """Extracted from GPHH.solve()'s tail so other training loops (e.g.
+    matrix_runner.py's lexicase/local_search/hybrid conditions, which can't
+    go through solve() since it hardcodes standard_gp) can produce the same
+    result-JSON shape without duplicating this logic.
+
+    train_case_records is passed in, not recomputed here, because the
+    caller is the only one who knows whether best_heuristic.case_records
+    can be trusted to actually mean "training." It usually can't just be
+    read off the attribute: under --multiprocess it's None (set inside a
+    worker, never sent back), AND -- a real bug this caught, see solve()'s
+    comment where it builds this value -- if a validation_data_provider is
+    also active, gp_algorithms.standard_gp directly re-evaluates
+    halloffame[0] against the VALIDATION set at the end of every
+    generation, so by the time the loop returns, case_records reflects
+    validation, not training, regardless of multiprocess. Callers should
+    explicitly re-evaluate best_heuristic against training data themselves
+    and pass the result in -- see solve()'s own call for the pattern.
+
+    Always returns at least {"train_case_records": train_case_records}. If
+    both providers are given, also evaluates best_heuristic on the test set
+    and does validation-based model selection over pop, exactly like
+    solve() always has.
+    """
+    test_data: dict = {"train_case_records": train_case_records}
+    if not all([validation_data_provider, test_data_provider]):
+        return test_data
+
+    test_set = test_data_provider.next()
+    if not test_set:
+        return test_data
+
+    total_dev_percent = toolbox.evaluate(individual=best_heuristic, domains=test_set)
+    test_data["best_heuristic"] = {
+        "tree": str(best_heuristic),
+        "fitness": best_heuristic.fitness.values[0],
+        "test_fitness": total_dev_percent[0],
+        # per-instance {instance, fitness (None if infeasible), feasible}
+        # records -- see evaluate_heuristic. Filter on "feasible" before
+        # averaging "fitness" from these. (train_case_records for this same
+        # individual is at the top level of the returned dict, not
+        # duplicated here.)
+        "test_case_records": best_heuristic.case_records,
+    }
+
+    # float('inf') (not a fixed magic threshold like 100000) so the first
+    # individual is always a candidate -- if every individual in pop is
+    # infeasible on validation (their sentinel fitness can run into the
+    # millions, well past any fixed threshold), best_validated_individual
+    # would otherwise stay None and crash the test evaluation below instead
+    # of falling back to "least-bad infeasible individual," which is what
+    # we actually want here.
+    min_deviation = float("inf")
+    best_validated_individual = None
+    validation_case_records = None
+    validation_set = validation_data_provider.next()
+    if validation_set:
+        validation_evaluate = partial(toolbox.evaluate, domains=validation_set)
+        validation_fitnesses = toolbox.map(validation_evaluate, pop)
+        for ind, total_dev_percent in zip(pop, validation_fitnesses):
+            if total_dev_percent[0] < min_deviation:
+                min_deviation = total_dev_percent[0]
+                best_validated_individual = ind
+                # same multiprocess caveat as train_case_records above
+                validation_case_records = getattr(ind, "case_records", None)
+        test_set = test_data_provider.next()
+        total_dev_percent = toolbox.evaluate(individual=best_validated_individual, domains=test_set)
+        test_data["best_heuristic_validation"] = {
+            "tree": str(best_validated_individual),
+            "fitness": best_validated_individual.fitness.values[0],
+            "validation_fitness": min_deviation,
+            "validation_case_records": validation_case_records,
+            "test_fitness": total_dev_percent[0],
+            "test_case_records": best_validated_individual.case_records,
+        }
+    return test_data
 
 
 def evaluate_heuristic(
