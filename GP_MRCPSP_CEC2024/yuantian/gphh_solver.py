@@ -134,6 +134,8 @@ class ParametersGPHH:
     deap_verbose: bool = None
     simulator: SimulatorTypeEnum = None
     decision_type: DecisionTypeEnum = None
+    seeding_strategy: str = "random"
+    n_mutated_clones: int = 2
 
     def __init__(
             self,
@@ -154,6 +156,8 @@ class ParametersGPHH:
             decision_type,
             simulator,
             cpu_cores=1,
+            seeding_strategy="random",
+            n_mutated_clones=2,
     ):
         self.set_feature = set_feature
         self.set_primitves = set_primitves
@@ -172,6 +176,12 @@ class ParametersGPHH:
         self.simulator = simulator
         self.decision_type = decision_type
         self.cpu_cores = cpu_cores
+        # "random" (default, baseline ramped half-and-half), "heuristic"
+        # (mix in textbook priority-rule trees, see heuristic_seeding.py) or
+        # "heuristic_mutated" (heuristic + n_mutated_clones mutated copies
+        # of each rule).
+        self.seeding_strategy = seeding_strategy
+        self.n_mutated_clones = n_mutated_clones
 
     @staticmethod
     def init_simulator_pset(
@@ -201,6 +211,45 @@ class ParametersGPHH:
         FeatureEnum.CP_SLACK_SCORE,
         FeatureEnum.CP_PROB,
     ]
+    # Non-renewable resource features (see nr_terminals.py). Stock ratio and
+    # budget pressure are schedule-state signals, not activity/mode-specific,
+    # so they go on the same tree(s) the CP propagation features go on
+    # (activity, or integrated for SIMULTANEOUS); mode demand ratio is
+    # mode-choice-specific. Only meaningful if instances were loaded with
+    # `read_instances(..., keep_non_renewable=True)`; see nr_terminals.py.
+    nr_activity_features = [
+        FeatureEnum.NR_STOCK_RATIO,
+        FeatureEnum.NR_BUDGET_PRESSURE,
+    ]
+    nr_mode_features = [
+        FeatureEnum.NR_MODE_DEMAND_RATIO,
+    ]
+    # Resource-constrained critical path features (see rccp_terminals.py).
+    # RCCP_BOTTLENECK_UTIL/RCCP_SLACK/RCCP_PRESSURE_TREND are schedule-state
+    # signals (no cur_mode dependency), so they go on the same tree(s) as
+    # the NR schedule-state terminals; RCCP_CANDIDATE_CONTENTION is
+    # mode-choice-specific, like NR_MODE_DEMAND_RATIO.
+    rccp_activity_features = [
+        FeatureEnum.RCCP_BOTTLENECK_UTIL,
+        FeatureEnum.RCCP_SLACK,
+        FeatureEnum.RCCP_PRESSURE_TREND,
+    ]
+    rccp_mode_features = [
+        FeatureEnum.RCCP_CANDIDATE_CONTENTION,
+        FeatureEnum.RCCP_RESOURCE_CONCENTRATION,
+    ]
+    # Mode-interaction features (see mode_interaction_terminals.py).
+    # MI_ACTIVITY_PRESSURE doesn't commit to a specific mode (averages over
+    # the candidate activity's own modes), so it goes with the other
+    # schedule-state-only terminals; MI_CONSTRAINT_TIGHTENING/
+    # MI_RECIPROCAL_SCARCITY are mode-choice-specific.
+    mode_interaction_activity_features = [
+        FeatureEnum.MI_ACTIVITY_PRESSURE,
+    ]
+    mode_interaction_mode_features = [
+        FeatureEnum.MI_CONSTRAINT_TIGHTENING,
+        FeatureEnum.MI_RECIPROCAL_SCARCITY,
+    ]
 
     @staticmethod
     def init_feature_set(
@@ -208,6 +257,9 @@ class ParametersGPHH:
             simulator_type: SimulatorTypeEnum = SimulatorTypeEnum.SERIAL_SGS,
             dynamic_CPM: bool = False,
             cp_propagation_feature: bool = False,
+            nr_terminals_feature: bool = False,
+            rccp_terminals_feature: bool = False,
+            mode_interaction_terminals_feature: bool = False,
     ):
         if decision_type == DecisionTypeEnum.ACTIVITY_THEN_MODE:
             set_feature = {
@@ -249,6 +301,27 @@ class ParametersGPHH:
                 set_feature[TerminalTypeEnum.ACTIVITY.value] += (
                     ParametersGPHH.cp_propagation_features
                 )
+            if nr_terminals_feature:
+                set_feature[TerminalTypeEnum.ACTIVITY.value] += (
+                    ParametersGPHH.nr_activity_features
+                )
+                set_feature[TerminalTypeEnum.MODE.value] += (
+                    ParametersGPHH.nr_mode_features
+                )
+            if rccp_terminals_feature:
+                set_feature[TerminalTypeEnum.ACTIVITY.value] += (
+                    ParametersGPHH.rccp_activity_features
+                )
+                set_feature[TerminalTypeEnum.MODE.value] += (
+                    ParametersGPHH.rccp_mode_features
+                )
+            if mode_interaction_terminals_feature:
+                set_feature[TerminalTypeEnum.ACTIVITY.value] += (
+                    ParametersGPHH.mode_interaction_activity_features
+                )
+                set_feature[TerminalTypeEnum.MODE.value] += (
+                    ParametersGPHH.mode_interaction_mode_features
+                )
         elif decision_type == DecisionTypeEnum.MODE_THEN_ACTIVITY:
             set_feature = {
                 TerminalTypeEnum.ACTIVITY.value: [
@@ -282,6 +355,27 @@ class ParametersGPHH:
                 set_feature[TerminalTypeEnum.ACTIVITY.value] += (
                     ParametersGPHH.cp_propagation_features
                 )
+            if nr_terminals_feature:
+                set_feature[TerminalTypeEnum.ACTIVITY.value] += (
+                    ParametersGPHH.nr_activity_features
+                )
+                set_feature[TerminalTypeEnum.MODE.value] += (
+                    ParametersGPHH.nr_mode_features
+                )
+            if rccp_terminals_feature:
+                set_feature[TerminalTypeEnum.ACTIVITY.value] += (
+                    ParametersGPHH.rccp_activity_features
+                )
+                set_feature[TerminalTypeEnum.MODE.value] += (
+                    ParametersGPHH.rccp_mode_features
+                )
+            if mode_interaction_terminals_feature:
+                set_feature[TerminalTypeEnum.ACTIVITY.value] += (
+                    ParametersGPHH.mode_interaction_activity_features
+                )
+                set_feature[TerminalTypeEnum.MODE.value] += (
+                    ParametersGPHH.mode_interaction_mode_features
+                )
         elif decision_type == DecisionTypeEnum.SIMULTANEOUS:
             set_feature = {
                 TerminalTypeEnum.INTEGRATED.value: [
@@ -312,6 +406,22 @@ class ParametersGPHH:
                 set_feature[TerminalTypeEnum.INTEGRATED.value] += (
                     ParametersGPHH.cp_propagation_features
                 )
+            if nr_terminals_feature:
+                # single combined tree: both the schedule-state NR features
+                # and the mode-specific one go on the same (only) pset.
+                set_feature[TerminalTypeEnum.INTEGRATED.value] += (
+                    ParametersGPHH.nr_activity_features + ParametersGPHH.nr_mode_features
+                )
+            if rccp_terminals_feature:
+                # single combined tree, same reasoning as nr_terminals_feature above.
+                set_feature[TerminalTypeEnum.INTEGRATED.value] += (
+                    ParametersGPHH.rccp_activity_features + ParametersGPHH.rccp_mode_features
+                )
+            if mode_interaction_terminals_feature:
+                set_feature[TerminalTypeEnum.INTEGRATED.value] += (
+                    ParametersGPHH.mode_interaction_activity_features
+                    + ParametersGPHH.mode_interaction_mode_features
+                )
         # if simulator_type == SimulatorTypeEnum.SERIAL_SGS:
         #     if decision_type == DecisionTypeEnum.SIMULTANEOUS:
         #         set_feature[TerminalTypeEnum.INTEGRATED.value].append(
@@ -330,13 +440,17 @@ class ParametersGPHH:
             decision_type: DecisionTypeEnum = DecisionTypeEnum.ACTIVITY_THEN_MODE,
             dynamic_CPM_feature: bool = False,
             cp_propagation_feature: bool = False,
+            nr_terminals_feature: bool = False,
+            rccp_terminals_feature: bool = False,
+            mode_interaction_terminals_feature: bool = False,
             fixed_activity_rule="",
             fixed_mode_rule="",
             cpu=1,
     ):
         simulator = ParametersGPHH.init_simulator_pset(simulator_type)
         set_feature = ParametersGPHH.init_feature_set(
-            decision_type, simulator_type, dynamic_CPM_feature, cp_propagation_feature
+            decision_type, simulator_type, dynamic_CPM_feature, cp_propagation_feature,
+            nr_terminals_feature, rccp_terminals_feature, mode_interaction_terminals_feature,
         )
         pset: Dict[
             TerminalTypeEnum, PrimitiveSet
@@ -438,11 +552,15 @@ class ParametersGPHH:
             decision_type: DecisionTypeEnum = DecisionTypeEnum.ACTIVITY_THEN_MODE,
             dynamic_CPM_feature: bool = False,
             cp_propagation_feature: bool = False,
+            nr_terminals_feature: bool = False,
+            rccp_terminals_feature: bool = False,
+            mode_interaction_terminals_feature: bool = False,
             cpus=1,
     ):
         simulator = ParametersGPHH.init_simulator_pset(simulator_type)
         set_feature = ParametersGPHH.init_feature_set(
-            decision_type, simulator_type, dynamic_CPM_feature, cp_propagation_feature
+            decision_type, simulator_type, dynamic_CPM_feature, cp_propagation_feature,
+            nr_terminals_feature, rccp_terminals_feature, mode_interaction_terminals_feature,
         )
         # {DecisionTypeEnum: PrimitiveSet}
         pset: Dict[TerminalTypeEnum, PrimitiveSet] = {}
@@ -739,7 +857,30 @@ class GPHH(SolverGenericRCPSP):
         mstats.register("std", np.std)
         mstats.register("min", np.min)
         mstats.register("max", np.max)
-        pop = self.toolbox.population(n=self.params_gphh.pop_size)
+        seeding_strategy = self.params_gphh.seeding_strategy
+        if seeding_strategy not in ("random", "heuristic", "heuristic_mutated"):
+            raise ValueError(
+                f"Unknown seeding_strategy: {seeding_strategy!r}; expected "
+                "'random', 'heuristic' or 'heuristic_mutated'."
+            )
+        if seeding_strategy == "random":
+            pop = self.toolbox.population(n=self.params_gphh.pop_size)
+        else:
+            from yuantian.exploratory.heuristic_seeding import seed_population
+
+            pop = seed_population(
+                toolbox=self.toolbox,
+                individual_class=creator.Individual,
+                pop_size=self.params_gphh.pop_size,
+                decision_type=self.decision_type,
+                pset=self.pset,
+                n_mutated_clones=(
+                    self.params_gphh.n_mutated_clones
+                    if self.params_gphh.seeding_strategy == "heuristic_mutated"
+                    else 0
+                ),
+                mutate=self.toolbox.mutate,
+            )
         hof = RefreshHallOfFame(1)
         self.hof = hof
         from utils import PopulationArchive
@@ -767,9 +908,18 @@ class GPHH(SolverGenericRCPSP):
         print(f"Running time: {elapsed}")
         self.best_heuristic = hof[0]
         logger.debug(f"best_heuristic: {self.best_heuristic}")
+        # Whatever evaluation last ran on hof[0] -- i.e. its training
+        # evaluation, since that's the last time anything called evaluate()
+        # on this individual before now. None under --multiprocess: that
+        # attribute gets set inside a worker process, and toolbox.map only
+        # ever sends the fitness values back, not the mutated individual.
+        train_case_records = getattr(self.best_heuristic, "case_records", None)
         output_path = kwargs.get("output_path", "result.json")
 
-        test_data: dict = {}
+        # always present regardless of whether validation/test providers are
+        # configured -- experiment scripts that only set a training provider
+        # and do their own test evaluation separately still get this for free.
+        test_data: dict = {"train_case_records": train_case_records}
         if all([self.validation_data_provider, self.test_data_provider]):
             # Put current best_heuristic into test set
             test_set = self.test_data_provider.next()
@@ -781,10 +931,17 @@ class GPHH(SolverGenericRCPSP):
                     "tree": str(self.best_heuristic),
                     "fitness": self.best_heuristic.fitness.values[0],
                     "test_fitness": total_dev_percent[0],
+                    # per-instance {instance, fitness (None if infeasible),
+                    # feasible} records -- see evaluate_heuristic. Filter on
+                    # "feasible" before averaging "fitness" from these.
+                    # (train_case_records for this same individual is at the
+                    # top level of the result dict, not duplicated here.)
+                    "test_case_records": self.best_heuristic.case_records,
                 }
                 # Apply validation test to choose the best individual
                 min_deviation = 100000
                 best_validated_individual = None
+                validation_case_records = None
                 validation_set = self.validation_data_provider.next()
                 if validation_set:
                     validation_evaluate = partial(
@@ -795,6 +952,8 @@ class GPHH(SolverGenericRCPSP):
                         if total_dev_percent[0] < min_deviation:
                             min_deviation = total_dev_percent[0]
                             best_validated_individual = ind
+                            # same multiprocess caveat as train_case_records above
+                            validation_case_records = getattr(ind, "case_records", None)
                     # Put this ind test set
                     test_set = self.test_data_provider.next()
                     total_dev_percent = self.toolbox.evaluate(
@@ -804,7 +963,9 @@ class GPHH(SolverGenericRCPSP):
                         "tree": str(best_validated_individual),
                         "fitness": best_validated_individual.fitness.values[0],
                         "validation_fitness": min_deviation,
+                        "validation_case_records": validation_case_records,
                         "test_fitness": total_dev_percent[0],
+                        "test_case_records": best_validated_individual.case_records,
                     }
 
         self.write_result(
@@ -831,6 +992,7 @@ class GPHH(SolverGenericRCPSP):
             "decision_type": self.params_gphh.decision_type.value,
             "pop_size": self.params_gphh.pop_size,
             "gen": self.params_gphh.n_gen,
+            "seeding_strategy": self.params_gphh.seeding_strategy,
             "selection": ".".join(
                 [self.toolbox.select.func.__module__, self.toolbox.select.func.__name__]
             ),
@@ -939,29 +1101,65 @@ def evaluate_heuristic(
                 mode_extre="min",
             )
     # build solutions & get objective values
+    feasible_flags: list[bool] = []
+    case_records: list[dict] = []
     for domain in domains:
         solution = simulator.buildSolution(domain=domain, choose=heuristic_func)
         do_makespan = solution.get_end_time(domain.sink_task)
-        vals.append(
-            (do_makespan - domain.cpm_esd)
-            * 100
-            / domain.cpm_esd
-        )
+        deviation = (do_makespan - domain.cpm_esd) * 100 / domain.cpm_esd
+        feasible = solution.rcpsp_schedule_feasible
+        vals.append(deviation)
+        feasible_flags.append(feasible)
+        case_records.append({
+            "instance": os.path.basename(domain.file_path) if getattr(domain, "file_path", None) else None,
+            # null (not the sentinel) when infeasible, so a downstream script
+            # can't accidentally average it in without checking "feasible" first.
+            "fitness": deviation if feasible else None,
+            "feasible": feasible,
+        })
     fitness = [np.mean(vals)]
     # per-instance fitness, used by epsilon-lexicase selection; harmless no-op
     # for any code path (e.g. multiprocessing) that doesn't read it back.
     individual.case_fitness = vals
+    # per-instance feasibility flags. vals still gets the sentinel penalty
+    # for infeasible domains (evolution needs that to steer away from
+    # infeasibility), but experiment scripts need to know which instances
+    # were actually infeasible so they can filter them out of a mean
+    # instead of reporting a sentinel-contaminated number. Same no-op
+    # behavior as case_fitness above.
+    individual.case_feasible = feasible_flags
+    # same data as the two lists above, just paired up with an instance name
+    # and with infeasible fitness replaced by None -- this is the form that
+    # actually gets serialized to the result JSON (see write_result), so
+    # downstream scripts can read it straight from disk instead of having to
+    # re-call evaluate_heuristic just to get feasibility back. Same no-op
+    # caveat under multiprocessing as the two attributes above.
+    individual.case_records = case_records
 
     return fitness
 
 
-def read_instances(filepaths: list[str]) -> list[RCPSPModel]:
+def read_instances(
+        filepaths: list[str], keep_non_renewable: bool = False
+) -> list[RCPSPModel]:
+    """
+    Args:
+        keep_non_renewable: if False (default, matches every existing call
+            site), instances go through `to_renewable_only_rcpsp_model`,
+            which strips all non-renewable resources -- the baseline and the
+            cp_propagation/hybrid_gp extensions all run on instances with
+            zero non-renewable resources. If True, that conversion is
+            skipped and `problem.nr_static_features` is precomputed, for use
+            with `--nr_terminals` / `ParametersGPHH(nr_terminals_feature=True)`
+            (see nr_terminals.py); meaningless to combine with False.
+    """
     from discrete_optimization.rcpsp.transform_model import \
         to_renewable_only_rcpsp_model
     from yuantian.cp_propagation import compute_cp_propagation_features
 
     instances: List[RCPSPModel] = [
-        to_renewable_only_rcpsp_model(parse_file(f)) for f in filepaths
+        parse_file(f) if keep_non_renewable else to_renewable_only_rcpsp_model(parse_file(f))
+        for f in filepaths
     ]
     for problem in instances:
         problem.cpm, problem.cpm_esd = compute_cpm(problem)
@@ -969,6 +1167,9 @@ def read_instances(filepaths: list[str]) -> list[RCPSPModel]:
         problem.graph.full_successors = problem.graph.descendants_map()
         # precomputed once per instance; GP terminals only do a dict lookup
         problem.cp_features = compute_cp_propagation_features(problem)
+        if keep_non_renewable:
+            from yuantian.nr_terminals import compute_nr_static_features
+            problem.nr_static_features = compute_nr_static_features(problem)
     return instances
 
 
@@ -1065,6 +1266,35 @@ if __name__ == "__main__":
         default=False,
     )
     parse.add_option(
+        "--nr_terminals",
+        action="store_true",
+        help="Add non-renewable resource terminals (NR_STOCK_RATIO, NR_MODE_DEMAND_RATIO, "
+             "NR_BUDGET_PRESSURE); also loads instances with non-renewable resources kept "
+             "(read_instances(keep_non_renewable=True)) instead of the renewable-only "
+             "default, since these terminals are meaningless otherwise -- see nr_terminals.py",
+        dest="nr_terminals",
+        default=False,
+    )
+    parse.add_option(
+        "--rccp_terminals",
+        action="store_true",
+        help="Add resource-constrained critical path terminals (RCCP_BOTTLENECK_UTIL, "
+             "RCCP_CANDIDATE_CONTENTION, RCCP_SLACK, RCCP_PRESSURE_TREND); no special "
+             "instance loading needed (these are about renewable, not non-renewable, "
+             "resources) -- see rccp_terminals.py",
+        dest="rccp_terminals",
+        default=False,
+    )
+    parse.add_option(
+        "--mode_interaction_terminals",
+        action="store_true",
+        help="Add mode-interaction terminals (MI_CONSTRAINT_TIGHTENING, "
+             "MI_RECIPROCAL_SCARCITY, MI_ACTIVITY_PRESSURE); no special instance loading "
+             "needed -- see mode_interaction_terminals.py",
+        dest="mode_interaction_terminals",
+        default=False,
+    )
+    parse.add_option(
         "--multiprocess",
         action="store_true",
         dest="multi_process",
@@ -1092,6 +1322,9 @@ if __name__ == "__main__":
     DYNAMIC_TERMINAL = options.dynamic_terminals
     SPLIT_TRAINING_SET = options.split_training_set
     CP_PROPAGATION_TERMINAL = options.cp_propagation_terminals
+    NR_TERMINALS = options.nr_terminals
+    RCCP_TERMINALS = options.rccp_terminals
+    MODE_INTERACTION_TERMINALS = options.mode_interaction_terminals
     MULTI_PROCESS = options.multi_process
     OUTPUT_DIR = options.output_dir
     SEED: int = options.seed
@@ -1132,18 +1365,18 @@ if __name__ == "__main__":
                 "discrete_optimization_data/mm/MMLIB/MMLIB50/J501_5.mm",
             ]
 
-    training_set: list = read_instances(training_files)
+    training_set: list = read_instances(training_files, keep_non_renewable=NR_TERMINALS)
     training_data_provider = (
         EvenlyDividedDatasetProvider(training_set, 51)
         if SPLIT_TRAINING_SET and DATASET
         else StaticDatasetProvider(training_set)
     )
 
-    validation_set: list = read_instances(validation_set_files)
+    validation_set: list = read_instances(validation_set_files, keep_non_renewable=NR_TERMINALS)
     validation_data_provider = StaticDatasetProvider(validation_set)
     # validation_data_provider = EmptyDataSetProvider()
 
-    test_set: list = read_instances(test_set_files)
+    test_set: list = read_instances(test_set_files, keep_non_renewable=NR_TERMINALS)
     test_data_provider: list = StaticDatasetProvider(test_set)
 
     CPU_CORES = 30 if MULTI_PROCESS else 1
@@ -1158,6 +1391,9 @@ if __name__ == "__main__":
             cpu=CPU_CORES,
             dynamic_CPM_feature=DYNAMIC_TERMINAL,
             cp_propagation_feature=CP_PROPAGATION_TERMINAL,
+            nr_terminals_feature=NR_TERMINALS,
+            rccp_terminals_feature=RCCP_TERMINALS,
+            mode_interaction_terminals_feature=MODE_INTERACTION_TERMINALS,
             fixed_activity_rule=FIXED_ACTIVITY_RULE,
             fixed_mode_rule=FIXED_MODE_RULE,
         )
@@ -1169,6 +1405,9 @@ if __name__ == "__main__":
             cpus=CPU_CORES,
             dynamic_CPM_feature=DYNAMIC_TERMINAL,
             cp_propagation_feature=CP_PROPAGATION_TERMINAL,
+            nr_terminals_feature=NR_TERMINALS,
+            rccp_terminals_feature=RCCP_TERMINALS,
+            mode_interaction_terminals_feature=MODE_INTERACTION_TERMINALS,
         )
 
     solver = GPHH(

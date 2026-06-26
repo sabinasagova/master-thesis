@@ -19,6 +19,9 @@ from discrete_optimization.rcpsp.rcpsp_model import RCPSPModel
 class SimulatorTypeEnum(Enum):
     SERIAL_SGS = "serial"
     PARALLEL_SGS = "parallel"
+    # Restored for yuantian/exploratory/multi_sgs.py (Phase 0 sweep); not
+    # produced by Simulator.get_simulator and unused by the default GPHH run.
+    BACKWARD_SERIAL_SGS = "backward"
 
 
 class DecisionTypeEnum(Enum):
@@ -66,6 +69,28 @@ class FeatureEnum(Enum):
     CP_BACKWARD = "CP_BACKWARD"
     CP_SLACK_SCORE = "CP_SLACK_SCORE"
     CP_PROB = "CP_PROB"
+    # non-renewable resource features (see nr_terminals.py)
+    NR_STOCK_RATIO = "NR_STOCK_RATIO"
+    NR_MODE_DEMAND_RATIO = "NR_MODE_DEMAND_RATIO"
+    NR_BUDGET_PRESSURE = "NR_BUDGET_PRESSURE"
+    # resource-constrained critical path features (see rccp_terminals.py)
+    RCCP_BOTTLENECK_UTIL = "RCCP_BOTTLENECK_UTIL"
+    RCCP_CANDIDATE_CONTENTION = "RCCP_CANDIDATE_CONTENTION"
+    RCCP_SLACK = "RCCP_SLACK"
+    RCCP_PRESSURE_TREND = "RCCP_PRESSURE_TREND"
+    RCCP_RESOURCE_CONCENTRATION = "RCCP_RESOURCE_CONCENTRATION"
+    # mode-interaction features (see mode_interaction_terminals.py)
+    MI_CONSTRAINT_TIGHTENING = "MI_CONSTRAINT_TIGHTENING"
+    MI_RECIPROCAL_SCARCITY = "MI_RECIPROCAL_SCARCITY"
+    MI_ACTIVITY_PRESSURE = "MI_ACTIVITY_PRESSURE"
+
+
+# Sentinel for NR_MODE_DEMAND_RATIO when a candidate mode demands a
+# non-renewable resource that's already fully depleted (remaining <= 0):
+# finite (so it composes safely with the GP's add/sub/mul/protected-div
+# primitives, none of which guard against inf/nan) but far larger than any
+# real ratio, so it still reads as "avoid this mode" under priority_extre="min".
+_NR_INFEASIBLE_DEMAND_RATIO = 1e6
 
 
 class Simulator(object):
@@ -90,6 +115,17 @@ class Simulator(object):
         self.cur_act = None
         self.cur_mode = None
         self.dynamic_cpm: Dict[Any, CPMObject] = None
+        # Bumped each time self.eligibles gets reassigned (once per SGS
+        # decision). _current_resource_avail uses this to cache its result
+        # for the whole decision -- remaining capacity doesn't change
+        # depending on which (cur_act, cur_mode) is being scored, only on
+        # what's already committed, so we don't need to recompute it for
+        # every candidate. Added after measuring mode_interaction_terminals
+        # was too slow without it; RCCP terminals get the speedup for free
+        # since they call the same method.
+        self._decision_counter = 0
+        self._resource_avail_cache_key = None
+        self._resource_avail_cache = None
         self.feature_function_map = {
             FeatureEnum.EARLIEST_START_DATE: self.feature_early_start,
             FeatureEnum.EARLIEST_FINISH_DATE: self.feature_early_finish,
@@ -126,6 +162,17 @@ class Simulator(object):
             FeatureEnum.CP_BACKWARD: self.feature_cp_backward,
             FeatureEnum.CP_SLACK_SCORE: self.feature_cp_slack_score,
             FeatureEnum.CP_PROB: self.feature_cp_prob,
+            FeatureEnum.NR_STOCK_RATIO: self.feature_nr_stock_ratio,
+            FeatureEnum.NR_MODE_DEMAND_RATIO: self.feature_nr_mode_demand_ratio,
+            FeatureEnum.NR_BUDGET_PRESSURE: self.feature_nr_budget_pressure,
+            FeatureEnum.RCCP_BOTTLENECK_UTIL: self.feature_rccp_bottleneck_util,
+            FeatureEnum.RCCP_CANDIDATE_CONTENTION: self.feature_rccp_candidate_contention,
+            FeatureEnum.RCCP_SLACK: self.feature_rccp_slack,
+            FeatureEnum.RCCP_PRESSURE_TREND: self.feature_rccp_pressure_trend,
+            FeatureEnum.RCCP_RESOURCE_CONCENTRATION: self.feature_rccp_resource_concentration,
+            FeatureEnum.MI_CONSTRAINT_TIGHTENING: self.feature_mi_constraint_tightening,
+            FeatureEnum.MI_RECIPROCAL_SCARCITY: self.feature_mi_reciprocal_scarcity,
+            FeatureEnum.MI_ACTIVITY_PRESSURE: self.feature_mi_activity_pressure,
         }
 
     @classmethod
@@ -305,6 +352,308 @@ class Simulator(object):
 
     def feature_cp_prob(self) -> Union[int, float]:
         return self.rcpsp_problem.cp_features[self.cur_act]["prob"]
+
+    def _nr_remaining_stock(self) -> Dict[str, float]:
+        """Current remaining stock for every non-renewable resource, given
+        the schedule built so far. Schedule-state-dependent (like the
+        dynamic CPM terminals), so this cannot be precomputed in
+        nr_terminals.py; implemented per-subclass since Serial and Parallel
+        track resource availability in different shapes (see
+        SerialSimulator/ParallelSimulator)."""
+        raise NotImplementedError
+
+    def feature_nr_stock_ratio(self) -> Union[int, float]:
+        non_renewable = self.rcpsp_problem.non_renewable_resources_list
+        if not non_renewable:
+            return 1.0  # no NR resources tracked: nothing is being depleted
+        remaining = self._nr_remaining_stock()
+        initial = self.rcpsp_problem.resources
+        return min(
+            remaining[res] / initial[res] if initial[res] else 1.0
+            for res in non_renewable
+        )
+
+    def feature_nr_mode_demand_ratio(self) -> Union[int, float]:
+        if self.cur_mode is None:
+            raise ValueError("Mode is not specified.")
+        non_renewable = self.rcpsp_problem.non_renewable_resources_list
+        if not non_renewable:
+            return 0.0  # no NR resources tracked: this mode costs nothing in NR terms
+        remaining = self._nr_remaining_stock()
+        mode_details = self.rcpsp_problem.mode_details[self.cur_act][self.cur_mode]
+        ratios = []
+        for res in non_renewable:
+            demand = mode_details.get(res, 0)
+            if demand == 0:
+                ratios.append(0.0)
+            elif remaining[res] <= 0:
+                ratios.append(_NR_INFEASIBLE_DEMAND_RATIO)
+            else:
+                ratios.append(demand / remaining[res])
+        return max(ratios)
+
+    def feature_nr_budget_pressure(self) -> Union[int, float]:
+        non_renewable = self.rcpsp_problem.non_renewable_resources_list
+        if not non_renewable:
+            return 1.0  # no NR resources tracked: no pressure at all
+        remaining = self._nr_remaining_stock()
+        static = self.rcpsp_problem.nr_static_features
+        not_yet_scheduled = set(self.rcpsp_problem.tasks_list) - set(self.scheduled)
+        pressures = []
+        for res in non_renewable:
+            min_future_demand = sum(
+                static["min_mode_demand"][task][res] for task in not_yet_scheduled
+            )
+            initial = static["initial_stock"][res]
+            margin = remaining[res] - min_future_demand
+            pressures.append(margin / initial if initial else 0.0)
+        return min(pressures)
+
+    def _compute_current_resource_avail(self) -> Dict[str, float]:
+        """Current remaining capacity for every *renewable* resource type,
+        given the schedule built so far -- the resource-contention analogue
+        of `_nr_remaining_stock`. Schedule-state-dependent, implemented
+        per-subclass since Serial and Parallel track resource availability
+        in different shapes (see SerialSimulator/ParallelSimulator;
+        rccp_terminals.py explains why). Don't call this directly outside
+        `_current_resource_avail` -- it's the uncached computation; callers
+        should use `_current_resource_avail()` (below) so repeated calls
+        within the same decision point are cheap."""
+        raise NotImplementedError
+
+    def _current_resource_avail(self) -> Dict[str, float]:
+        if self._resource_avail_cache_key != self._decision_counter:
+            self._resource_avail_cache_key = self._decision_counter
+            self._resource_avail_cache = self._compute_current_resource_avail()
+        return self._resource_avail_cache
+
+    def _rccp_bottleneck_resource(self):
+        """Returns (res, utilization) for whichever renewable resource is
+        most contended right now. Shared by all the RCCP terminals so they
+        agree on what "the" bottleneck is at any given point. Returns
+        (None, 0.0) if there are no renewable resources, which shouldn't
+        happen on MMLIB instances but better safe than sorry."""
+        renewable = self.rcpsp_problem.renewable_resources_list
+        if not renewable:
+            return None, 0.0
+        avail = self._current_resource_avail()
+        capacity = self.rcpsp_problem.resources
+        utilizations = {
+            res: 1.0 - (avail[res] / capacity[res] if capacity[res] else 0.0)
+            for res in renewable
+        }
+        bottleneck_res = max(utilizations, key=utilizations.get)
+        return bottleneck_res, utilizations[bottleneck_res]
+
+    def feature_rccp_bottleneck_util(self) -> Union[int, float]:
+        _, utilization = self._rccp_bottleneck_resource()
+        return utilization
+
+    def feature_rccp_candidate_contention(self) -> Union[int, float]:
+        if self.cur_mode is None:
+            raise ValueError("Mode is not specified.")
+        bottleneck_res, _ = self._rccp_bottleneck_resource()
+        if bottleneck_res is None:
+            return 0.0  # no renewable resources tracked: nothing to contend for
+        avail = self._current_resource_avail()
+        demand = self.rcpsp_problem.mode_details[self.cur_act][self.cur_mode].get(
+            bottleneck_res, 0
+        )
+        if demand == 0:
+            return 0.0
+        remaining = avail[bottleneck_res]
+        if remaining <= 0:
+            return _NR_INFEASIBLE_DEMAND_RATIO  # same "avoid this" sentinel as NR_MODE_DEMAND_RATIO
+        return demand / remaining
+
+    def feature_rccp_slack(self) -> Union[int, float]:
+        # CP_SLACK_SCORE only looks at precedence, so it overestimates true
+        # slack when the bottleneck resource is tight -- an activity can
+        # have zero precedence conflicts and still have to wait because its
+        # resource is fully booked. This just discounts slack by how busy
+        # the bottleneck is. Not real resource-leveling (that would mean
+        # solving a sub-problem over the rest of the schedule), just shrinks
+        # slack toward 0 as utilization climbs toward 1.
+        _, utilization = self._rccp_bottleneck_resource()
+        return self.feature_cp_slack_score() * (1.0 - utilization)
+
+    def feature_rccp_pressure_trend(self) -> Union[int, float]:
+        # Forward-looking version of bottleneck_util: sums up what every
+        # currently-eligible activity would minimally need from the
+        # bottleneck resource, divided by what's left. >1 means more demand
+        # is queued up than there's room for. Doesn't account for those
+        # activities competing with each other, so it's optimistic, same
+        # idea as NR_BUDGET_PRESSURE.
+        if not self.eligibles:
+            return 0.0
+        bottleneck_res, _ = self._rccp_bottleneck_resource()
+        if bottleneck_res is None:
+            return 0.0
+        near_term_demand = sum(
+            min(
+                self.rcpsp_problem.mode_details[act][m].get(bottleneck_res, 0)
+                for m in self.rcpsp_problem.mode_details[act]
+            )
+            for act in self.eligibles
+        )
+        avail = self._current_resource_avail()[bottleneck_res]
+        if avail <= 0:
+            return _NR_INFEASIBLE_DEMAND_RATIO if near_term_demand > 0 else 0.0
+        return near_term_demand / avail
+
+    def feature_rccp_resource_concentration(self) -> Union[int, float]:
+        # Small bundled addition (see rccp_terminals.py): tells apart two
+        # candidates with the same total renewable demand but a different
+        # shape -- all from one resource type (more exposed if that
+        # resource becomes a bottleneck) vs spread across several (more
+        # robust). This is 1 minus normalized Shannon entropy, so higher =
+        # more concentrated = more constrained, matching the rest of this
+        # module's convention (RCCP_SLACK is the one exception, since it
+        # just inherits CP_SLACK_SCORE's sign).
+        #
+        # Two edge cases handled on purpose: k=1 (only one renewable
+        # resource type exists) returns 1.0 instead of dividing by log(1);
+        # a mode that draws nothing at all returns 0.0, nothing to be
+        # concentrated about.
+        if self.cur_mode is None:
+            raise ValueError("Mode is not specified.")
+        renewable = self.rcpsp_problem.renewable_resources_list
+        k = len(renewable)
+        if k == 0:
+            return 0.0  # no renewable resources tracked: nothing to concentrate on
+        if k == 1:
+            return 1.0
+        demand = self.rcpsp_problem.mode_details[self.cur_act][self.cur_mode]
+        values = [demand.get(res, 0) for res in renewable]
+        total = sum(values)
+        if total <= 0:
+            return 0.0
+        entropy = -sum(
+            (v / total) * np.log(v / total) for v in values if v > 0
+        )
+        normalized_entropy = entropy / np.log(k)
+        return float(1.0 - normalized_entropy)
+
+    # Capping how many neighbors we look at -- measured mode_interaction
+    # terminals running about 3x slower without this, since realistic
+    # trees can call an MI terminal multiple times and each call rescans
+    # every eligible neighbor. This does make MI_CONSTRAINT_TIGHTENING/
+    # MI_ACTIVITY_PRESSURE an approximation once more than 5 neighbors
+    # share a resource (we just skip the smaller ones), but that tradeoff
+    # seemed worth it for the speedup.
+    _MI_MAX_NEIGHBORS = 5
+
+    def _mode_interaction_neighbors(self, candidate_resources) -> list:
+        """Other currently-eligible activities (not the one being scored)
+        that have at least one mode demanding something from
+        candidate_resources -- basically "who could this decision affect."
+        Renewable resources only: two activities sharing a non-renewable
+        resource at different points in time aren't really competing for
+        anything, since NR budget is a whole-project pool, not a
+        time-window thing.
+
+        Capped to the `_MI_MAX_NEIGHBORS` most resource-heavy matches (by
+        each candidate's single largest demand, across its own modes, on
+        any resource in `candidate_resources`) -- see the cost comment
+        above `_MI_MAX_NEIGHBORS`. Below the cap, this returns exactly the
+        same set an uncapped scan would."""
+        if not self.eligibles or not candidate_resources:
+            return []
+        scored = []
+        for act in self.eligibles:
+            if act == self.cur_act:
+                continue
+            modes = self.rcpsp_problem.mode_details[act]
+            max_demand = max(
+                (modes[m].get(res, 0) for m in modes for res in candidate_resources),
+                default=0,
+            )
+            if max_demand > 0:
+                scored.append((max_demand, act))
+        if len(scored) <= self._MI_MAX_NEIGHBORS:
+            return [act for _, act in scored]
+        scored.sort(reverse=True)
+        return [act for _, act in scored[: self._MI_MAX_NEIGHBORS]]
+
+    def _mi_constraint_tightening_fraction(self, demand, avail) -> float:
+        """Shared by MI_CONSTRAINT_TIGHTENING and MI_ACTIVITY_PRESSURE.
+        Given a demand vector and current availability, finds every
+        neighbor sharing a demanded resource and works out what fraction of
+        that neighbor's modes would stop being feasible after committing
+        demand. Averaged across neighbors (not max, so one badly-hit
+        neighbor doesn't dominate over a bunch of barely-affected ones)."""
+        renewable = self.rcpsp_problem.renewable_resources_list
+        candidate_resources = {res for res in renewable if demand.get(res, 0) > 0}
+        if not candidate_resources:
+            return 0.0  # this mode draws no renewable resource: nothing to tighten
+        neighbors = self._mode_interaction_neighbors(candidate_resources)
+        if not neighbors:
+            return 0.0
+        remaining_after = {
+            res: avail[res] - demand.get(res, 0) for res in candidate_resources
+        }
+        fractions = []
+        for act in neighbors:
+            modes = self.rcpsp_problem.mode_details[act]
+            n_modes = len(modes)
+            n_infeasible = sum(
+                1
+                for m in modes
+                if any(modes[m].get(res, 0) > remaining_after[res] for res in candidate_resources)
+            )
+            fractions.append(n_infeasible / n_modes if n_modes else 0.0)
+        return float(np.mean(fractions))
+
+    def feature_mi_constraint_tightening(self) -> Union[int, float]:
+        if self.cur_mode is None:
+            raise ValueError("Mode is not specified.")
+        demand = self.rcpsp_problem.mode_details[self.cur_act][self.cur_mode]
+        return self._mi_constraint_tightening_fraction(demand, self._current_resource_avail())
+
+    def feature_mi_activity_pressure(self) -> Union[int, float]:
+        # Same idea as constraint_tightening but averaged over the
+        # activity's own modes, since we haven't committed to cur_mode yet
+        # at the activity-tree stage. Just one extra loop over ~2-4 modes.
+        own_modes = self.rcpsp_problem.mode_details[self.cur_act]
+        if not own_modes:
+            return 0.0
+        avail = self._current_resource_avail()
+        scores = [
+            self._mi_constraint_tightening_fraction(demand, avail)
+            for demand in own_modes.values()
+        ]
+        return float(np.mean(scores))
+
+    def feature_mi_reciprocal_scarcity(self) -> Union[int, float]:
+        # Cheaper version of constraint_tightening: instead of recomputing
+        # feasibility for every neighbor mode, just checks whether the
+        # neighbors' combined cheapest-mode demand already exceeds what's
+        # available, for each resource the candidate mode actually needs.
+        # A count/ratio, not a real feasibility check, but a lot cheaper
+        # (see mode_interaction_terminals.py for the timing comparison).
+        if self.cur_mode is None:
+            raise ValueError("Mode is not specified.")
+        renewable = self.rcpsp_problem.renewable_resources_list
+        demand = self.rcpsp_problem.mode_details[self.cur_act][self.cur_mode]
+        candidate_resources = [res for res in renewable if demand.get(res, 0) > 0]
+        if not candidate_resources or not self.eligibles:
+            return 0.0
+        neighbors = [act for act in self.eligibles if act != self.cur_act]
+        if not neighbors:
+            return 0.0
+        avail = self._current_resource_avail()
+        n_scarce = 0
+        for res in candidate_resources:
+            near_term_demand = sum(
+                min(
+                    self.rcpsp_problem.mode_details[act][m].get(res, 0)
+                    for m in self.rcpsp_problem.mode_details[act]
+                )
+                for act in neighbors
+            )
+            if near_term_demand > avail[res]:
+                n_scarce += 1
+        return n_scarce / len(candidate_resources)
 
     def feature_duration(self) -> Union[int, float]:
         return self.rcpsp_problem.mode_details[self.cur_act][self.cur_mode]["duration"]
@@ -512,6 +861,38 @@ class SerialSimulator(Simulator):
         super().__init__()
         self.type = SimulatorTypeEnum.SERIAL_SGS
 
+    def _nr_remaining_stock(self) -> Dict[str, float]:
+        # For a non-renewable resource, buildSolution's resource update step
+        # decrements resource_avail_in_time[res][t] for every t from a
+        # scheduled task's end_t through the horizon once (never replenished),
+        # so the *last* horizon slot already reflects every consumption so
+        # far -- the same lookup buildSolution's own eligible-mode filter
+        # uses (`resource_avail_in_time[res][-1]`) to decide mode feasibility.
+        return {
+            res: self.resource_avail_in_time[res][-1]
+            for res in self.rcpsp_problem.non_renewable_resources_list
+        }
+
+    def _compute_current_resource_avail(self) -> Dict[str, float]:
+        # Serial SGS has no single global "now": each eligible activity has
+        # its own earliest precedence-feasible start
+        # (`minimum_starting_time`), and `resource_avail_in_time[res]` is a
+        # full-horizon array of remaining capacity at every future time
+        # slot, reflecting everything committed so far. The natural "right
+        # now" reference for a pending decision is the earliest time any
+        # currently-eligible activity could actually start -- the frontier
+        # of the partial schedule -- so that's where this terminal reads
+        # remaining capacity from.
+        renewable = self.rcpsp_problem.renewable_resources_list
+        if not self.eligibles:
+            frontier_time = 0
+        else:
+            frontier_time = min(
+                self.minimum_starting_time[act] for act in self.eligibles
+            )
+            frontier_time = min(frontier_time, self.new_horizon - 1)
+        return {res: self.resource_avail_in_time[res][frontier_time] for res in renewable}
+
     def _compute_dynamic_cpm(self, eligible: list):
         import networkx as nx
 
@@ -650,6 +1031,22 @@ class SerialSimulator(Simulator):
                             valid = False
                     if valid:
                         eligibles[act].append(m)
+            # Drop activities with zero eligible modes: with non-renewable
+            # resources present this is reachable (an exhausted NR budget can
+            # leave a precedence-eligible activity with no feasible mode at
+            # all), unlike the renewable-only pipeline where it never came up.
+            # `choose(eligibles)` (e.g. activity_first_choose) assumes every
+            # value is a non-empty mode list and would crash with
+            # `min() arg is an empty sequence` otherwise.
+            eligibles = {act: modes for act, modes in eligibles.items() if modes}
+            if not eligibles:
+                unfeasible_non_renewable_resources = True
+                break
+            # self.eligibles was declared in __init__ but never actually
+            # set anywhere -- needed it so rccp_terminals can see what's
+            # eligible right now.
+            self.eligibles = eligibles
+            self._decision_counter += 1
             act_id, mode_id = choose(eligibles)
             # Step 3: find the earliest finish time of all predecessors
             current_min_time = self.minimum_starting_time[act_id]
@@ -810,6 +1207,29 @@ class ParallelSimulator(Simulator):
         super().__init__()
         self.type = SimulatorTypeEnum.PARALLEL_SGS
 
+    def _nr_remaining_stock(self) -> Dict[str, float]:
+        # `resource_avail[res]` for a non-renewable resource is decremented
+        # on every scheduling decision and -- unlike renewable resources --
+        # deliberately never replenished on task completion (see Step 1.3 in
+        # buildSolution, "don't update non-renewable resources"), so it
+        # already *is* the live remaining-stock value.
+        return {
+            res: self.resource_avail[res]
+            for res in self.rcpsp_problem.non_renewable_resources_list
+        }
+
+    def _compute_current_resource_avail(self) -> Dict[str, float]:
+        # Parallel SGS already maintains a single global current_time and a
+        # scalar (not time-indexed) resource_avail dict that's kept exactly
+        # in sync with it -- updated whenever an activity starts or
+        # finishes, so it directly *is* the live remaining-capacity value at
+        # self.current_time, no further lookup needed (unlike Serial, which
+        # has no single global "now").
+        return {
+            res: self.resource_avail[res]
+            for res in self.rcpsp_problem.renewable_resources_list
+        }
+
     def buildSolution(self, domain: RCPSPModel, choose: callable) -> RCPSPSolution:
         """
         Build a RCPSP solution from parallel SGS.
@@ -842,6 +1262,10 @@ class ParallelSimulator(Simulator):
                     new_horizon, self.rcpsp_problem.resources[res], dtype=np.int_
                 ).tolist()
         resource_avail = self.rcpsp_problem.resources.copy()
+        # exposed as instance state (not just a local var) so
+        # _nr_remaining_stock can read live non-renewable consumption;
+        # doesn't otherwise change how resource_avail itself is used below.
+        self.resource_avail = resource_avail
         self.minimum_starting_time = {act: 0 for act in self.rcpsp_problem.tasks_list}
         completed: list[int] = []  # completed activities
         active_jobs: list[int] = [1]  # processing activities
@@ -880,6 +1304,9 @@ class ParallelSimulator(Simulator):
                     ][res]
             # Step 1.4: update eligible set
             eligibles = self.get_eligibles(resource_avail, completed, self.scheduled)
+            # same deal as SerialSimulator -- rccp_terminals needs this set
+            self.eligibles = eligibles
+            self._decision_counter += 1
             # print(f"removal:{removal}")
             # print(f"After removal: {resource_avail}")
 
@@ -928,6 +1355,8 @@ class ParallelSimulator(Simulator):
                     eligibles = self.get_eligibles(
                         resource_avail, completed, self.scheduled
                     )
+                    self.eligibles = eligibles
+                    self._decision_counter += 1
                     # print(
                     #     f"Active:{active_jobs}, Completed:{completed}, Scheduled:{scheduled}")
         # Convert to readable schedule
@@ -1079,3 +1508,291 @@ class ParallelSimulator(Simulator):
             self.current_time
             + self.rcpsp_problem.mode_details[self.cur_act][self.cur_mode]["duration"]
         )
+
+
+class BackwardSerialSimulator(Simulator):
+    """
+    Backward Serial SGS. Restored for yuantian/exploratory/multi_sgs.py (the
+    Phase 0 exploratory sweep that preceded cp_propagation.py / hybrid_gp.py /
+    nr_terminals.py); not used by the default GPHH run or by any of those
+    three extensions.
+
+    Schedules activities from the project sink back to the source:
+      - Eligible at each step = activities whose ALL successors are already placed.
+      - For each chosen activity, search DOWNWARD from its latest feasible finish
+        time (= minimum start time of its successors) for the latest slot where
+        all resource constraints are satisfied.
+      - Returns a valid forward schedule: start[j] = horizon - backward_end[j].
+
+    Using LS/LF terminals (which express deadline-relative urgency) as the GP
+    priority signal is natural here; the evolved rule can differ from the forward
+    rule and typically finds complementary, tighter schedules.
+
+    Does not track non-renewable resource consumption correctly across the
+    backward pass (a pre-existing limitation, not introduced by this restoration);
+    callers should not enable it on NR-tight instances (see multi_sgs.py's
+    ``use_backward`` flag).
+    """
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.type = SimulatorTypeEnum.BACKWARD_SERIAL_SGS
+
+    def _compute_dynamic_cpm(self, eligible: list):
+        import networkx as nx
+
+        _eligible = list(eligible)
+        _scheduled_set = set(self.scheduled)  # backward-scheduled so far
+        _subproblem = set(self.rcpsp_problem.tasks_list) - _scheduled_set
+        cpm_nodes: Dict[Any, CPMObject] = {
+            n: CPMObject(None, None, None, None) for n in _subproblem
+        }
+        _subgraph: nx.DiGraph = self.rcpsp_problem.graph.graph_nx.subgraph(_subproblem)
+
+        for act in _eligible:
+            cpm_nodes[act]._LFD = self.maximum_finish_time[act]
+            cpm_nodes[act]._LSD = (
+                self.maximum_finish_time[act]
+                - self.rcpsp_problem.mode_details[act][1]["duration"]
+            )
+        _done = list(_eligible)
+        while len(_done) < len(_subproblem):
+            for cur in set(_subproblem) - set(_done):
+                succ = list(_subgraph.successors(cur))
+                if set(succ) <= set(_done):
+                    min_succ_lsd = (
+                        min(cpm_nodes[s]._LSD for s in succ) if succ else self.new_horizon
+                    )
+                    cpm_nodes[cur]._LFD = min_succ_lsd
+                    cpm_nodes[cur]._LSD = (
+                        min_succ_lsd - self.rcpsp_problem.mode_details[cur][1]["duration"]
+                    )
+                    _done.append(cur)
+
+        # Forward pass: earliest start/finish (from source)
+        source = self.rcpsp_problem.source_task
+        if source in _subproblem:
+            cpm_nodes[source]._ESD = 0
+            cpm_nodes[source]._EFD = self.rcpsp_problem.mode_details[source][1]["duration"]
+        _fwd_done = [source] if source in _subproblem else []
+        while len(_fwd_done) < len(_subproblem):
+            for cur in set(_subproblem) - set(_fwd_done):
+                preds = list(_subgraph.predecessors(cur))
+                if set(preds) <= set(_fwd_done):
+                    max_pred_efd = max((cpm_nodes[p]._EFD for p in preds), default=0)
+                    cpm_nodes[cur]._ESD = max_pred_efd
+                    cpm_nodes[cur]._EFD = (
+                        max_pred_efd + self.rcpsp_problem.mode_details[cur][1]["duration"]
+                    )
+                    _fwd_done.append(cur)
+
+        self.dynamic_cpm = cpm_nodes
+
+    def buildSolution(self, domain: RCPSPModel, choose: callable) -> RCPSPSolution:
+        self.rcpsp_problem: RCPSPModel = domain
+        successors = self.rcpsp_problem.successors  # {act: [succ, ...]}
+        predecessors = self.rcpsp_problem.graph.graph_nx.predecessors
+        graph_nx = self.rcpsp_problem.graph.graph_nx
+        import networkx as nx
+
+        all_jobs = self.rcpsp_problem.tasks_list
+        self.new_horizon = self.rcpsp_problem.horizon
+        sink = self.rcpsp_problem.sink_task
+        source = self.rcpsp_problem.source_task
+
+        # ── Deadline computation ───────────────────────────────────────────────
+        # The backward schedule places activities as LATE as possible within a
+        # deadline D.  After shifting so source starts at 0, the makespan equals
+        # D - T_src where T_src = the source's pre-shift start time.  Resource
+        # conflicts push activities earlier, increasing makespan toward the
+        # resource-constrained optimum.  D must be >= optimal makespan (for
+        # feasibility).  We use min(horizon, CPM_max_duration * 6) as a tight
+        # but safe upper bound; for MMLIB50 this gives D ~= 4-6x the typical
+        # optimal and much less than the raw horizon (~17x optimal).
+        def _min_dur(act):
+            modes = self.rcpsp_problem.mode_details[act]
+            return min(modes[m]["duration"] for m in modes)
+
+        def _max_dur(act):
+            modes = self.rcpsp_problem.mode_details[act]
+            return max(modes[m]["duration"] for m in modes)
+
+        # CPM forward pass with MAX durations (tighter lower bound than min, avoids 0-duration modes)
+        efd_cpm_max: Dict[Hashable, int] = {}
+        for act in nx.topological_sort(graph_nx):
+            preds_list = list(graph_nx.predecessors(act))
+            esd = max((efd_cpm_max[p] for p in preds_list), default=0)
+            efd_cpm_max[act] = esd + _max_dur(act)
+        cp_max: int = efd_cpm_max[sink]
+
+        # Deadline: tight enough to pack activities compactly, but not so tight
+        # that resource conflicts force activities before time 0.
+        deadline: int = min(self.new_horizon, max(cp_max * 6, self.new_horizon // 5))
+
+        # CPM backward pass with deadline as the initial LFD for all activities.
+        # Correct formula: LFD[j] = min(LFD[s] - min_dur[s] for s in successors(j))
+        lfd_cpm: Dict[Hashable, int] = {act: deadline for act in all_jobs}
+        for act in reversed(list(nx.topological_sort(graph_nx))):
+            succs_list = list(graph_nx.successors(act))
+            if succs_list:
+                lfd_cpm[act] = min(lfd_cpm[s] - _min_dur(s) for s in succs_list)
+
+        # Resource availability — same layout as forward SGS
+        self.resource_avail_in_time: Dict = {}
+        for res in self.rcpsp_problem.resources_list:
+            self.resource_avail_in_time[res] = np.full(
+                self.new_horizon, self.rcpsp_problem.resources[res], dtype=np.int_
+            ).tolist()
+
+        # mode_dict and backward start times
+        mode_dict: Dict[Hashable, int] = {act: 1 for act in all_jobs}
+        activity_start_times: Dict[Hashable, int] = {}
+        unfeasible_non_renewable_resources = False
+
+        # maximum_finish_time from CPM backward pass (tight deadlines per activity)
+        self.maximum_finish_time: Dict[Hashable, int] = dict(lfd_cpm)
+        # minimum_starting_time kept at 0 for terminal compatibility
+        self.minimum_starting_time: Dict[Hashable, int] = {act: 0 for act in all_jobs}
+
+        # Sink pre-scheduled at the computed deadline
+        activity_start_times[sink] = deadline
+        self.scheduled = [sink]
+
+        while (
+            len(self.scheduled) < self.rcpsp_problem.n_jobs
+            and not unfeasible_non_renewable_resources
+        ):
+            # Step 1: eligible = unscheduled activities whose ALL successors are placed
+            eligibles: Dict = {}
+            unscheduled = set(all_jobs) - set(self.scheduled)
+            for act in unscheduled:
+                if set(successors[act]) <= set(self.scheduled):
+                    eligibles[act] = []
+
+            # Step 2: NR-feasible modes (same logic as forward SGS)
+            for act in eligibles:
+                for m in self.rcpsp_problem.mode_details[act]:
+                    valid_mode = True
+                    for res in self.rcpsp_problem.resources:
+                        if self.rcpsp_problem.mode_details[act][m].get(res, 0) == 0:
+                            continue
+                        if (
+                            self.resource_avail_in_time[res][-1]
+                            < self.rcpsp_problem.mode_details[act][m][res]
+                        ):
+                            valid_mode = False
+                    if valid_mode:
+                        eligibles[act].append(m)
+                if not eligibles[act]:
+                    eligibles[act] = list(self.rcpsp_problem.mode_details[act].keys())
+
+            act_id, mode_id = choose(eligibles)
+            mode_dict[act_id] = mode_id
+            duration = self.rcpsp_problem.mode_details[act_id][mode_id]["duration"]
+
+            # Step 3: latest feasible START = maximum_finish_time[act] - duration,
+            #         then search DOWNWARD for a feasible slot.
+            # When resource conflicts push current_max_start below 0 we place the
+            # activity at 0 (the schedule may be resource-infeasible there, but we
+            # still produce a complete schedule whose makespan will be penalised by
+            # the fitness function).
+            current_max_start = self.maximum_finish_time[act_id] - duration
+            valid = False
+            while not valid:
+                valid = True
+                if current_max_start < 0:
+                    current_max_start = 0  # clamp; resource conflicts accepted at time 0
+                    break
+                for t in range(current_max_start, current_max_start + duration):
+                    if t >= self.new_horizon:
+                        valid = False
+                        current_max_start = max(0, self.new_horizon - duration)
+                        break
+                    for res in self.rcpsp_problem.resources_list:
+                        if self.rcpsp_problem.mode_details[act_id][mode_id].get(res, 0) == 0:
+                            continue
+                        if (
+                            self.resource_avail_in_time[res][t]
+                            < self.rcpsp_problem.mode_details[act_id][mode_id][res]
+                        ):
+                            valid = False
+                            break
+                    if not valid:
+                        break
+                if not valid:
+                    current_max_start -= 1
+
+            # Step 4: update resource availability
+            start_t = current_max_start
+            end_t = start_t + duration
+            for t in range(start_t, end_t):
+                for res in self.resource_avail_in_time:
+                    demand = self.rcpsp_problem.mode_details[act_id][mode_id].get(res, 0)
+                    if demand == 0:
+                        continue
+                    self.resource_avail_in_time[res][t] -= demand
+                    if res in self.rcpsp_problem.non_renewable_resources_list and t == end_t - 1:
+                        for tt in range(end_t, self.new_horizon):
+                            self.resource_avail_in_time[res][tt] -= demand
+                            if self.resource_avail_in_time[res][tt] < 0:
+                                unfeasible_non_renewable_resources = True
+
+            # Step 5: record and propagate maximum_finish_time to predecessors
+            activity_start_times[act_id] = current_max_start
+            self.scheduled.append(act_id)
+            for pred in predecessors(act_id):
+                self.maximum_finish_time[pred] = min(
+                    self.maximum_finish_time[pred], activity_start_times[act_id]
+                )
+
+        # ── Time shift: translate so source starts at t=0 ────────────────────
+        # The backward schedule was built relative to a deadline; shifting left
+        # by T_src gives a forward schedule with source at 0 and makespan = cp_length - T_src.
+        T_src = activity_start_times.get(source, 0)
+        rcpsp_schedule: Dict[Hashable, Dict[str, int]] = {}
+        for act_id, start in activity_start_times.items():
+            dur = self.rcpsp_problem.mode_details[act_id][mode_dict[act_id]]["duration"]
+            shifted = max(0, start - T_src)
+            rcpsp_schedule[act_id] = {"start_time": shifted, "end_time": shifted + dur}
+
+        if unfeasible_non_renewable_resources:
+            rcpsp_schedule_feasible = False
+            if sink not in rcpsp_schedule:
+                rcpsp_schedule[sink] = {"start_time": 99999999, "end_time": 99999999}
+        else:
+            rcpsp_schedule_feasible = True
+
+        del mode_dict[source]
+        del mode_dict[sink]
+        return RCPSPSolution(
+            problem=self.rcpsp_problem,
+            rcpsp_schedule=rcpsp_schedule,
+            rcpsp_modes=list(mode_dict.values()),
+            rcpsp_schedule_feasible=rcpsp_schedule_feasible,
+        )
+
+    def heuristic_earliest_feasible_finish_time(self) -> Union[int, float]:
+        # Returns the latest resource-feasible FINISH time for this activity/mode.
+        # We search downward from maximum_finish_time and return start + duration.
+        duration = self.rcpsp_problem.mode_details[self.cur_act][self.cur_mode]["duration"]
+        current_max_start = self.maximum_finish_time[self.cur_act] - duration
+        valid = False
+        while not valid and current_max_start >= 0:
+            valid = True
+            for t in range(current_max_start, current_max_start + duration):
+                if t >= self.new_horizon:
+                    return 0
+                for res in self.rcpsp_problem.resources_list:
+                    if self.rcpsp_problem.mode_details[self.cur_act][self.cur_mode].get(res, 0) == 0:
+                        continue
+                    if (
+                        self.resource_avail_in_time[res][t]
+                        < self.rcpsp_problem.mode_details[self.cur_act][self.cur_mode][res]
+                    ):
+                        valid = False
+                        break
+                if not valid:
+                    break
+            if not valid:
+                current_max_start -= 1
+        return current_max_start + duration

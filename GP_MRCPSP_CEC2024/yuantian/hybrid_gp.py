@@ -8,15 +8,22 @@ replacement for it: the baseline condition keeps using `standard_gp`
 (tournament selection, no local search) completely untouched. The two
 conditions therefore only differ in (a) the selection operator and (b) the
 elite local-search step, as required for a fair comparison.
+
+A gap-aware early-stopping variant of `lexicase_memetic_gp` was tried (see
+`yuantian/exploratory/gap_aware_stopping.py`) and moved there after two
+separate validations both came back negative -- see that module's
+docstring and GP_MRCPSP_CEC2024/readme.md, extension #2, for what was
+tried and what the result was.
 """
 import random
 from functools import partial
+from typing import Optional
 
 import numpy as np
 from deap import tools
 
 from yuantian.gp_algorithms import load_elites, varOr
-from yuantian.local_search import apply_local_search_to_elite
+from yuantian.local_search import RefinementStrategyEnum, apply_local_search_to_elite
 from yuantian.rcpsp_dataset import DatasetProvider
 
 
@@ -62,10 +69,20 @@ def _local_search_elites(
     pset,
     local_search_iters,
     rng,
+    refinement_strategy=RefinementStrategyEnum.LOCAL_SEARCH_WITH_CP,
 ):
     """Part 2, Steps 1+4: pick the top `elite_fraction` of the population by
     mean fitness, and overwrite each one's fitness/case_fitness with the
-    locally-improved values (the GP tree itself is left untouched)."""
+    refined values (the GP tree itself is left untouched).
+
+    `refinement_strategy=RefinementStrategyEnum.BASELINE` means "no
+    refinement": this is the single place that decision is made, so every
+    caller of `lexicase_memetic_gp` gets a true no-op (elites keep whatever
+    fitness they were already evaluated with) rather than each caller having
+    to special-case it.
+    """
+    if refinement_strategy == RefinementStrategyEnum.BASELINE:
+        return []
     n_elite_ls = max(1, int(round(elite_fraction * len(population))))
     elites = sorted(population, key=lambda ind: ind.fitness.values[0])[:n_elite_ls]
     for ind in elites:
@@ -78,8 +95,29 @@ def _local_search_elites(
             simulator,
             max_iters=local_search_iters,
             rng=rng,
+            strategy=refinement_strategy,
         )
     return elites
+
+
+def _accumulate_move_stats(elites, move_stats: Optional[dict]):
+    """Sum each refined elite's `local_search_moves` (and any
+    `critical_path_construct_failed` flag) into the caller-owned `move_stats`
+    accumulator, so the GP-loop caller can report, across the whole run, how
+    many proposed moves were attempted vs. accepted (hill-climbing
+    strategies) or how many one-shot constructions failed
+    (CRITICAL_PATH_ONLY) -- without `lexicase_memetic_gp` itself needing to
+    know which strategy is in use. No-op if `move_stats` is None (the
+    default for callers that don't care, e.g. the pre-existing experiments)."""
+    if move_stats is None:
+        return
+    for ind in elites:
+        moves = getattr(ind, "local_search_moves", None)
+        if moves:
+            move_stats["attempted"] = move_stats.get("attempted", 0) + moves["attempted"]
+            move_stats["accepted"] = move_stats.get("accepted", 0) + moves["accepted"]
+        if getattr(ind, "critical_path_construct_failed", False):
+            move_stats["construct_failures"] = move_stats.get("construct_failures", 0) + 1
 
 
 def lexicase_memetic_gp(
@@ -96,16 +134,19 @@ def lexicase_memetic_gp(
     pset,
     elite_fraction: float = 0.08,
     local_search_iters: int = 10,
+    refinement_strategy=RefinementStrategyEnum.LOCAL_SEARCH_WITH_CP,
     stats: tools.Statistics = None,
     halloffame: tools.HallOfFame = None,
     pop_archive: list = None,
+    move_stats: Optional[dict] = None,
     rng=random,
     verbose=__debug__,
 ):
     """Same generational loop as `gp_algorithms.standard_gp`, with the elite
     local-search step inserted right after each fitness evaluation. Selection
     itself is whatever `toolbox.select` is registered to (epsilon-lexicase
-    for the proposed condition)."""
+    for the proposed condition).
+    """
     logbook = tools.Logbook()
     logbook.header = ["gen", "nevals"] + (stats.fields if stats else [])
 
@@ -116,7 +157,7 @@ def lexicase_memetic_gp(
     for ind, fit in zip(invalid_ind, fitnesses):
         ind.fitness.values = fit
 
-    _local_search_elites(
+    elites = _local_search_elites(
         population,
         elite_fraction,
         toolbox,
@@ -126,7 +167,9 @@ def lexicase_memetic_gp(
         pset,
         local_search_iters,
         rng,
+        refinement_strategy,
     )
+    _accumulate_move_stats(elites, move_stats)
 
     pop_archive.append([toolbox.clone(ind) for ind in population])
 
@@ -158,7 +201,7 @@ def lexicase_memetic_gp(
         for ind, fit in zip(offspring, fitnesses):
             ind.fitness.values = fit
 
-        _local_search_elites(
+        elites = _local_search_elites(
             offspring,
             elite_fraction,
             toolbox,
@@ -168,7 +211,9 @@ def lexicase_memetic_gp(
             pset,
             local_search_iters,
             rng,
+            refinement_strategy,
         )
+        _accumulate_move_stats(elites, move_stats)
 
         if halloffame is not None:
             halloffame.update(offspring)

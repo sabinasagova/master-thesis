@@ -1,4 +1,4 @@
-# Evolutionary Algorithms for Project Scheduling — Master Thesis
+# Evolutionary Algorithms for Project Scheduling
 
 This repository contains the code, data, and LaTeX source for a master's thesis at Charles University, Prague, on solving the **Multi-Mode Resource-Constrained Project Scheduling Problem (MRCPSP)** using evolutionary algorithms.
 
@@ -93,6 +93,16 @@ Both extensions are opt-in flags on the baseline; the GP representation itself (
 ## Running the code
 
 ### Setup
+
+Create and activate a virtual environment first (this repo uses a `.env`
+folder at the repo root for it, not a dotenv config file):
+
+```bash
+python3 -m venv .env
+source .env/bin/activate
+```
+
+Then install dependencies and set up the path:
 
 ```bash
 cd GP_MRCPSP_CEC2024

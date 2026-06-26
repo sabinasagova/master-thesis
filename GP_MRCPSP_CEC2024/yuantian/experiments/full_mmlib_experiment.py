@@ -174,6 +174,12 @@ def run_single(seed: int, method: str, sgs_type: str, training, validation, test
     val_fitnesses = solver.toolbox.map(validation_evaluate, final_pop)
     best_validated_ind = min(zip(final_pop, val_fitnesses), key=lambda x: x[1][0])[0]
     test_fitness = solver.toolbox.evaluate(individual=best_validated_ind, domains=test)[0]
+    # this single evaluation has no selection pressure backing it up (unlike
+    # best_fitness_train, where an infeasible individual would have to beat
+    # out the entire rest of the population to end up reported), so a single
+    # infeasible test instance can silently swap test_fitness for a sentinel
+    # in the millions -- this PRIMARY metric needs feasibility tracked.
+    test_feasible = all(best_validated_ind.case_feasible)
 
     gen_best = log.chapters["generation_best"]
     fitness_curve = [g["fitness"] for g in gen_best]
@@ -193,6 +199,7 @@ def run_single(seed: int, method: str, sgs_type: str, training, validation, test
         "sgs": sgs_type,
         "best_fitness_train": best_fitness_train,
         "test_fitness": test_fitness,
+        "test_feasible": test_feasible,
         "mean_final_pop": float(final_pop_stats["avg"]),
         "std_final_pop": float(final_pop_stats["std"]),
         "convergence_gen": convergence_gen,
@@ -201,6 +208,12 @@ def run_single(seed: int, method: str, sgs_type: str, training, validation, test
         "avg_unique_trees_over_run": float(np.mean(unique_trees_per_gen)),
         "best_tree": gen_best[-1]["tree"],
     }
+
+
+def _feasible_test_vals(records: list) -> np.ndarray:
+    # old result files (pre-feasibility-tracking) default to "assume feasible"
+    # so they keep working, but every new run actually filters.
+    return np.array([r["test_fitness"] for r in records if r.get("test_feasible", True)])
 
 
 def rank_biserial_effect_size(diffs: np.ndarray) -> float:
@@ -242,7 +255,7 @@ def main():
                 print(
                     f"[{sgs_type}/{method}] seed={seed} "
                     f"train_best={record['best_fitness_train']:.4f} "
-                    f"test={record['test_fitness']:.4f} "
+                    f"test={record['test_fitness']:.4f} test_feasible={record['test_feasible']} "
                     f"conv_gen={record['convergence_gen']} "
                     f"uniq_trees={record['avg_unique_trees_over_run']:.1f} "
                     f"({time.time() - t0:.1f}s)"
@@ -274,6 +287,7 @@ def analyze(all_results: list):
     emit("=" * 90)
     emit("1. SUMMARY TABLES (per SGS): methods x mean +/- std test fitness")
     emit("=" * 90)
+    emit("(TestMean/TestStd below are feasibility-filtered -- see n_feasible noted per row if any seed was dropped)")
     for sgs_type in SGS_TYPES:
         emit(f"\n--- SGS = {sgs_type} ---")
         emit(
@@ -283,12 +297,15 @@ def analyze(all_results: list):
         for method in METHODS:
             records = by_key[(sgs_type, method)]
             train_vals = np.array([r["best_fitness_train"] for r in records])
-            test_vals = np.array([r["test_fitness"] for r in records])
+            test_vals = _feasible_test_vals(records)
             conv_vals = np.array([r["convergence_gen"] for r in records], dtype=float)
+            n_dropped = len(records) - len(test_vals)
+            dropped_note = f" (dropped {n_dropped} infeasible test)" if n_dropped else ""
             emit(
                 f"{METHOD_LABELS[method]:<15}{train_vals.mean():>11.4f}{train_vals.min():>11.4f}"
                 f"{train_vals.std():>10.4f}{np.median(train_vals):>12.4f}"
                 f"{test_vals.mean():>10.4f}{test_vals.std():>10.4f}{conv_vals.mean():>9.2f}"
+                f"{dropped_note}"
             )
 
     emit("\n" + "=" * 90)
@@ -297,12 +314,12 @@ def analyze(all_results: list):
     for sgs_type in SGS_TYPES:
         ranking = sorted(
             METHODS,
-            key=lambda m: np.mean([r["test_fitness"] for r in by_key[(sgs_type, m)]]),
+            key=lambda m: _feasible_test_vals(by_key[(sgs_type, m)]).mean(),
         )
         emit(f"{sgs_type}: " + " < ".join(METHOD_LABELS[m] for m in ranking))
     overall_ranking = sorted(
         [(sgs, m) for sgs in SGS_TYPES for m in METHODS],
-        key=lambda sm: np.mean([r["test_fitness"] for r in by_key[sm]]),
+        key=lambda sm: _feasible_test_vals(by_key[sm]).mean(),
     )
     emit(
         "Overall (across both SGS): "
@@ -321,9 +338,11 @@ def analyze(all_results: list):
         ("lexicase", "ls_only"),
     ]
 
-    def _wilcoxon_block(section_label, metric_key, metric_label):
+    def _wilcoxon_block(section_label, metric_key, metric_label, feasible_key=None):
         emit("\n" + "=" * 90)
         emit(f"{section_label}. STATISTICAL SIGNIFICANCE (paired Wilcoxon on {metric_label}, by seed)")
+        if feasible_key:
+            emit("Pairs where EITHER side was infeasible on this metric are dropped before testing.")
         emit("=" * 90)
         for sgs_type in SGS_TYPES:
             emit(f"\n--- SGS = {sgs_type} ---")
@@ -332,11 +351,20 @@ def analyze(all_results: list):
                 recs_b = by_key[(sgs_type, b)]
                 vals_a = np.array([r[metric_key] for r in recs_a])
                 vals_b = np.array([r[metric_key] for r in recs_b])
+                if feasible_key:
+                    feas_a = np.array([r.get(feasible_key, True) for r in recs_a])
+                    feas_b = np.array([r.get(feasible_key, True) for r in recs_b])
+                    mask = feas_a & feas_b
+                    n_dropped = (~mask).sum()
+                    vals_a, vals_b = vals_a[mask], vals_b[mask]
+                else:
+                    n_dropped = 0
                 diffs = vals_a - vals_b  # positive => b better
-                if np.all(diffs == 0):
+                drop_note = f" [dropped {n_dropped} infeasible pair(s)]" if n_dropped else ""
+                if len(diffs) < 1 or np.all(diffs == 0):
                     emit(
-                        f"{METHOD_LABELS[a]} vs {METHOD_LABELS[b]}: all differences zero, "
-                        "Wilcoxon not informative"
+                        f"{METHOD_LABELS[a]} vs {METHOD_LABELS[b]}: all differences zero or no "
+                        f"pairs left, Wilcoxon not informative{drop_note}"
                     )
                     continue
                 stat, p_value = wilcoxon(vals_a, vals_b)
@@ -345,14 +373,14 @@ def analyze(all_results: list):
                 direction = f"{label_b} better" if diffs.mean() > 0 else f"{label_a} better"
                 sig = "significant (p<0.05)" if p_value < 0.05 else "not significant"
                 emit(
-                    f"{label_a} vs {label_b}: W={stat:.3f}, p={p_value:.6f}, r={effect:.4f}, "
-                    f"mean diff={diffs.mean():.4f} ({direction}) -> {sig}"
+                    f"{label_a} vs {label_b}: n={len(diffs)} W={stat:.3f}, p={p_value:.6f}, r={effect:.4f}, "
+                    f"mean diff={diffs.mean():.4f} ({direction}) -> {sig}{drop_note}"
                 )
 
     # Primary: validation-selected test fitness (what actually matters for
     # generalization). Secondary: training best_fitness (what the GP run
     # itself optimized), kept for transparency / overfitting checks.
-    _wilcoxon_block("3a", "test_fitness", "held-out test_fitness [PRIMARY]")
+    _wilcoxon_block("3a", "test_fitness", "held-out test_fitness [PRIMARY]", feasible_key="test_feasible")
     _wilcoxon_block("3b", "best_fitness_train", "training best_fitness [secondary]")
 
     emit("\n" + "=" * 90)
