@@ -695,7 +695,7 @@ class GPHH(SolverGenericRCPSP):
         self.toolbox = Toolbox()
         # multi-process map
         if self.params_gphh.cpu_cores > 1:
-            pool = multiprocessing.Pool(processes=self.params_gphh.cpu_cores)
+            pool = multiprocessing.Pool(processes=self.params_gphh.cpu_cores, maxtasksperchild=1)
             self.toolbox.register("map", pool.map)
 
         if self.decision_type == DecisionTypeEnum.SIMULTANEOUS:
