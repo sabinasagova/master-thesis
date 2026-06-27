@@ -1,10 +1,9 @@
 #!/bin/bash
 #PBS -N thesis_core_4h
-#PBS -l walltime=4:00:00
+#PBS -l walltime=8:00:00
 #PBS -l select=1:ncpus=8:mem=8gb:scratch_local=8gb
 #PBS -q default
 #PBS -j oe
-#PBS -t 1-300 
 
 # --- fill these in once per MetaCentrum account, not per script ---
 PROJECT_DIR="/storage/praha1/home/sagovas/master-thesis/GP_MRCPSP_CEC2024"
