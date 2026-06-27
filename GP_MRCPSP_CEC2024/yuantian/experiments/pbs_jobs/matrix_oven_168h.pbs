@@ -6,9 +6,9 @@
 #PBS -j oe
 
 # --- fill these in once per MetaCentrum account, not per script ---
-PROJECT_DIR="/storage/REPLACE_ME/master-thesis/GP_MRCPSP_CEC2024"
-VENV_PATH="/storage/REPLACE_ME/master-thesis/.env"
-PERSISTENT_OUT="/storage/REPLACE_ME/master-thesis/GP_MRCPSP_CEC2024/yuantian/experiments/results/matrix"
+PROJECT_DIR="/storage/praha1/home/sagovas/master-thesis/GP_MRCPSP_CEC2024"
+VENV_PATH="/storage/praha1/home/sagovas/master-thesis/.env"
+PERSISTENT_OUT="/storage/praha1/home/sagovas/master-thesis/GP_MRCPSP_CEC2024/yuantian/experiments/results/matrix"
 MANIFEST="$PROJECT_DIR/yuantian/experiments/pbs_jobs/matrix_oven_168h.manifest.csv"
 # --------------------------------------------------------------------
 

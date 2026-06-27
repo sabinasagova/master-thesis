@@ -1,0 +1,46 @@
+Loading python/3.11.11-gcc-10.2.1-555dlyc
+  Loading requirement: bzip2/1.0.8-gcc-10.2.1-ydytecx
+    expat/2.4.8-gcc-10.2.1-46kpooz gdbm/1.19-gcc-10.2.1-qavlyzh
+    gettext/0.21-gcc-10.2.1-tm75xz5 libffi/3.4.2-gcc-10.2.1-hrcl4md
+    ncurses/6.2-gcc-10.2.1-h3werp5 zlib/1.2.12-gcc-10.2.1-7qmmk4c
+    openssl/1.1.1o-gcc-10.2.1-k5zobqv readline/8.1-gcc-10.2.1-6rg3hny
+    sqlite/3.38.5-gcc-10.2.1-azsem56 tcl/8.6.12-gcc-10.2.1-c47mx2q
+    tix/8.4.3-gcc-10.2.1-lxwtcwj inputproto/2.3.2-gcc-10.2.1-umyzwhu
+    kbproto/1.0.7-gcc-10.2.1-sr6qksu libxcb/1.14-gcc-10.2.1-tq27v2s
+    xextproto/7.3.0-gcc-10.2.1-xmvpp75 xproto/7.0.31-gcc-10.2.1-jfxlkup
+    xtrans/1.3.5-gcc-10.2.1-kekp66m libx11/1.7.0-gcc-10.2.1-h76k4xh
+    font-util/1.3.2-gcc-10.2.1-ecfhf54 freetype/2.11.1-gcc-10.2.1-ukjspcj
+    libxml2/2.9.13-gcc-10.2.1-ov3wk3g util-linux-uuid/2.37.4-gcc-10.2.1-3nziyzx
+    fontconfig/2.13.94-gcc-10.2.1-siir4e7 renderproto/0.11.1-gcc-10.2.1-zwxitml
+    libxrender/0.9.10-gcc-10.2.1-zweyjfr libxft/2.3.2-gcc-10.2.1-vmpa6bv
+    libxext/1.3.3-gcc-10.2.1-zmhyr7d scrnsaverproto/1.2.2-gcc-10.2.1-c5t362p
+    libxscrnsaver/1.2.2-gcc-10.2.1-cmc2qsc tk/8.6.11-gcc-10.2.1-egeivzq
+    xz/5.2.5-gcc-10.2.1-fteagxc
+Matplotlib is building the font cache; this may take a moment.
+/storage/praha1/home/sagovas/gpenv/lib/python3.11/site-packages/minizinc/__init__.py:26: RuntimeWarning: MiniZinc was not found on the system. No default driver could be initialised.
+  warnings.warn(
+Current Working Directory: /scratch.ssd/sagovas/job_21605744.pbs-m1/repo
+Total CPUs: 192
+Total Memory: 811137499136
+Available Memory: 796941041664
+[MMLIB100/serial/AF/baseline] seed=12000 pop=1000 gen=50 train=30 val=10 test=10
+Running time: 20763.633615493774
+  done in 20950.9s -- train_best=13.2390 test_fitness=16.0775 -> /scratch.ssd/sagovas/job_21605744.pbs-m1/results/MMLIB100__serial__AF__baseline__seed12000.json
+Exception ignored in: <function Pool.__del__ at 0x14a296540cc0>
+Traceback (most recent call last):
+  File "/cvmfs/software.metacentrum.cz/spack18/software/linux-debian11-x86_64_v2/gcc-10.2.1/python-3.11.11-555dlyctrqxciw5mnnebm2fzyawa7i3s/lib/python3.11/multiprocessing/pool.py", line 271, in __del__
+    self._change_notifier.put(None)
+  File "/cvmfs/software.metacentrum.cz/spack18/software/linux-debian11-x86_64_v2/gcc-10.2.1/python-3.11.11-555dlyctrqxciw5mnnebm2fzyawa7i3s/lib/python3.11/multiprocessing/queues.py", line 377, in put
+    self._writer.send_bytes(obj)
+  File "/cvmfs/software.metacentrum.cz/spack18/software/linux-debian11-x86_64_v2/gcc-10.2.1/python-3.11.11-555dlyctrqxciw5mnnebm2fzyawa7i3s/lib/python3.11/multiprocessing/connection.py", line 200, in send_bytes
+    self._send_bytes(m[offset:offset + size])
+  File "/cvmfs/software.metacentrum.cz/spack18/software/linux-debian11-x86_64_v2/gcc-10.2.1/python-3.11.11-555dlyctrqxciw5mnnebm2fzyawa7i3s/lib/python3.11/multiprocessing/connection.py", line 427, in _send_bytes
+    self._send(header + buf)
+  File "/cvmfs/software.metacentrum.cz/spack18/software/linux-debian11-x86_64_v2/gcc-10.2.1/python-3.11.11-555dlyctrqxciw5mnnebm2fzyawa7i3s/lib/python3.11/multiprocessing/connection.py", line 384, in _send
+    n = write(self._handle, buf)
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 9] Bad file descriptor
+
+**********************************************************************************************************
+
+The SCRATCHes have been SUCCESSFULLY cleaned...
