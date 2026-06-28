@@ -9,7 +9,7 @@
 PROJECT_DIR="/storage/praha1/home/sagovas/master-thesis/GP_MRCPSP_CEC2024"
 VENV_PATH="/storage/praha1/home/sagovas/gpenv"
 PERSISTENT_OUT="/storage/praha1/home/sagovas/master-thesis/GP_MRCPSP_CEC2024/yuantian/experiments/results/matrix"
-MANIFEST="$PROJECT_DIR/yuantian/experiments/pbs_jobs/thesis_core_MMLIB50_4h.manifest.csv"
+MANIFEST="$PROJECT_DIR/yuantian/experiments/pbs_jobs/thesis_core_MMLIB100.manifest.csv"
 # --------------------------------------------------------------------
 
 set -e

@@ -1,15 +1,15 @@
 #!/bin/bash
-#PBS -N matrix_oven_168h
-#PBS -l walltime=168:00:00
-#PBS -l select=1:ncpus=1:mem=4gb:scratch_local=4gb
-#PBS -q oven
+#PBS -N thesis_core_96h
+#PBS -l walltime=96:00:00
+#PBS -l select=1:ncpus=8:mem=8gb:scratch_local=8gb
+#PBS -q default
 #PBS -j oe
 
 # --- fill these in once per MetaCentrum account, not per script ---
 PROJECT_DIR="/storage/praha1/home/sagovas/master-thesis/GP_MRCPSP_CEC2024"
-VENV_PATH="/storage/praha1/home/sagovas/master-thesis/.env"
+VENV_PATH="/storage/praha1/home/sagovas/gpenv"
 PERSISTENT_OUT="/storage/praha1/home/sagovas/master-thesis/GP_MRCPSP_CEC2024/yuantian/experiments/results/matrix"
-MANIFEST="$PROJECT_DIR/yuantian/experiments/pbs_jobs/matrix_oven_168h.manifest.csv"
+MANIFEST="$PROJECT_DIR/yuantian/experiments/pbs_jobs/thesis_core_MMLIB50.manifest.csv"
 # --------------------------------------------------------------------
 
 set -e
@@ -27,6 +27,8 @@ if [ -f "$PERSISTENT_OUT/$RESULT_NAME" ]; then
     exit 0
 fi
 
+module add python/3.11.11-gcc-10.2.1-555dlyc
+
 cp -r "$PROJECT_DIR" "$SCRATCHDIR/repo"
 cd "$SCRATCHDIR/repo"
 source "$VENV_PATH/bin/activate"
@@ -36,6 +38,7 @@ mkdir -p "$SCRATCHDIR/results"
 python3 -O -m yuantian.experiments.matrix_runner \
     --condition "$CONDITION" --strategy "$STRATEGY" --sgs "$SGS" --dataset "$DATASET" \
     --pop "$POP" --gen "$GEN" --seed "$SEED" --n_classes "$NCLASSES" \
+    --multiprocess --cpu_cores 8 \
     --out "$SCRATCHDIR/results"
 
 mkdir -p "$PERSISTENT_OUT"
