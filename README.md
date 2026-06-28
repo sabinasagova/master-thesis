@@ -77,19 +77,6 @@ GPHH evolves scheduling priority rules as symbolic GP trees (one activity-select
 
 ---
 
-## Extensions to the baseline
-
-Two extensions on top of the baseline, both described in more detail (with results) in [`GP_MRCPSP_CEC2024/readme.md`](GP_MRCPSP_CEC2024/readme.md):
-
-| # | Extension | Location | Status |
-|---|-----------|----------|--------|
-| 1 | Critical-path propagation terminals (`CP_FORWARD`, `CP_BACKWARD`, `CP_SLACK_SCORE`, `CP_PROB`) | `cp_propagation.py` | Tested over 10 seeds: faster convergence, no significant quality gain (likely redundant with existing ES/EF/LS/LF terminals) |
-| 2 | Epsilon-lexicase selection with critical-path local search on elites | `hybrid_gp.py`, `local_search.py` | Tested at small scale (significant) and on full MMLIB50 (significant on training fitness; trending but not yet significant on held-out test fitness, additional seeds in progress) |
-
-Both extensions are opt-in flags on the baseline; the GP representation itself (trees, primitives) is unchanged.
-
----
-
 ## Running the code
 
 ### Setup
@@ -116,24 +103,6 @@ export PYTHONPATH=$(pwd):$PYTHONPATH
 python yuantian/gphh_solver.py --default --dataset MMLIB50
 ```
 
-### Run the baseline with CP propagation terminals enabled
-
-```bash
-python yuantian/gphh_solver.py --default --dataset MMLIB50 --cp_propagation
-```
-
-### Run the comparison experiments (lexicase, local search, full MMLIB sweep)
-
-These are standalone scripts under `yuantian/experiments/`, not CLI flags on `gphh_solver.py`. Each script runs multiple seeds, performs the train/val/test split, and prints a Wilcoxon test at the end. Run with `-O` to suppress debug output from the parallel SGS:
-
-```bash
-python -O yuantian/experiments/cp_propagation_experiment.py
-python -O yuantian/experiments/lexicase_local_search_experiment.py
-python -O yuantian/experiments/full_mmlib_experiment.py
-```
-
-Results (raw per-run JSON and a convergence plot) are written to `yuantian/experiments/results/<script_name>/`.
-
 ### Key CLI flags for `gphh_solver.py`
 
 | Flag | Default | Description |
@@ -144,9 +113,6 @@ Results (raw per-run JSON and a convergence plot) are written to `yuantian/exper
 | `--dataset` | small | `MMLIB50` / `MMLIB100` / `MMLIBPLUS_50` / `MMLIBPLUS_100` |
 | `-n` | 1 | Number of independent runs |
 | `--seed` | 1 | Starting random seed |
-| `--cp_propagation` | off | Add the critical-path propagation terminals |
-| `--dynamic` | off | Use dynamic CPM terminals |
-| `--split` | off | Split training set across generations |
 | `--multiprocess` | off | Parallel fitness evaluation |
 | `--log` | `./results/` | Output directory for result JSON files |
 
@@ -156,3 +122,11 @@ Results (raw per-run JSON and a convergence plot) are written to `yuantian/exper
 
 Experiments use the **MMLIB** benchmark library (Van Peteghem & Vanhoucke, 2014) for MRCPSP, hosted by the OR&S Research Group at Ghent University:
 <https://www.projectmanagement.ugent.be/research/project_scheduling/mmrcpsp>
+
+---
+
+## License
+
+This repository is licensed under the **MIT License** — see [`LICENSE`](LICENSE).
+
+The vendored code under [`GP_MRCPSP_CEC2024/`](GP_MRCPSP_CEC2024) (the GPHH baseline and the `discrete_optimization` library) carries its own MIT license from the original authors — see [`GP_MRCPSP_CEC2024/LICENSE`](GP_MRCPSP_CEC2024/LICENSE).
