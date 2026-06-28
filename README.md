@@ -127,6 +127,6 @@ Experiments use the **MMLIB** benchmark library (Van Peteghem & Vanhoucke, 2014)
 
 ## License
 
-This repository is licensed under the **MIT License** — see [`LICENSE`](LICENSE).
+This repository is licensed under the **MIT License**: see [`LICENSE`](LICENSE).
 
-The vendored code under [`GP_MRCPSP_CEC2024/`](GP_MRCPSP_CEC2024) (the GPHH baseline and the `discrete_optimization` library) carries its own MIT license from the original authors — see [`GP_MRCPSP_CEC2024/LICENSE`](GP_MRCPSP_CEC2024/LICENSE). The matrix experiment scripts under `yuantian/experiments/`, the NR terminal extensions, and other additions on top of the original GPHH baseline are original contributions by the thesis author, not part of the vendored upstream code.
+The vendored code under [`GP_MRCPSP_CEC2024/`](GP_MRCPSP_CEC2024) (the GPHH baseline and the `discrete_optimization` library) carries its own MIT license from the original authors: see [`GP_MRCPSP_CEC2024/LICENSE`](GP_MRCPSP_CEC2024/LICENSE). The matrix experiment scripts under `yuantian/experiments/`, the NR terminal extensions, and other additions on top of the original GPHH baseline are original contributions by the thesis author, not part of the vendored upstream code.
