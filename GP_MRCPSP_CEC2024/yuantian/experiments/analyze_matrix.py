@@ -153,32 +153,45 @@ def reproduction_report(rows: list, emit):
     emit("PAPER-BASELINE REPRODUCTION REPORT (our 'baseline' condition vs paper Tables V/VI)")
     emit("=" * 100)
     emit("Manual-rule reference is the paper's strongest hand-crafted heuristic for that dataset")
-    emit("(name varies by dataset/SGS -- shown per row). Paper GP column is mean+-std over 30 runs.\n")
+    emit("(name varies by dataset/SGS -- shown per row). Paper GP column is mean+-std over 30 runs,")
+    emit("and is itself a HELD-OUT test-set number -- so 'Diff' below is computed against Our test")
+    emit("mean, not train (train fitness is mechanically lower: the GP is directly selected to")
+    emit("minimize it on those exact instances). Our train mean is shown alongside for reference,")
+    emit("not as the reproduction comparison.\n")
 
     baseline_rows = [r for r in rows if r["condition"] == "baseline"]
     by_sgs_ds_strat = group_by(baseline_rows, "sgs", "dataset", "strategy")
 
-    col = "{:<16} {:<9} {:>22} {:>14} {:>9} {:>8} {:>8} {:>3}"
+    col = "{:<16} {:<9} {:>22} {:>14} {:>11} {:>9} {:>11} {:>9} {:>8} {:>3}"
     for sgs, paper_table in (("serial", PAPER_TABLE_V_SERIAL), ("parallel", PAPER_TABLE_VI_PARALLEL)):
         emit(f"--- SGS = {sgs} ({'Table V' if sgs == 'serial' else 'Table VI'}) ---")
-        emit(col.format("Dataset", "Strategy", "Manual rule", "Paper GP", "Our mean", "Our std", "Diff", "n"))
+        emit(col.format(
+            "Dataset", "Strategy", "Manual rule", "Paper GP",
+            "Our train", "std", "Our test", "std", "Diff", "n",
+        ))
         for dataset in DATASETS:
             for strategy in STRATEGIES:
                 manual_name, manual_val, paper_val, paper_std = paper_table[dataset][strategy]
                 cell_rows = by_sgs_ds_strat.get((sgs, dataset, strategy), [])
                 train_means = [r["train_mean"] for r in cell_rows if r["train_mean"] is not None]
+                test_means = [r["test_mean"] for r in cell_rows if r["test_mean"] is not None]
                 manual_str = f"{manual_val:.2f} ({manual_name})"
                 paper_str = f"{paper_val:.2f}+-{paper_std:.2f}"
-                if train_means:
-                    our_mean = float(np.mean(train_means))
-                    our_std = float(np.std(train_means))
-                    diff_str = f"{our_mean - paper_val:+.2f}"
-                    emit(col.format(
-                        dataset, strategy, manual_str, paper_str,
-                        f"{our_mean:.2f}", f"{our_std:.2f}", diff_str, str(len(train_means)),
-                    ))
+                train_str = f"{np.mean(train_means):.2f}" if train_means else "no data"
+                train_std_str = f"{np.std(train_means):.2f}" if train_means else ""
+                if test_means:
+                    our_test_mean = float(np.mean(test_means))
+                    test_str = f"{our_test_mean:.2f}"
+                    test_std_str = f"{np.std(test_means):.2f}"
+                    diff_str = f"{our_test_mean - paper_val:+.2f}"
+                    n_str = str(len(test_means))
                 else:
-                    emit(col.format(dataset, strategy, manual_str, paper_str, "no data yet", "", "", ""))
+                    test_str = "no data yet"
+                    test_std_str = diff_str = n_str = ""
+                emit(col.format(
+                    dataset, strategy, manual_str, paper_str,
+                    train_str, train_std_str, test_str, test_std_str, diff_str, n_str,
+                ))
         emit("")
 
 
@@ -194,6 +207,7 @@ def extension_comparison_report(rows: list, emit):
         by_cell = group_by(rows, "dataset", "sgs", "strategy")
         for (dataset, sgs, strategy), cell_rows in sorted(by_cell.items()):
             baseline_rows = [r for r in cell_rows if r["condition"] == "baseline"]
+            baseline_nr_rows = [r for r in cell_rows if r["condition"] == "baseline_nr"]
             if not baseline_rows:
                 continue
             emit(f"\n  {dataset} / {sgs} / {strategy}")
@@ -208,9 +222,21 @@ def extension_comparison_report(rows: list, emit):
                 vals = [r[metric] for r in cond_rows if r[metric] is not None]
                 feas_rate = float(np.mean([r[f"{split}_feas_rate"] for r in cond_rows]))
                 if condition == "nr":
-                    note = "[different instance set, see caveat below -- not in vs-baseline column]"
+                    if baseline_nr_rows:
+                        cmp = paired_wilcoxon(baseline_nr_rows, cond_rows, metric)
+                        if cmp is None:
+                            note = "not enough paired data (vs baseline_nr)"
+                        elif cmp["p"] is None:
+                            note = f"n={cmp['n']} all differences zero (vs baseline_nr)"
+                        else:
+                            sig = "significant" if cmp["p"] < 0.05 else "not significant"
+                            note = f"n={cmp['n']} p={cmp['p']:.4f} r={cmp['r']:.3f} ({sig}, vs baseline_nr)"
+                    else:
+                        note = "[different instance set, see caveat below -- not in vs-baseline column]"
                 elif condition == "baseline":
                     note = "--"
+                elif condition == "baseline_nr":
+                    note = "-- (NR-instance control, pairs with 'nr' row above)"
                 else:
                     cmp = paired_wilcoxon(baseline_rows, cond_rows, metric)
                     if cmp is None:
@@ -230,11 +256,14 @@ def extension_comparison_report(rows: list, emit):
 
     emit("--- 'nr' condition caveat ---")
     emit(
-        "The 'nr' condition runs on NR-preserving instances (keep_non_renewable=True); every "
-        "other condition above (including this matrix's 'baseline' row) runs on the paper's "
-        "renewable-only-converted instances. They are NOT the same problem instances, so 'nr' "
-        "vs this matrix's 'baseline' is not a valid same-instance paired comparison -- see "
-        "nr_terminals_experiment.py for the dedicated, instance-matched nr-vs-baseline comparison."
+        "The 'nr' condition runs on NR-preserving instances (keep_non_renewable=True); "
+        "'baseline'/'lexicase'/'local_search'/'hybrid' run on the paper's renewable-only-"
+        "converted instances -- NOT the same problem instances as 'nr', so 'nr' vs 'baseline' "
+        "above is never a valid same-instance comparison. 'baseline_nr' (same algorithm as "
+        "'baseline', loaded on the NR-preserving set) is nr's matched control instead -- where "
+        "'baseline_nr' data exists, the 'nr' row's vs-baseline column is the paired Wilcoxon "
+        "against baseline_nr, not the caveat text. See also nr_terminals_experiment.py for an "
+        "independent, smaller-scale instance-matched nr-vs-baseline comparison."
     )
 
 

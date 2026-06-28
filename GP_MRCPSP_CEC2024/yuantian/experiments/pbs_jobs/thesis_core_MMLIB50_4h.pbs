@@ -1,8 +1,8 @@
 #!/bin/bash
-#PBS -N thesis_core_4h
-#PBS -l walltime=8:00:00
+#PBS -N thesis_core_720h
+#PBS -l walltime=720:00:00
 #PBS -l select=1:ncpus=8:mem=8gb:scratch_local=8gb
-#PBS -q default
+#PBS -q oven
 #PBS -j oe
 
 # --- fill these in once per MetaCentrum account, not per script ---

@@ -20,18 +20,20 @@ condition has to load instances WITHOUT that conversion
 does, keyed off whether --nr_terminals is set (see read_instances call
 there). That means "nr" runs on a different, slightly harder instance set
 than baseline/lexicase/local_search/hybrid (all of which use the paper's
-renewable-only conversion, exactly matching Tables V/VI), and the two
-results are NOT a same-instance paired comparison. analyze_matrix.py
-flags this explicitly rather than silently diffing mismatched instances.
+renewable-only conversion, exactly matching Tables V/VI). "baseline_nr"
+closes that gap: it's the plain (no NR terminals) algorithm run on the
+SAME NR-preserving instance set as "nr", so analyze_matrix.py can pair
+nr against baseline_nr as a valid same-instance comparison, instead of
+only against the renewable-only "baseline" row.
 
 Conditions:
-  - baseline / nr: pure standard_gp (gp_algorithms.standard_gp), with
-    nr_terminals_feature on for "nr". Goes through GPHH.solve() directly,
-    so the result JSON's feasibility fields come from solve()'s own
-    (already-fixed) write path natively -- this is also why this runner
-    defaults to single-process: under --multiprocess, train_case_records
-    would come back None and fall back to a recompute (see
-    gphh_solver.py's docstring on that path), which is fine but
+  - baseline / baseline_nr / nr: pure standard_gp (gp_algorithms.
+    standard_gp), with nr_terminals_feature on for "nr" only. Goes through
+    GPHH.solve() directly, so the result JSON's feasibility fields come
+    from solve()'s own (already-fixed) write path natively -- this is also
+    why this runner defaults to single-process: under --multiprocess,
+    train_case_records would come back None and fall back to a recompute
+    (see gphh_solver.py's docstring on that path), which is fine but
     unnecessary when the point of a result file is to feed an analysis
     later, not to race the clock.
   - lexicase / local_search / hybrid: solve() hardcodes standard_gp, so
@@ -134,9 +136,9 @@ def build_params(args) -> ParametersGPHH:
 def load_split(args):
     classes = stratified_classes(args.dataset, args.n_classes)
     train_files, val_files, test_files = dataset_files(args.dataset, classes)
-    # see module docstring: "nr" needs NR resources preserved, every other
-    # condition uses the paper's own renewable-only conversion.
-    keep_non_renewable = args.condition == "nr"
+    # see module docstring: "nr"/"baseline_nr" need NR resources preserved,
+    # every other condition uses the paper's own renewable-only conversion.
+    keep_non_renewable = args.condition in ("nr", "baseline_nr")
     training = read_instances(train_files, keep_non_renewable=keep_non_renewable)
     validation = read_instances(val_files, keep_non_renewable=keep_non_renewable)
     test = read_instances(test_files, keep_non_renewable=keep_non_renewable)
@@ -178,7 +180,7 @@ def run_cell(args, training, validation, test, output_path: Path) -> dict:
     np.random.seed(args.seed)
     params = build_params(args)
 
-    if args.condition in ("baseline", "nr"):
+    if args.condition in ("baseline", "baseline_nr", "nr"):
         solver = GPHH(
             training_set_provider=StaticDatasetProvider(training),
             validation_set_provider=StaticDatasetProvider(validation),
