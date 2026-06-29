@@ -1,0 +1,45 @@
+#!/bin/bash
+#PBS -N thesis_core_48h_MMLIB100
+#PBS -l walltime=48:00:00
+#PBS -l select=1:ncpus=8:mem=8gb:scratch_local=8gb
+#PBS -q default
+#PBS -j oe
+
+# --- fill these in once per MetaCentrum account, not per script ---
+PROJECT_DIR="/storage/praha1/home/sagovas/master-thesis/GP_MRCPSP_CEC2024"
+VENV_PATH="/storage/praha1/home/sagovas/gpenv"
+PERSISTENT_OUT="/storage/praha1/home/sagovas/master-thesis/GP_MRCPSP_CEC2024/yuantian/experiments/results/matrix"
+MANIFEST="$PROJECT_DIR/yuantian/experiments/pbs_jobs/thesis_core_MMLIB100_nr_only.manifest.csv"
+# --------------------------------------------------------------------
+
+set -e
+trap 'clean_scratch' TERM EXIT
+
+LINE=$(sed -n "${PBS_ARRAY_INDEX}p" "$MANIFEST")
+IFS=',' read -r CONDITION STRATEGY SGS DATASET SEED POP GEN NCLASSES <<< "$LINE"
+RESULT_NAME="${DATASET}__${SGS}__${STRATEGY}__${CONDITION}__seed${SEED}.json"
+
+# idempotent: bail before touching scratch at all if the persistent result
+# already exists -- a resubmitted/relaunched array element shouldn't redo
+# finished cells, and shouldn't even pay for the scratch copy to find that out.
+if [ -f "$PERSISTENT_OUT/$RESULT_NAME" ]; then
+    echo "SKIP (already exists): $PERSISTENT_OUT/$RESULT_NAME"
+    exit 0
+fi
+
+module add python/3.11.11-gcc-10.2.1-555dlyc
+
+cp -r "$PROJECT_DIR" "$SCRATCHDIR/repo"
+cd "$SCRATCHDIR/repo"
+source "$VENV_PATH/bin/activate"
+export PYTHONPATH="$SCRATCHDIR/repo:$SCRATCHDIR/repo/yuantian:$PYTHONPATH"
+mkdir -p "$SCRATCHDIR/results"
+
+python3 -O -m yuantian.experiments.matrix_runner \
+    --condition "$CONDITION" --strategy "$STRATEGY" --sgs "$SGS" --dataset "$DATASET" \
+    --pop "$POP" --gen "$GEN" --seed "$SEED" --n_classes "$NCLASSES" \
+    --multiprocess --cpu_cores 8 \
+    --out "$SCRATCHDIR/results"
+
+mkdir -p "$PERSISTENT_OUT"
+cp "$SCRATCHDIR/results/"*.json "$PERSISTENT_OUT/" 2>/dev/null || true
