@@ -69,17 +69,25 @@ def rank_biserial_effect_size(diffs: np.ndarray) -> float:
     return float((r_plus - r_minus) / ranks.sum())
 
 
-def load_results(results_dir: Path) -> list:
-    results = []
-    for path in sorted(results_dir.glob("*.json")):
+def load_summaries(results_dir: Path, glob: str = "*.json") -> list:
+    """Stream each result file through per_seed_summary and discard its raw
+    JSON immediately, instead of accumulating every full result dict in
+    memory first. Result files carry a full per-generation/per-instance log
+    (tens of MB each; 30 seeds x 6 conditions x 6 cells for one dataset alone
+    is ~30GB), so holding all of them as parsed dicts at once (the previous
+    two-pass load_results -> [per_seed_summary(r) for r in raw_results]
+    approach) OOM-kills on a full matrix run -- only the small per-seed
+    summary dict needs to survive past each file's own iteration."""
+    summaries = []
+    for path in sorted(results_dir.glob(glob)):
         if path.name.startswith("."):
             continue
         with open(path) as f:
             r = json.load(f)
-        if "matrix_cell" not in r:
-            continue  # not one of ours (e.g. a stray non-matrix result file)
-        results.append(r)
-    return results
+        if "matrix_cell" in r:
+            summaries.append(per_seed_summary(r))
+        del r
+    return summaries
 
 
 def feasible_mean(case_records: list) -> float:
@@ -270,16 +278,18 @@ def extension_comparison_report(rows: list, emit):
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--results_dir", type=str, default="yuantian/experiments/results/matrix")
+    p.add_argument("--glob", type=str, default="*.json",
+                   help="filename glob within results_dir, e.g. 'MMLIB50__*.json' to "
+                        "process one dataset at a time and keep peak memory bounded")
     p.add_argument("--out", type=str, default=None, help="also write the report text to this path")
     args = p.parse_args()
 
     results_dir = Path(args.results_dir)
-    raw_results = load_results(results_dir)
-    if not raw_results:
-        print(f"No matrix result files found under {results_dir}")
+    rows = load_summaries(results_dir, args.glob)
+    if not rows:
+        print(f"No matrix result files found under {results_dir} matching {args.glob!r}")
         return
-    rows = [per_seed_summary(r) for r in raw_results]
-    print(f"Loaded {len(rows)} matrix result files from {results_dir}\n")
+    print(f"Loaded {len(rows)} matrix result files from {results_dir} ({args.glob!r})\n")
 
     report_lines = []
 

@@ -1,0 +1,17 @@
+# Dependencies actually exercised by yuantian/*.py (the GPHH/DMGE pipeline,
+# evaluation harnesses, and plotting scripts used in the thesis). The vendored
+# discrete_optimization/ folder in this directory is NOT the PyPI package of
+# the same name -- it is a local, modified copy and is imported via the
+# current-directory path, not installed.
+deap==1.4.3
+networkx
+numpy
+scipy
+matplotlib
+seaborn
+psutil
+numba
+shapely
+deprecation
+minizinc
+mip

@@ -46,6 +46,20 @@ for `modifications.py`) and ported here, split into one module per strategy
 to match this repo's current convention (one file per extension) instead of
 the original single 1314-line file.
 
+The complete original first-phase codebase has since also been restored,
+byte-identical to its last pre-deletion state (`b595a2d5^`), under
+[`legacy_gp_algorithm/`](legacy_gp_algorithm/) in this package: the full
+`yuantian/` tree (including `modifications.py`, `custom_ea.py`, the old
+`gphh_solver.py`/`rcpsp_simulation.py` they ran against, the evaluation
+harnesses, and the analysis notebooks) plus its original `readme.md` and
+`requirements.txt`. It is an archive for provenance and thesis
+reproducibility, not an importable part of this package: nothing here or
+elsewhere in the active codebase imports from it, and running it requires
+its two vendored directories (`discrete_optimization/`,
+`discrete_optimization_data/`), which were not duplicated -- symlink or
+copy them from the repository root (`GP_MRCPSP_CEC2024/`) into
+`legacy_gp_algorithm/` first.
+
 Two adaptations were necessary because the surrounding codebase changed
 shape between the original work and now:
 
