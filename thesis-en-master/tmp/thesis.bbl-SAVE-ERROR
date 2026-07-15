@@ -1,0 +1,1979 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.2 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global}
+    \entry{blazewicz1983}{article}{}
+      \name{author}{3}{}{%
+        {{hash=6b19ed6305d2c9b37bf1dd5375b9bc89}{%
+           family={B{ł}ażewicz},
+           familyi={B\bibinitperiod},
+           given={Jacek},
+           giveni={J\bibinitperiod}}}%
+        {{hash=6e2e92a3e1619c0eb372733ac57cbf32}{%
+           family={Lenstra},
+           familyi={L\bibinitperiod},
+           given={Jan\bibnamedelima Karel},
+           giveni={J\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
+        {{hash=34c78db7a15e6009eaa2367b970c3cee}{%
+           family={Rinnooy\bibnamedelima Kan},
+           familyi={R\bibinitperiod\bibinitdelim K\bibinitperiod},
+           given={Alexander\bibnamedelimb H.\bibnamedelimi G.},
+           giveni={A\bibinitperiod\bibinitdelim H\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+      }
+      \strng{namehash}{63fc7725b9bbf9f399aba10fe415d92f}
+      \strng{fullhash}{6cfab1e7a4eee7980dc7ef7a11380c7f}
+      \strng{bibnamehash}{6cfab1e7a4eee7980dc7ef7a11380c7f}
+      \strng{authorbibnamehash}{6cfab1e7a4eee7980dc7ef7a11380c7f}
+      \strng{authornamehash}{63fc7725b9bbf9f399aba10fe415d92f}
+      \strng{authorfullhash}{6cfab1e7a4eee7980dc7ef7a11380c7f}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Discrete Applied Mathematics}
+      \field{number}{1}
+      \field{title}{Scheduling Subject to Resource Constraints: Classification and Complexity}
+      \field{volume}{5}
+      \field{year}{1983}
+      \field{pages}{11\bibrangedash 24}
+      \range{pages}{14}
+      \verb{doi}
+      \verb 10.1016/0166-218X(83)90012-4
+      \endverb
+    \endentry
+    \entry{hartmann2010survey}{article}{}
+      \name{author}{2}{}{%
+        {{hash=90c20f5f97ab114474bc2c9a27dc348a}{%
+           family={Hartmann},
+           familyi={H\bibinitperiod},
+           given={Sönke},
+           giveni={S\bibinitperiod}}}%
+        {{hash=f6e05550d8bb5a688a3994d72179a836}{%
+           family={Briskorn},
+           familyi={B\bibinitperiod},
+           given={Dirk},
+           giveni={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{e2267fa163e40a7f2ace1b0c81aedde8}
+      \strng{fullhash}{e2267fa163e40a7f2ace1b0c81aedde8}
+      \strng{bibnamehash}{e2267fa163e40a7f2ace1b0c81aedde8}
+      \strng{authorbibnamehash}{e2267fa163e40a7f2ace1b0c81aedde8}
+      \strng{authornamehash}{e2267fa163e40a7f2ace1b0c81aedde8}
+      \strng{authorfullhash}{e2267fa163e40a7f2ace1b0c81aedde8}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{European Journal of Operational Research}
+      \field{number}{1}
+      \field{title}{A Survey of Variants and Extensions of the Resource-Constrained Project Scheduling Problem}
+      \field{volume}{207}
+      \field{year}{2010}
+      \field{pages}{1\bibrangedash 14}
+      \range{pages}{14}
+      \verb{doi}
+      \verb 10.1016/j.ejor.2009.11.005
+      \endverb
+    \endentry
+    \entry{kolisch2006}{article}{}
+      \name{author}{2}{}{%
+        {{hash=ec7e759459aeaf0eee291f32416098f5}{%
+           family={Kolisch},
+           familyi={K\bibinitperiod},
+           given={Rainer},
+           giveni={R\bibinitperiod}}}%
+        {{hash=90c20f5f97ab114474bc2c9a27dc348a}{%
+           family={Hartmann},
+           familyi={H\bibinitperiod},
+           given={Sönke},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{59dcc3d23f5e4ddcfb3039e840a6dbdf}
+      \strng{fullhash}{59dcc3d23f5e4ddcfb3039e840a6dbdf}
+      \strng{bibnamehash}{59dcc3d23f5e4ddcfb3039e840a6dbdf}
+      \strng{authorbibnamehash}{59dcc3d23f5e4ddcfb3039e840a6dbdf}
+      \strng{authornamehash}{59dcc3d23f5e4ddcfb3039e840a6dbdf}
+      \strng{authorfullhash}{59dcc3d23f5e4ddcfb3039e840a6dbdf}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{European Journal of Operational Research}
+      \field{number}{1}
+      \field{title}{Experimental Investigation of Heuristics for Resource-Constrained Project Scheduling: An Update}
+      \field{volume}{174}
+      \field{year}{2006}
+      \field{pages}{23\bibrangedash 37}
+      \range{pages}{15}
+      \verb{doi}
+      \verb 10.1016/j.ejor.2005.01.065
+      \endverb
+    \endentry
+    \entry{khajesaeedi2025review}{article}{}
+      \name{author}{4}{}{%
+        {{hash=daa77e20e946a72f885253bd53d8d9da}{%
+           family={Khajesaeedi},
+           familyi={K\bibinitperiod},
+           given={Sahar},
+           giveni={S\bibinitperiod}}}%
+        {{hash=0cfe525debec6800b6bce79691bc3198}{%
+           family={Sadjadi},
+           familyi={S\bibinitperiod},
+           given={Seyed\bibnamedelima Jafar},
+           giveni={S\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=6bcfaaf66167dd0b25d5c2d9a2d00d9c}{%
+           family={Barzinpour},
+           familyi={B\bibinitperiod},
+           given={Farnaz},
+           giveni={F\bibinitperiod}}}%
+        {{hash=ce7cb2e503759af2747a0fe22deb11f2}{%
+           family={Tavakkoli-Moghaddam},
+           familyi={T\bibinithyphendelim M\bibinitperiod},
+           given={Reza},
+           giveni={R\bibinitperiod}}}%
+      }
+      \strng{namehash}{6e80cc67bbda173f6ba909860628880e}
+      \strng{fullhash}{bf57ab28469830913db69996ed24c281}
+      \strng{bibnamehash}{bf57ab28469830913db69996ed24c281}
+      \strng{authorbibnamehash}{bf57ab28469830913db69996ed24c281}
+      \strng{authornamehash}{6e80cc67bbda173f6ba909860628880e}
+      \strng{authorfullhash}{bf57ab28469830913db69996ed24c281}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of Project Management}
+      \field{number}{1}
+      \field{title}{Resource-constrained project scheduling problem: Review of recent developments}
+      \field{volume}{10}
+      \field{year}{2025}
+      \field{pages}{1\bibrangedash 26}
+      \range{pages}{26}
+      \verb{doi}
+      \verb 10.5267/j.jpm.2024.12.002
+      \endverb
+    \endentry
+    \entry{pmbok2021}{book}{}
+      \name{author}{1}{}{%
+        {{hash=1ef4da9f3cd29e1ab68b3bc1995dc4a1}{%
+           family={{Project Management Institute}},
+           familyi={P\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Newtown Square, PA, USA}%
+      }
+      \list{publisher}{1}{%
+        {Project Management Institute}%
+      }
+      \strng{namehash}{1ef4da9f3cd29e1ab68b3bc1995dc4a1}
+      \strng{fullhash}{1ef4da9f3cd29e1ab68b3bc1995dc4a1}
+      \strng{bibnamehash}{1ef4da9f3cd29e1ab68b3bc1995dc4a1}
+      \strng{authorbibnamehash}{1ef4da9f3cd29e1ab68b3bc1995dc4a1}
+      \strng{authornamehash}{1ef4da9f3cd29e1ab68b3bc1995dc4a1}
+      \strng{authorfullhash}{1ef4da9f3cd29e1ab68b3bc1995dc4a1}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{7}
+      \field{title}{A Guide to the Project Management Body of Knowledge (PMBOK Guide)}
+      \field{year}{2021}
+    \endentry
+    \entry{demeulemeester2002}{book}{}
+      \name{author}{2}{}{%
+        {{hash=612e73619c946b7bf605e9081e2d6e85}{%
+           family={Demeulemeester},
+           familyi={D\bibinitperiod},
+           given={Erik\bibnamedelima L.},
+           giveni={E\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+        {{hash=5fbb51b6a19646ab72697f1f7276abd9}{%
+           family={Herroelen},
+           familyi={H\bibinitperiod},
+           given={Willy\bibnamedelima S.},
+           giveni={W\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Boston, MA, USA}%
+      }
+      \list{publisher}{1}{%
+        {Kluwer Academic Publishers}%
+      }
+      \strng{namehash}{599406cdd02c92570e30c0d1176cc4aa}
+      \strng{fullhash}{599406cdd02c92570e30c0d1176cc4aa}
+      \strng{bibnamehash}{599406cdd02c92570e30c0d1176cc4aa}
+      \strng{authorbibnamehash}{599406cdd02c92570e30c0d1176cc4aa}
+      \strng{authornamehash}{599406cdd02c92570e30c0d1176cc4aa}
+      \strng{authorfullhash}{599406cdd02c92570e30c0d1176cc4aa}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{series}{International Series in Operations Research \& Management Science}
+      \field{title}{Project Scheduling: A Research Handbook}
+      \field{year}{2002}
+      \verb{doi}
+      \verb 10.1007/b101924
+      \endverb
+    \endentry
+    \entry{brucker1999}{article}{}
+      \name{author}{5}{}{%
+        {{hash=373121fe1e94871b2272a3840f703686}{%
+           family={Brucker},
+           familyi={B\bibinitperiod},
+           given={Peter},
+           giveni={P\bibinitperiod}}}%
+        {{hash=403470810a3601613216c9e763906f97}{%
+           family={Drexl},
+           familyi={D\bibinitperiod},
+           given={Andreas},
+           giveni={A\bibinitperiod}}}%
+        {{hash=c413607f6c6a656c6445be55dc62cfe4}{%
+           family={Möhring},
+           familyi={M\bibinitperiod},
+           given={Rolf},
+           giveni={R\bibinitperiod}}}%
+        {{hash=c2c088442e8aed4b985940f763ac484a}{%
+           family={Neumann},
+           familyi={N\bibinitperiod},
+           given={Klaus},
+           giveni={K\bibinitperiod}}}%
+        {{hash=7d75b4a3e9e56a5351c677d297112340}{%
+           family={Pesch},
+           familyi={P\bibinitperiod},
+           given={Erwin},
+           giveni={E\bibinitperiod}}}%
+      }
+      \strng{namehash}{d6860845b1692f6b03de5a0c9421e4a9}
+      \strng{fullhash}{0920c630d23c0c55e9332839003615cc}
+      \strng{bibnamehash}{0920c630d23c0c55e9332839003615cc}
+      \strng{authorbibnamehash}{0920c630d23c0c55e9332839003615cc}
+      \strng{authornamehash}{d6860845b1692f6b03de5a0c9421e4a9}
+      \strng{authorfullhash}{0920c630d23c0c55e9332839003615cc}
+      \field{sortinit}{8}
+      \field{sortinithash}{a231b008ebf0ecbe0b4d96dcc159445f}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{European Journal of Operational Research}
+      \field{number}{1}
+      \field{title}{Resource-Constrained Project Scheduling: Notation, Classification, Models, and Methods}
+      \field{volume}{112}
+      \field{year}{1999}
+      \field{pages}{3\bibrangedash 41}
+      \range{pages}{39}
+      \verb{doi}
+      \verb 10.1016/S0377-2217(98)00204-5
+      \endverb
+    \endentry
+    \entry{vanpeteghem2014}{article}{}
+      \name{author}{2}{}{%
+        {{hash=85078f37031aa8f652e8bb588692f28d}{%
+           family={Van\bibnamedelima Peteghem},
+           familyi={V\bibinitperiod\bibinitdelim P\bibinitperiod},
+           given={Vincent},
+           giveni={V\bibinitperiod}}}%
+        {{hash=27cd638f93b277b9fd9605ddcd823524}{%
+           family={Vanhoucke},
+           familyi={V\bibinitperiod},
+           given={Mario},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{eec5ece634b6c035465ec2867726faa2}
+      \strng{fullhash}{eec5ece634b6c035465ec2867726faa2}
+      \strng{bibnamehash}{eec5ece634b6c035465ec2867726faa2}
+      \strng{authorbibnamehash}{eec5ece634b6c035465ec2867726faa2}
+      \strng{authornamehash}{eec5ece634b6c035465ec2867726faa2}
+      \strng{authorfullhash}{eec5ece634b6c035465ec2867726faa2}
+      \field{extraname}{1}
+      \field{sortinit}{9}
+      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{European Journal of Operational Research}
+      \field{number}{1}
+      \field{title}{An Experimental Investigation of Metaheuristics for the Multi-Mode Resource-Constrained Project Scheduling Problem on New Dataset Instances}
+      \field{volume}{235}
+      \field{year}{2014}
+      \field{pages}{62\bibrangedash 72}
+      \range{pages}{11}
+      \verb{doi}
+      \verb 10.1016/j.ejor.2013.10.012
+      \endverb
+    \endentry
+    \entry{ganian2020complexity}{inproceedings}{}
+      \name{author}{3}{}{%
+        {{hash=6ecfff9759e226a5e49d674f7c5332a9}{%
+           family={Ganian},
+           familyi={G\bibinitperiod},
+           given={Robert},
+           giveni={R\bibinitperiod}}}%
+        {{hash=759f1cbf66dc1fa9579a34f66296abe6}{%
+           family={Hamm},
+           familyi={H\bibinitperiod},
+           given={Thekla},
+           giveni={T\bibinitperiod}}}%
+        {{hash=5a5ed70113c80ed4ced086d22a09f056}{%
+           family={Mescoff},
+           familyi={M\bibinitperiod},
+           given={Guillaume},
+           giveni={G\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {International Joint Conferences on Artificial Intelligence Organization}%
+      }
+      \strng{namehash}{3ed61ee28992ade242d1fc32c110b9b8}
+      \strng{fullhash}{b5dbc84f5ed05e88ea6950e2d8733d35}
+      \strng{bibnamehash}{b5dbc84f5ed05e88ea6950e2d8733d35}
+      \strng{authorbibnamehash}{b5dbc84f5ed05e88ea6950e2d8733d35}
+      \strng{authornamehash}{3ed61ee28992ade242d1fc32c110b9b8}
+      \strng{authorfullhash}{b5dbc84f5ed05e88ea6950e2d8733d35}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Proceedings of the Twenty-Ninth International Joint Conference on Artificial Intelligence (IJCAI-20)}
+      \field{title}{The Complexity Landscape of Resource-Constrained Scheduling}
+      \field{year}{2020}
+      \field{pages}{1741\bibrangedash 1747}
+      \range{pages}{7}
+      \verb{doi}
+      \verb 10.24963/ijcai.2020/241
+      \endverb
+    \endentry
+    \entry{kolischdrexl1994}{report}{}
+      \name{author}{2}{}{%
+        {{hash=ec7e759459aeaf0eee291f32416098f5}{%
+           family={Kolisch},
+           familyi={K\bibinitperiod},
+           given={Rainer},
+           giveni={R\bibinitperiod}}}%
+        {{hash=403470810a3601613216c9e763906f97}{%
+           family={Drexl},
+           familyi={D\bibinitperiod},
+           given={Andreas},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{institution}{1}{%
+        {Institut für Betriebswirtschaftslehre, Universität Kiel}%
+      }
+      \strng{namehash}{2375590729165c9fcc82f6202d518f7e}
+      \strng{fullhash}{2375590729165c9fcc82f6202d518f7e}
+      \strng{bibnamehash}{2375590729165c9fcc82f6202d518f7e}
+      \strng{authorbibnamehash}{2375590729165c9fcc82f6202d518f7e}
+      \strng{authornamehash}{2375590729165c9fcc82f6202d518f7e}
+      \strng{authorfullhash}{2375590729165c9fcc82f6202d518f7e}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{number}{360}
+      \field{series}{Manuskripte aus den Instituten für Betriebswirtschaftslehre der Universität Kiel}
+      \field{title}{Local Search for Nonpreemptive Multi-Mode Resource-Constrained Project Scheduling}
+      \field{type}{techreport}
+      \field{year}{1994}
+    \endentry
+    \entry{hartmann2002}{article}{}
+      \name{author}{1}{}{%
+        {{hash=90c20f5f97ab114474bc2c9a27dc348a}{%
+           family={Hartmann},
+           familyi={H\bibinitperiod},
+           given={Sönke},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{90c20f5f97ab114474bc2c9a27dc348a}
+      \strng{fullhash}{90c20f5f97ab114474bc2c9a27dc348a}
+      \strng{bibnamehash}{90c20f5f97ab114474bc2c9a27dc348a}
+      \strng{authorbibnamehash}{90c20f5f97ab114474bc2c9a27dc348a}
+      \strng{authornamehash}{90c20f5f97ab114474bc2c9a27dc348a}
+      \strng{authorfullhash}{90c20f5f97ab114474bc2c9a27dc348a}
+      \field{extraname}{1}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Naval Research Logistics}
+      \field{number}{5}
+      \field{title}{A Self-Adapting Genetic Algorithm for Project Scheduling under Resource Constraints}
+      \field{volume}{49}
+      \field{year}{2002}
+      \field{pages}{433\bibrangedash 448}
+      \range{pages}{16}
+      \verb{doi}
+      \verb 10.1002/nav.10029
+      \endverb
+    \endentry
+    \entry{yang2024biobjective}{article}{}
+      \name{author}{4}{}{%
+        {{hash=73039545c3508f2cb43ef766ef694b9e}{%
+           family={Yang},
+           familyi={Y\bibinitperiod},
+           given={Hongbing},
+           giveni={H\bibinitperiod}}}%
+        {{hash=c7c1ffe37764242ffd431ec1848b0f32}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Ziyang},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=887dda75d37d73f919129d14fd2e94cb}{%
+           family={Gao},
+           familyi={G\bibinitperiod},
+           given={Yue},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=c7905d3683e86c148202145e4b6e5b7c}{%
+           family={Zhou},
+           familyi={Z\bibinitperiod},
+           given={Wei},
+           giveni={W\bibinitperiod}}}%
+      }
+      \strng{namehash}{92f89487511817c1d488fbb2579d78e1}
+      \strng{fullhash}{d3afe96600c9af4c55609f8d3b440045}
+      \strng{bibnamehash}{d3afe96600c9af4c55609f8d3b440045}
+      \strng{authorbibnamehash}{d3afe96600c9af4c55609f8d3b440045}
+      \strng{authornamehash}{92f89487511817c1d488fbb2579d78e1}
+      \strng{authorfullhash}{d3afe96600c9af4c55609f8d3b440045}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Applied Soft Computing}
+      \field{title}{Bi-objective multi-mode resource-constrained multi-project scheduling using combined {NSGA II} and {Q}-learning algorithm}
+      \field{volume}{152}
+      \field{year}{2024}
+      \field{pages}{111201}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1016/j.asoc.2023.111201
+      \endverb
+    \endentry
+    \entry{tian2022multiskill}{article}{}
+      \name{author}{5}{}{%
+        {{hash=d12eaa4bcfe35e37d08f0d3d058861fd}{%
+           family={Tian},
+           familyi={T\bibinitperiod},
+           given={Yuan},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=6227ca2f74edcf8c3d9f3db08cefb971}{%
+           family={Xiong},
+           familyi={X\bibinitperiod},
+           given={Tifan},
+           giveni={T\bibinitperiod}}}%
+        {{hash=db09354ff6d13bdbc1d3f1503b882b0f}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={Zhenyuan},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=a5695b00af8c2a44034c09cd78f0a21d}{%
+           family={Mei},
+           familyi={M\bibinitperiod},
+           given={Yi},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=11602738f8bd9aee99f686724984e0ec}{%
+           family={Wan},
+           familyi={W\bibinitperiod},
+           given={Li},
+           giveni={L\bibinitperiod}}}%
+      }
+      \strng{namehash}{d3c76a10b55975bb6b4c1cf5b95074bd}
+      \strng{fullhash}{72cf92826d83d4a133c15d66bc7ce05f}
+      \strng{bibnamehash}{72cf92826d83d4a133c15d66bc7ce05f}
+      \strng{authorbibnamehash}{72cf92826d83d4a133c15d66bc7ce05f}
+      \strng{authornamehash}{d3c76a10b55975bb6b4c1cf5b95074bd}
+      \strng{authorfullhash}{72cf92826d83d4a133c15d66bc7ce05f}
+      \field{extraname}{1}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Computers \& Industrial Engineering}
+      \field{title}{Multi-objective multi-skill resource-constrained project scheduling problem with skill switches: Model and evolutionary approaches}
+      \field{volume}{167}
+      \field{year}{2022}
+      \field{pages}{107897}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1016/j.cie.2021.107897
+      \endverb
+    \endentry
+    \entry{herroelen2005}{article}{}
+      \name{author}{2}{}{%
+        {{hash=c7108c253c427fb2ea7708dfbfcffb7c}{%
+           family={Herroelen},
+           familyi={H\bibinitperiod},
+           given={Willy},
+           giveni={W\bibinitperiod}}}%
+        {{hash=14a19d8b194820b3140aac9b48f6a020}{%
+           family={Leus},
+           familyi={L\bibinitperiod},
+           given={Roel},
+           giveni={R\bibinitperiod}}}%
+      }
+      \strng{namehash}{260b19a17329174691ddc77617bcfd5b}
+      \strng{fullhash}{260b19a17329174691ddc77617bcfd5b}
+      \strng{bibnamehash}{260b19a17329174691ddc77617bcfd5b}
+      \strng{authorbibnamehash}{260b19a17329174691ddc77617bcfd5b}
+      \strng{authornamehash}{260b19a17329174691ddc77617bcfd5b}
+      \strng{authorfullhash}{260b19a17329174691ddc77617bcfd5b}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{European Journal of Operational Research}
+      \field{number}{2}
+      \field{title}{Project Scheduling under Uncertainty: Survey and Research Potentials}
+      \field{volume}{165}
+      \field{year}{2005}
+      \field{pages}{289\bibrangedash 306}
+      \range{pages}{18}
+      \verb{doi}
+      \verb 10.1016/j.ejor.2004.04.002
+      \endverb
+    \endentry
+    \entry{ramos2023stochastic}{article}{}
+      \name{author}{4}{}{%
+        {{hash=c6d4b55d2e3468af7d71f7759fb191ef}{%
+           family={Ramos},
+           familyi={R\bibinitperiod},
+           given={Alfredo\bibnamedelima S.},
+           giveni={A\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=a6e87b4c07b37a83589e1adeb4acb9f3}{%
+           family={Miranda-González},
+           familyi={M\bibinithyphendelim G\bibinitperiod},
+           given={Pablo\bibnamedelima A.},
+           giveni={P\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=cfc83912d8c434f152173677b7f6017d}{%
+           family={Nucamendi-Guillén},
+           familyi={N\bibinithyphendelim G\bibinitperiod},
+           given={Samuel},
+           giveni={S\bibinitperiod}}}%
+        {{hash=f8e9348d6a7f88cd3f9ab5c9066df79d}{%
+           family={Olivares-Benitez},
+           familyi={O\bibinithyphendelim B\bibinitperiod},
+           given={Elias},
+           giveni={E\bibinitperiod}}}%
+      }
+      \strng{namehash}{0eaa498de0193ca7491d11b0c0072795}
+      \strng{fullhash}{bfb20777d0194c7e514ab6ce03ff0073}
+      \strng{bibnamehash}{bfb20777d0194c7e514ab6ce03ff0073}
+      \strng{authorbibnamehash}{bfb20777d0194c7e514ab6ce03ff0073}
+      \strng{authornamehash}{0eaa498de0193ca7491d11b0c0072795}
+      \strng{authorfullhash}{bfb20777d0194c7e514ab6ce03ff0073}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Mathematics}
+      \field{number}{2}
+      \field{title}{A Formulation for the Stochastic Multi-Mode Resource-Constrained Project Scheduling Problem Solved with a Multi-Start Iterated Local Search Metaheuristic}
+      \field{volume}{11}
+      \field{year}{2023}
+      \field{pages}{337}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.3390/math11020337
+      \endverb
+    \endentry
+    \entry{kolisch1997}{article}{}
+      \name{author}{2}{}{%
+        {{hash=ec7e759459aeaf0eee291f32416098f5}{%
+           family={Kolisch},
+           familyi={K\bibinitperiod},
+           given={Rainer},
+           giveni={R\bibinitperiod}}}%
+        {{hash=550ee68cdc70a5f1952efefc40183a20}{%
+           family={Sprecher},
+           familyi={S\bibinitperiod},
+           given={Arno},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{98ef2ad732358f3f3b53f2527eb02277}
+      \strng{fullhash}{98ef2ad732358f3f3b53f2527eb02277}
+      \strng{bibnamehash}{98ef2ad732358f3f3b53f2527eb02277}
+      \strng{authorbibnamehash}{98ef2ad732358f3f3b53f2527eb02277}
+      \strng{authornamehash}{98ef2ad732358f3f3b53f2527eb02277}
+      \strng{authorfullhash}{98ef2ad732358f3f3b53f2527eb02277}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{European Journal of Operational Research}
+      \field{number}{1}
+      \field{title}{{PSPLIB} -- A Project Scheduling Problem Library}
+      \field{volume}{96}
+      \field{year}{1996}
+      \field{pages}{205\bibrangedash 216}
+      \range{pages}{12}
+      \verb{doi}
+      \verb 10.1016/S0377-2217(96)00170-1
+      \endverb
+    \endentry
+    \entry{hartmann1998}{article}{}
+      \name{author}{1}{}{%
+        {{hash=90c20f5f97ab114474bc2c9a27dc348a}{%
+           family={Hartmann},
+           familyi={H\bibinitperiod},
+           given={Sönke},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{90c20f5f97ab114474bc2c9a27dc348a}
+      \strng{fullhash}{90c20f5f97ab114474bc2c9a27dc348a}
+      \strng{bibnamehash}{90c20f5f97ab114474bc2c9a27dc348a}
+      \strng{authorbibnamehash}{90c20f5f97ab114474bc2c9a27dc348a}
+      \strng{authornamehash}{90c20f5f97ab114474bc2c9a27dc348a}
+      \strng{authorfullhash}{90c20f5f97ab114474bc2c9a27dc348a}
+      \field{extraname}{2}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Naval Research Logistics}
+      \field{number}{7}
+      \field{title}{A Competitive Genetic Algorithm for Resource-Constrained Project Scheduling}
+      \field{volume}{45}
+      \field{year}{1998}
+      \field{pages}{733\bibrangedash 750}
+      \range{pages}{18}
+      \verb{doi}
+      \verb 10.1002/(SICI)1520-6750(199810)45:7<733::AID-NAV5>3.0.CO;2-C
+      \endverb
+    \endentry
+    \entry{dokeroglu2025metaheuristics}{online}{}
+      \name{author}{3}{}{%
+        {{hash=087edfd7f1dd283c011d044960e6d4d4}{%
+           family={Dokeroglu},
+           familyi={D\bibinitperiod},
+           given={Tansel},
+           giveni={T\bibinitperiod}}}%
+        {{hash=943453f59319fa9e2df8292eeb44eeb5}{%
+           family={Canturk},
+           familyi={C\bibinitperiod},
+           given={Deniz},
+           giveni={D\bibinitperiod}}}%
+        {{hash=c3285ab0f4a13b43102b4dd3f66e8b20}{%
+           family={Kucukyilmaz},
+           familyi={K\bibinitperiod},
+           given={Tayfun},
+           giveni={T\bibinitperiod}}}%
+      }
+      \strng{namehash}{11540cad8ff769f4d58a58db63fa9737}
+      \strng{fullhash}{3a47b5448b98dbf590bfef455ac1fe20}
+      \strng{bibnamehash}{3a47b5448b98dbf590bfef455ac1fe20}
+      \strng{authorbibnamehash}{3a47b5448b98dbf590bfef455ac1fe20}
+      \strng{authornamehash}{11540cad8ff769f4d58a58db63fa9737}
+      \strng{authorfullhash}{3a47b5448b98dbf590bfef455ac1fe20}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprintclass}{cs.NE}
+      \field{eprinttype}{arxiv}
+      \field{title}{A survey on pioneering metaheuristic algorithms between 2019 and 2024}
+      \field{year}{2025}
+      \verb{doi}
+      \verb 10.48550/arXiv.2501.14769
+      \endverb
+      \verb{eprint}
+      \verb 2501.14769
+      \endverb
+    \endentry
+    \entry{Tian2024GPHH}{inproceedings}{}
+      \name{author}{3}{}{%
+        {{hash=d12eaa4bcfe35e37d08f0d3d058861fd}{%
+           family={Tian},
+           familyi={T\bibinitperiod},
+           given={Yuan},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=a5695b00af8c2a44034c09cd78f0a21d}{%
+           family={Mei},
+           familyi={M\bibinitperiod},
+           given={Yi},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=e678527db27127baf2e337470c642bc4}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Mengjie},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{d3c76a10b55975bb6b4c1cf5b95074bd}
+      \strng{fullhash}{87ddc20b13c15753b6d8d6ca6665492b}
+      \strng{bibnamehash}{87ddc20b13c15753b6d8d6ca6665492b}
+      \strng{authorbibnamehash}{87ddc20b13c15753b6d8d6ca6665492b}
+      \strng{authornamehash}{d3c76a10b55975bb6b4c1cf5b95074bd}
+      \strng{authorfullhash}{87ddc20b13c15753b6d8d6ca6665492b}
+      \field{extraname}{2}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{2024 {IEEE} Congress on Evolutionary Computation ({CEC})}
+      \field{title}{Learning Heuristics via Genetic Programming for Multi-Mode Resource-Constrained Project Scheduling}
+      \field{year}{2024}
+      \field{pages}{1\bibrangedash 8}
+      \range{pages}{8}
+      \verb{doi}
+      \verb 10.1109/CEC60901.2024.10612172
+      \endverb
+    \endentry
+    \entry{boctor1996new}{article}{}
+      \name{author}{1}{}{%
+        {{hash=8c55e898c23f9224255ff9477bce38fe}{%
+           family={Boctor},
+           familyi={B\bibinitperiod},
+           given={Fayez\bibnamedelima F.},
+           giveni={F\bibinitperiod\bibinitdelim F\bibinitperiod}}}%
+      }
+      \strng{namehash}{8c55e898c23f9224255ff9477bce38fe}
+      \strng{fullhash}{8c55e898c23f9224255ff9477bce38fe}
+      \strng{bibnamehash}{8c55e898c23f9224255ff9477bce38fe}
+      \strng{authorbibnamehash}{8c55e898c23f9224255ff9477bce38fe}
+      \strng{authornamehash}{8c55e898c23f9224255ff9477bce38fe}
+      \strng{authorfullhash}{8c55e898c23f9224255ff9477bce38fe}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{European Journal of Operational Research}
+      \field{title}{A New and Efficient Heuristic for Scheduling Projects with Resource Restrictions and Multiple Execution Modes}
+      \field{volume}{90}
+      \field{year}{1996}
+      \field{pages}{349\bibrangedash 361}
+      \range{pages}{13}
+      \verb{doi}
+      \verb 10.1016/0377-2217(95)00359-2
+      \endverb
+    \endentry
+    \entry{kolisch1994priority}{report}{}
+      \name{author}{1}{}{%
+        {{hash=ec7e759459aeaf0eee291f32416098f5}{%
+           family={Kolisch},
+           familyi={K\bibinitperiod},
+           given={Rainer},
+           giveni={R\bibinitperiod}}}%
+      }
+      \list{institution}{1}{%
+        {Universität Kiel, Institut für Betriebswirtschaftslehre}%
+      }
+      \strng{namehash}{ec7e759459aeaf0eee291f32416098f5}
+      \strng{fullhash}{ec7e759459aeaf0eee291f32416098f5}
+      \strng{bibnamehash}{ec7e759459aeaf0eee291f32416098f5}
+      \strng{authorbibnamehash}{ec7e759459aeaf0eee291f32416098f5}
+      \strng{authornamehash}{ec7e759459aeaf0eee291f32416098f5}
+      \strng{authorfullhash}{ec7e759459aeaf0eee291f32416098f5}
+      \field{extraname}{1}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{number}{350}
+      \field{series}{Manuskripte aus den Instituten für Betriebswirtschaftslehre der Universität Kiel}
+      \field{title}{Efficient Priority Rules for the Resource-Constrained Project Scheduling Problem}
+      \field{type}{techreport}
+      \field{year}{1994}
+    \endentry
+    \entry{lova2006mrcpsp}{article}{}
+      \name{author}{3}{}{%
+        {{hash=e13a795352c8a37ef700099b083b9e90}{%
+           family={Lova},
+           familyi={L\bibinitperiod},
+           given={Antonio},
+           giveni={A\bibinitperiod}}}%
+        {{hash=e5427079c949d6efe994f9b33bffa4e4}{%
+           family={Tormos},
+           familyi={T\bibinitperiod},
+           given={Pilar},
+           giveni={P\bibinitperiod}}}%
+        {{hash=61a7a0d34f3fc997625e4f153e1c1763}{%
+           family={Barber},
+           familyi={B\bibinitperiod},
+           given={Federico},
+           giveni={F\bibinitperiod}}}%
+      }
+      \strng{namehash}{a379df07488a4b6da80068801b779f65}
+      \strng{fullhash}{e00b1e8a7b24a1a18bda7ddf75c99142}
+      \strng{bibnamehash}{e00b1e8a7b24a1a18bda7ddf75c99142}
+      \strng{authorbibnamehash}{e00b1e8a7b24a1a18bda7ddf75c99142}
+      \strng{authornamehash}{a379df07488a4b6da80068801b779f65}
+      \strng{authorfullhash}{e00b1e8a7b24a1a18bda7ddf75c99142}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Inteligencia Artificial. Revista Iberoamericana de Inteligencia Artificial}
+      \field{number}{30}
+      \field{title}{Multi-Mode Resource Constrained Project Scheduling: Scheduling Schemes, Priority Rules and Mode Selection Rules}
+      \field{volume}{10}
+      \field{year}{2006}
+      \field{pages}{69\bibrangedash 86}
+      \range{pages}{18}
+      \verb{doi}
+      \verb 10.4114/ia.v10i30.947
+      \endverb
+    \endentry
+    \entry{mika2015mrcpsp}{incollection}{}
+      \name{author}{3}{}{%
+        {{hash=b3a3b774407ff2ff485e8b829700c911}{%
+           family={Mika},
+           familyi={M\bibinitperiod},
+           given={Marek},
+           giveni={M\bibinitperiod}}}%
+        {{hash=31044d0ee0b319498c23806b74736a5d}{%
+           family={Waligóra},
+           familyi={W\bibinitperiod},
+           given={Grzegorz},
+           giveni={G\bibinitperiod}}}%
+        {{hash=f61d1ccf49ff146dbc10e2e36dedf93b}{%
+           family={Węglarz},
+           familyi={W\bibinitperiod},
+           given={Jan},
+           giveni={J\bibinitperiod}}}%
+      }
+      \name{editor}{2}{}{%
+        {{hash=258d38ff378bee9e7ccb60c4becfa018}{%
+           family={Schwindt},
+           familyi={S\bibinitperiod},
+           given={Christoph},
+           giveni={C\bibinitperiod}}}%
+        {{hash=94ba44c84bb34e158f29e7f5daf622d0}{%
+           family={Zimmermann},
+           familyi={Z\bibinitperiod},
+           given={Jürgen},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{9682ce65e965125c9ca430e712993359}
+      \strng{fullhash}{8bd89f2bbb235ae14089d8e2c401f616}
+      \strng{bibnamehash}{8bd89f2bbb235ae14089d8e2c401f616}
+      \strng{authorbibnamehash}{8bd89f2bbb235ae14089d8e2c401f616}
+      \strng{authornamehash}{9682ce65e965125c9ca430e712993359}
+      \strng{authorfullhash}{8bd89f2bbb235ae14089d8e2c401f616}
+      \strng{editorbibnamehash}{edbeb9bbaa3e713bbaadfd12e11d5f9e}
+      \strng{editornamehash}{edbeb9bbaa3e713bbaadfd12e11d5f9e}
+      \strng{editorfullhash}{edbeb9bbaa3e713bbaadfd12e11d5f9e}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Handbook on Project Management and Scheduling Vol.\ 1}
+      \field{chapter}{21}
+      \field{series}{International Handbooks on Information Systems}
+      \field{title}{Overview and State of the Art}
+      \field{year}{2015}
+      \field{pages}{445\bibrangedash 490}
+      \range{pages}{46}
+      \verb{doi}
+      \verb 10.1007/978-3-319-05443-8_21
+      \endverb
+    \endentry
+    \entry{bartusch1988}{article}{}
+      \name{author}{3}{}{%
+        {{hash=aafd40edd5d2d5f983cb98ac27ee97d1}{%
+           family={Bartusch},
+           familyi={B\bibinitperiod},
+           given={Michael},
+           giveni={M\bibinitperiod}}}%
+        {{hash=009208d647b13242cba02e269412af1b}{%
+           family={Möhring},
+           familyi={M\bibinitperiod},
+           given={Rolf\bibnamedelima H.},
+           giveni={R\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+        {{hash=bf7a101b08421940691e2e1c06c8b7e2}{%
+           family={Radermacher},
+           familyi={R\bibinitperiod},
+           given={Franz\bibnamedelima J.},
+           giveni={F\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \strng{namehash}{5d694981bc6bd370fa0c380257a88f50}
+      \strng{fullhash}{26cf63bf1806a97e344ad10761c35820}
+      \strng{bibnamehash}{26cf63bf1806a97e344ad10761c35820}
+      \strng{authorbibnamehash}{26cf63bf1806a97e344ad10761c35820}
+      \strng{authornamehash}{5d694981bc6bd370fa0c380257a88f50}
+      \strng{authorfullhash}{26cf63bf1806a97e344ad10761c35820}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Annals of Operations Research}
+      \field{number}{1}
+      \field{title}{Scheduling Project Networks with Resource Constraints and Time Windows}
+      \field{volume}{16}
+      \field{year}{1988}
+      \field{pages}{199\bibrangedash 240}
+      \range{pages}{42}
+      \verb{doi}
+      \verb 10.1007/BF02283745
+      \endverb
+    \endentry
+    \entry{vanpeteghem2010}{article}{}
+      \name{author}{2}{}{%
+        {{hash=85078f37031aa8f652e8bb588692f28d}{%
+           family={Van\bibnamedelima Peteghem},
+           familyi={V\bibinitperiod\bibinitdelim P\bibinitperiod},
+           given={Vincent},
+           giveni={V\bibinitperiod}}}%
+        {{hash=27cd638f93b277b9fd9605ddcd823524}{%
+           family={Vanhoucke},
+           familyi={V\bibinitperiod},
+           given={Mario},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{eec5ece634b6c035465ec2867726faa2}
+      \strng{fullhash}{eec5ece634b6c035465ec2867726faa2}
+      \strng{bibnamehash}{eec5ece634b6c035465ec2867726faa2}
+      \strng{authorbibnamehash}{eec5ece634b6c035465ec2867726faa2}
+      \strng{authornamehash}{eec5ece634b6c035465ec2867726faa2}
+      \strng{authorfullhash}{eec5ece634b6c035465ec2867726faa2}
+      \field{extraname}{2}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{European Journal of Operational Research}
+      \field{number}{2}
+      \field{title}{A Genetic Algorithm for the Preemptive and Non-Preemptive Multi-Mode Resource-Constrained Project Scheduling Problem}
+      \field{volume}{201}
+      \field{year}{2010}
+      \field{pages}{409\bibrangedash 418}
+      \range{pages}{10}
+      \verb{doi}
+      \verb 10.1016/j.ejor.2009.03.034
+      \endverb
+    \endentry
+    \entry{cai2024rlgnn}{article}{}
+      \name{author}{3}{}{%
+        {{hash=54f888cf7295e71829e21755085fd292}{%
+           family={Cai},
+           familyi={C\bibinitperiod},
+           given={Hongxia},
+           giveni={H\bibinitperiod}}}%
+        {{hash=d303edb38417a1cae3b30ca715b3b038}{%
+           family={Bian},
+           familyi={B\bibinitperiod},
+           given={Yunqi},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=7fa926169b338a506132078fe52e1886}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={Lilan},
+           giveni={L\bibinitperiod}}}%
+      }
+      \strng{namehash}{257e471b8722e664cb3895fb97751d4d}
+      \strng{fullhash}{11383adff5bd9ae2441a4b50a31b0b58}
+      \strng{bibnamehash}{11383adff5bd9ae2441a4b50a31b0b58}
+      \strng{authorbibnamehash}{11383adff5bd9ae2441a4b50a31b0b58}
+      \strng{authornamehash}{257e471b8722e664cb3895fb97751d4d}
+      \strng{authorfullhash}{11383adff5bd9ae2441a4b50a31b0b58}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Robotics and Computer-Integrated Manufacturing}
+      \field{title}{Deep Reinforcement Learning for Solving Resource Constrained Project Scheduling Problems with Resource Disruptions}
+      \field{volume}{85}
+      \field{year}{2024}
+      \field{pages}{102628}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1016/j.rcim.2023.102628
+      \endverb
+    \endentry
+    \entry{ruhlusarac2022dynamic}{article}{}
+      \name{author}{2}{}{%
+        {{hash=1bbff8e8f77c720be7eae15f933b8b74}{%
+           family={Ruhlusarac},
+           familyi={R\bibinitperiod},
+           given={Murat},
+           giveni={M\bibinitperiod}}}%
+        {{hash=2fa477a8551be021b96940162e8cf015}{%
+           family={Çal{ı}şkan},
+           familyi={Ç\bibinitperiod},
+           given={Filiz},
+           giveni={F\bibinitperiod}}}%
+      }
+      \strng{namehash}{dec9e8dc77395daa7ef205d6b8fae438}
+      \strng{fullhash}{dec9e8dc77395daa7ef205d6b8fae438}
+      \strng{bibnamehash}{dec9e8dc77395daa7ef205d6b8fae438}
+      \strng{authorbibnamehash}{dec9e8dc77395daa7ef205d6b8fae438}
+      \strng{authornamehash}{dec9e8dc77395daa7ef205d6b8fae438}
+      \strng{authorfullhash}{dec9e8dc77395daa7ef205d6b8fae438}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Business and Management Studies: An International Journal (BMIJ)}
+      \field{number}{3}
+      \field{title}{Dynamic Multi-Mode Resource-Constrained Multi-Project Scheduling Problem with Weighted Earliness and Tardiness: A Real-Life Boutique Furniture Implementation}
+      \field{volume}{10}
+      \field{year}{2022}
+      \field{pages}{1095\bibrangedash 1117}
+      \range{pages}{23}
+      \verb{doi}
+      \verb 10.15295/bmij.v10i3.2111
+      \endverb
+    \endentry
+    \entry{VanDerBeek2024}{article}{}
+      \name{author}{5}{}{%
+        {{hash=1981007904ba45e66c8b66b3986717b9}{%
+           family={Beek},
+           familyi={B\bibinitperiod},
+           given={T.},
+           giveni={T\bibinitperiod},
+           prefix={van\bibnamedelima der},
+           prefixi={v\bibinitperiod\bibinitdelim d\bibinitperiod}}}%
+        {{hash=b179533c132fcd7daff1d5f28bbc97ba}{%
+           family={Souravlias},
+           familyi={S\bibinitperiod},
+           given={D.},
+           giveni={D\bibinitperiod}}}%
+        {{hash=d8420fc38619e5a100eda02af05dc279}{%
+           family={Essen},
+           familyi={E\bibinitperiod},
+           given={J.\bibnamedelimi T.},
+           giveni={J\bibinitperiod\bibinitdelim T\bibinitperiod},
+           prefix={van},
+           prefixi={v\bibinitperiod}}}%
+        {{hash=98b1fb8ccdc539a07bd4e67f936d68dd}{%
+           family={Pruyn},
+           familyi={P\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=95c45a127e6f024be03955cd2e2023a9}{%
+           family={Aardal},
+           familyi={A\bibinitperiod},
+           given={K.},
+           giveni={K\bibinitperiod}}}%
+      }
+      \strng{namehash}{5f67b89022cf9ccd34f76b313d991db6}
+      \strng{fullhash}{3b32a9243248ea766c1a86b22e851428}
+      \strng{bibnamehash}{3b32a9243248ea766c1a86b22e851428}
+      \strng{authorbibnamehash}{3b32a9243248ea766c1a86b22e851428}
+      \strng{authornamehash}{5f67b89022cf9ccd34f76b313d991db6}
+      \strng{authorfullhash}{3b32a9243248ea766c1a86b22e851428}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{European Journal of Operational Research}
+      \field{title}{Hybrid differential evolution algorithm for the resource constrained project scheduling problem with a flexible project structure and consumption and production of resources}
+      \field{volume}{313}
+      \field{year}{2024}
+      \field{pages}{92\bibrangedash 111}
+      \range{pages}{20}
+      \verb{doi}
+      \verb 10.1016/j.ejor.2023.07.043
+      \endverb
+    \endentry
+    \entry{kolisch1996sgs}{article}{}
+      \name{author}{1}{}{%
+        {{hash=ec7e759459aeaf0eee291f32416098f5}{%
+           family={Kolisch},
+           familyi={K\bibinitperiod},
+           given={Rainer},
+           giveni={R\bibinitperiod}}}%
+      }
+      \strng{namehash}{ec7e759459aeaf0eee291f32416098f5}
+      \strng{fullhash}{ec7e759459aeaf0eee291f32416098f5}
+      \strng{bibnamehash}{ec7e759459aeaf0eee291f32416098f5}
+      \strng{authorbibnamehash}{ec7e759459aeaf0eee291f32416098f5}
+      \strng{authornamehash}{ec7e759459aeaf0eee291f32416098f5}
+      \strng{authorfullhash}{ec7e759459aeaf0eee291f32416098f5}
+      \field{extraname}{2}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{European Journal of Operational Research}
+      \field{number}{2}
+      \field{title}{Serial and Parallel Resource-Constrained Project Scheduling Methods Revisited: Theory and Computation}
+      \field{volume}{90}
+      \field{year}{1996}
+      \field{pages}{320\bibrangedash 333}
+      \range{pages}{14}
+      \verb{doi}
+      \verb 10.1016/0377-2217(95)00357-6
+      \endverb
+    \endentry
+    \entry{koza1994gp}{article}{}
+      \name{author}{1}{}{%
+        {{hash=d241153844d58a4b82a895968a24006f}{%
+           family={Koza},
+           familyi={K\bibinitperiod},
+           given={John\bibnamedelima R.},
+           giveni={J\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+      }
+      \strng{namehash}{d241153844d58a4b82a895968a24006f}
+      \strng{fullhash}{d241153844d58a4b82a895968a24006f}
+      \strng{bibnamehash}{d241153844d58a4b82a895968a24006f}
+      \strng{authorbibnamehash}{d241153844d58a4b82a895968a24006f}
+      \strng{authornamehash}{d241153844d58a4b82a895968a24006f}
+      \strng{authorfullhash}{d241153844d58a4b82a895968a24006f}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Statistics and Computing}
+      \field{title}{Genetic Programming as a Means for Programming Computers by Natural Selection}
+      \field{volume}{4}
+      \field{year}{1994}
+      \field{pages}{87\bibrangedash 112}
+      \range{pages}{26}
+      \verb{doi}
+      \verb 10.1007/BF00175355
+      \endverb
+    \endentry
+    \entry{branke2016gphh}{article}{}
+      \name{author}{4}{}{%
+        {{hash=d9e8de881fe2db78bf10c2e152430ab7}{%
+           family={Branke},
+           familyi={B\bibinitperiod},
+           given={Jürgen},
+           giveni={J\bibinitperiod}}}%
+        {{hash=6a21014fac5eee60d7ecc2f50dad5df9}{%
+           family={Nguyen},
+           familyi={N\bibinitperiod},
+           given={Su},
+           giveni={S\bibinitperiod}}}%
+        {{hash=fa01b39cf087105be418e86daed6448f}{%
+           family={Pickardt},
+           familyi={P\bibinitperiod},
+           given={Christoph\bibnamedelima W.},
+           giveni={C\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+        {{hash=e678527db27127baf2e337470c642bc4}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Mengjie},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{9e763c34b091a40ef222808d7c6b3588}
+      \strng{fullhash}{ba522a68fc0d115b2093148de857dcbf}
+      \strng{bibnamehash}{ba522a68fc0d115b2093148de857dcbf}
+      \strng{authorbibnamehash}{ba522a68fc0d115b2093148de857dcbf}
+      \strng{authornamehash}{9e763c34b091a40ef222808d7c6b3588}
+      \strng{authorfullhash}{ba522a68fc0d115b2093148de857dcbf}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Transactions on Evolutionary Computation}
+      \field{number}{1}
+      \field{title}{Automated Design of Production Scheduling Heuristics: A Review}
+      \field{volume}{20}
+      \field{year}{2016}
+      \field{pages}{110\bibrangedash 124}
+      \range{pages}{15}
+      \verb{doi}
+      \verb 10.1109/TEVC.2015.2429314
+      \endverb
+    \endentry
+    \entry{chakrabortty2014event}{inproceedings}{}
+      \name{author}{3}{}{%
+        {{hash=326a1272353825524e231ce653945e4b}{%
+           family={Chakrabortty},
+           familyi={C\bibinitperiod},
+           given={Ripon\bibnamedelima Kumar},
+           giveni={R\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
+        {{hash=56d569f4c33b09f99d59807e3805688e}{%
+           family={Sarker},
+           familyi={S\bibinitperiod},
+           given={Ruhul\bibnamedelima Amin},
+           giveni={R\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=21ceefc953704bd4d8ac58c7f9848f27}{%
+           family={Essam},
+           familyi={E\bibinitperiod},
+           given={Daryl\bibnamedelima L.},
+           giveni={D\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+      }
+      \name{editor}{2}{}{%
+        {{hash=e4a0fecda1e29c6d1e34777fa7173e82}{%
+           family={Saeed},
+           familyi={S\bibinitperiod},
+           given={Khalid},
+           giveni={K\bibinitperiod}}}%
+        {{hash=4f341350f03f0b0781dbeb54a65dc157}{%
+           family={Snášel},
+           familyi={S\bibinitperiod},
+           given={Václav},
+           giveni={V\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{ba3dfbd3c592532f79e383197403c6ab}
+      \strng{fullhash}{a7050dcf6cebe9ad19f9bbce63b1f9ad}
+      \strng{bibnamehash}{a7050dcf6cebe9ad19f9bbce63b1f9ad}
+      \strng{authorbibnamehash}{a7050dcf6cebe9ad19f9bbce63b1f9ad}
+      \strng{authornamehash}{ba3dfbd3c592532f79e383197403c6ab}
+      \strng{authorfullhash}{a7050dcf6cebe9ad19f9bbce63b1f9ad}
+      \strng{editorbibnamehash}{b7dd448fa44abab271170f0b64f29d38}
+      \strng{editornamehash}{b7dd448fa44abab271170f0b64f29d38}
+      \strng{editorfullhash}{b7dd448fa44abab271170f0b64f29d38}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Computer Information Systems and Industrial Management (CISIM 2014)}
+      \field{series}{Lecture Notes in Computer Science}
+      \field{title}{Event Based Approaches for Solving Multi-mode Resource Constraints Project Scheduling Problem}
+      \field{volume}{8838}
+      \field{year}{2014}
+      \field{pages}{375\bibrangedash 386}
+      \range{pages}{12}
+      \verb{doi}
+      \verb 10.1007/978-3-662-45237-0_35
+      \endverb
+    \endentry
+    \entry{vanhoucke2024matheuristic}{article}{}
+      \name{author}{2}{}{%
+        {{hash=27cd638f93b277b9fd9605ddcd823524}{%
+           family={Vanhoucke},
+           familyi={V\bibinitperiod},
+           given={Mario},
+           giveni={M\bibinitperiod}}}%
+        {{hash=45dde9ae2e850f41b1e850d33ae61761}{%
+           family={Coelho},
+           familyi={C\bibinitperiod},
+           given={José},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{6d3a137bd8affdef2c3035ecfa5ad823}
+      \strng{fullhash}{6d3a137bd8affdef2c3035ecfa5ad823}
+      \strng{bibnamehash}{6d3a137bd8affdef2c3035ecfa5ad823}
+      \strng{authorbibnamehash}{6d3a137bd8affdef2c3035ecfa5ad823}
+      \strng{authornamehash}{6d3a137bd8affdef2c3035ecfa5ad823}
+      \strng{authorfullhash}{6d3a137bd8affdef2c3035ecfa5ad823}
+      \field{extraname}{1}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{European Journal of Operational Research}
+      \field{title}{A Matheuristic for the Resource-Constrained Project Scheduling Problem}
+      \field{volume}{319}
+      \field{year}{2024}
+      \field{pages}{711\bibrangedash 725}
+      \range{pages}{15}
+      \verb{doi}
+      \verb 10.1016/j.ejor.2024.07.016
+      \endverb
+    \endentry
+    \entry{vanhoucke2024reducing}{article}{}
+      \name{author}{2}{}{%
+        {{hash=27cd638f93b277b9fd9605ddcd823524}{%
+           family={Vanhoucke},
+           familyi={V\bibinitperiod},
+           given={Mario},
+           giveni={M\bibinitperiod}}}%
+        {{hash=45dde9ae2e850f41b1e850d33ae61761}{%
+           family={Coelho},
+           familyi={C\bibinitperiod},
+           given={José},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{6d3a137bd8affdef2c3035ecfa5ad823}
+      \strng{fullhash}{6d3a137bd8affdef2c3035ecfa5ad823}
+      \strng{bibnamehash}{6d3a137bd8affdef2c3035ecfa5ad823}
+      \strng{authorbibnamehash}{6d3a137bd8affdef2c3035ecfa5ad823}
+      \strng{authornamehash}{6d3a137bd8affdef2c3035ecfa5ad823}
+      \strng{authorfullhash}{6d3a137bd8affdef2c3035ecfa5ad823}
+      \field{extraname}{2}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Computers \& Operations Research}
+      \field{title}{Reducing the Feasible Solution Space of Resource-Constrained Project Instances}
+      \field{volume}{165}
+      \field{year}{2024}
+      \field{pages}{106567}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1016/j.cor.2024.106567
+      \endverb
+    \endentry
+    \entry{peng2023quantumpso}{article}{}
+      \name{author}{4}{}{%
+        {{hash=94bd32a5d9b4e6ab860dfc28d3c8bc0a}{%
+           family={Peng},
+           familyi={P\bibinitperiod},
+           given={Jun\bibnamedelima Long},
+           giveni={J\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+        {{hash=dd8304255c910bcbd7d7d0cb4f7ed860}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={Xiao},
+           giveni={X\bibinitperiod}}}%
+        {{hash=f4c11bfeb13b5897278b3b2c6412c3c2}{%
+           family={Peng},
+           familyi={P\bibinitperiod},
+           given={Chao},
+           giveni={C\bibinitperiod}}}%
+        {{hash=274f639b5887438d0b0a5a0258b1dfdb}{%
+           family={Shao},
+           familyi={S\bibinitperiod},
+           given={Yu},
+           giveni={Y\bibinitperiod}}}%
+      }
+      \strng{namehash}{5d1d09dfb36dcabb627dffda13e7c8c6}
+      \strng{fullhash}{050466fcc1c3e5e7993ddcf9533ada22}
+      \strng{bibnamehash}{050466fcc1c3e5e7993ddcf9533ada22}
+      \strng{authorbibnamehash}{050466fcc1c3e5e7993ddcf9533ada22}
+      \strng{authornamehash}{5d1d09dfb36dcabb627dffda13e7c8c6}
+      \strng{authorfullhash}{050466fcc1c3e5e7993ddcf9533ada22}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Scientific Reports}
+      \field{title}{Multi-Skill Resource-Constrained Multi-Modal Project Scheduling Problem Based on Hybrid Quantum Algorithm}
+      \field{volume}{13}
+      \field{year}{2023}
+      \field{pages}{18502}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1038/s41598-023-45970-y
+      \endverb
+    \endentry
+    \entry{zamani2019mirror}{article}{}
+      \name{author}{1}{}{%
+        {{hash=fba0b26df2d73631e2287c661563fc2b}{%
+           family={Zamani},
+           familyi={Z\bibinitperiod},
+           given={Reza},
+           giveni={R\bibinitperiod}}}%
+      }
+      \strng{namehash}{fba0b26df2d73631e2287c661563fc2b}
+      \strng{fullhash}{fba0b26df2d73631e2287c661563fc2b}
+      \strng{bibnamehash}{fba0b26df2d73631e2287c661563fc2b}
+      \strng{authorbibnamehash}{fba0b26df2d73631e2287c661563fc2b}
+      \strng{authornamehash}{fba0b26df2d73631e2287c661563fc2b}
+      \strng{authorfullhash}{fba0b26df2d73631e2287c661563fc2b}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Computers \& Industrial Engineering}
+      \field{title}{An Effective Mirror-Based Genetic Algorithm for Scheduling Multi-Mode Resource-Constrained Projects}
+      \field{volume}{127}
+      \field{year}{2019}
+      \field{pages}{914\bibrangedash 924}
+      \range{pages}{11}
+      \verb{doi}
+      \verb 10.1016/j.cie.2018.11.031
+      \endverb
+    \endentry
+    \entry{cheng2016fcde}{article}{}
+      \name{author}{2}{}{%
+        {{hash=27c07ebe7fa82be952d0a118f6d8b76f}{%
+           family={Cheng},
+           familyi={C\bibinitperiod},
+           given={Min-Yuan},
+           giveni={M\bibinithyphendelim Y\bibinitperiod}}}%
+        {{hash=e07172106f38b0f7937cd4eed6a24a46}{%
+           family={Tran},
+           familyi={T\bibinitperiod},
+           given={Duc-Hoc},
+           giveni={D\bibinithyphendelim H\bibinitperiod}}}%
+      }
+      \strng{namehash}{be883669fe2aea8f482d8c5fa9a27fad}
+      \strng{fullhash}{be883669fe2aea8f482d8c5fa9a27fad}
+      \strng{bibnamehash}{be883669fe2aea8f482d8c5fa9a27fad}
+      \strng{authorbibnamehash}{be883669fe2aea8f482d8c5fa9a27fad}
+      \strng{authornamehash}{be883669fe2aea8f482d8c5fa9a27fad}
+      \strng{authorfullhash}{be883669fe2aea8f482d8c5fa9a27fad}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{KSCE Journal of Civil Engineering}
+      \field{number}{1}
+      \field{title}{An Efficient Hybrid Differential Evolution Based Serial Method for Multimode Resource-Constrained Project Scheduling}
+      \field{volume}{20}
+      \field{year}{2016}
+      \field{pages}{90\bibrangedash 100}
+      \range{pages}{11}
+      \verb{doi}
+      \verb 10.1007/s12205-015-0414-0
+      \endverb
+    \endentry
+    \entry{buddhakulsomsiri2007}{article}{}
+      \name{author}{2}{}{%
+        {{hash=da4c1e74305a6790abb1fcfee0aadd17}{%
+           family={Buddhakulsomsiri},
+           familyi={B\bibinitperiod},
+           given={Jirachai},
+           giveni={J\bibinitperiod}}}%
+        {{hash=3612d4d6d520fbba4daaecb05fd709f6}{%
+           family={Kim},
+           familyi={K\bibinitperiod},
+           given={David\bibnamedelima S.},
+           giveni={D\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+      }
+      \strng{namehash}{d680b71ac01640aa9991f96b5380ac9a}
+      \strng{fullhash}{d680b71ac01640aa9991f96b5380ac9a}
+      \strng{bibnamehash}{d680b71ac01640aa9991f96b5380ac9a}
+      \strng{authorbibnamehash}{d680b71ac01640aa9991f96b5380ac9a}
+      \strng{authornamehash}{d680b71ac01640aa9991f96b5380ac9a}
+      \strng{authorfullhash}{d680b71ac01640aa9991f96b5380ac9a}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{European Journal of Operational Research}
+      \field{number}{1}
+      \field{title}{Priority Rule-Based Heuristic for Multi-Mode Resource-Constrained Project Scheduling Problems with Resource Vacations and Activity Splitting}
+      \field{volume}{178}
+      \field{year}{2007}
+      \field{pages}{374\bibrangedash 390}
+      \range{pages}{17}
+      \verb{doi}
+      \verb 10.1016/j.ejor.2006.02.010
+      \endverb
+    \endentry
+    \entry{adamu2019priority}{article}{}
+      \name{author}{3}{}{%
+        {{hash=c4738f660c1ca45a2664f05b5c17f338}{%
+           family={Adamu},
+           familyi={A\bibinitperiod},
+           given={Patience\bibnamedelima I.},
+           giveni={P\bibinitperiod\bibinitdelim I\bibinitperiod}}}%
+        {{hash=359a6d3bc9a039d3bda366f4ebf90d6d}{%
+           family={Okagbue},
+           familyi={O\bibinitperiod},
+           given={Hilary\bibnamedelima I.},
+           giveni={H\bibinitperiod\bibinitdelim I\bibinitperiod}}}%
+        {{hash=36b637320ce88367c0fe9179b6074ed4}{%
+           family={Oguntunde},
+           familyi={O\bibinitperiod},
+           given={Pelumi\bibnamedelima E.},
+           giveni={P\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+      }
+      \strng{namehash}{ad073cb180d6c4c72a54edae99f068f6}
+      \strng{fullhash}{90888a0a1a2bdbcfb7fd733f9981e58b}
+      \strng{bibnamehash}{90888a0a1a2bdbcfb7fd733f9981e58b}
+      \strng{authorbibnamehash}{90888a0a1a2bdbcfb7fd733f9981e58b}
+      \strng{authornamehash}{ad073cb180d6c4c72a54edae99f068f6}
+      \strng{authorfullhash}{90888a0a1a2bdbcfb7fd733f9981e58b}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Wireless Personal Communications}
+      \field{title}{A New Priority Rule for Solving Project Scheduling Problems}
+      \field{volume}{106}
+      \field{year}{2019}
+      \field{pages}{681\bibrangedash 699}
+      \range{pages}{19}
+      \verb{doi}
+      \verb 10.1007/s11277-019-06185-5
+      \endverb
+    \endentry
+    \entry{tian2025multitree}{inproceedings}{}
+      \name{author}{3}{}{%
+        {{hash=d12eaa4bcfe35e37d08f0d3d058861fd}{%
+           family={Tian},
+           familyi={T\bibinitperiod},
+           given={Yuan},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=a5695b00af8c2a44034c09cd78f0a21d}{%
+           family={Mei},
+           familyi={M\bibinitperiod},
+           given={Yi},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=e678527db27127baf2e337470c642bc4}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Mengjie},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{d3c76a10b55975bb6b4c1cf5b95074bd}
+      \strng{fullhash}{87ddc20b13c15753b6d8d6ca6665492b}
+      \strng{bibnamehash}{87ddc20b13c15753b6d8d6ca6665492b}
+      \strng{authorbibnamehash}{87ddc20b13c15753b6d8d6ca6665492b}
+      \strng{authornamehash}{d3c76a10b55975bb6b4c1cf5b95074bd}
+      \strng{authorfullhash}{87ddc20b13c15753b6d8d6ca6665492b}
+      \field{extraname}{3}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Pacific Rim International Conference on Artificial Intelligence (PRICAI 2025)}
+      \field{title}{Scalable Knee-Point Guided Activity Group Selection in Multi-Tree Genetic Programming for Dynamic Multi-Mode Project Scheduling}
+      \field{year}{2025}
+      \verb{doi}
+      \verb 10.1007/978-981-95-7081-2_40
+      \endverb
+    \endentry
+    \entry{valls2005justification}{article}{}
+      \name{author}{3}{}{%
+        {{hash=b0350f99f83daf1c531389e15a13619f}{%
+           family={Valls},
+           familyi={V\bibinitperiod},
+           given={Vicente},
+           giveni={V\bibinitperiod}}}%
+        {{hash=4d6f285568a359a34ca8b635294ec163}{%
+           family={Ballestín},
+           familyi={B\bibinitperiod},
+           given={Francisco},
+           giveni={F\bibinitperiod}}}%
+        {{hash=44f609132525981b2d99894b2279d03a}{%
+           family={Quintanilla},
+           familyi={Q\bibinitperiod},
+           given={Sacramento},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{ed65a4a4355ff94574158f0b33fb5de8}
+      \strng{fullhash}{8f696cfe495e1c32922076be8a26c636}
+      \strng{bibnamehash}{8f696cfe495e1c32922076be8a26c636}
+      \strng{authorbibnamehash}{8f696cfe495e1c32922076be8a26c636}
+      \strng{authornamehash}{ed65a4a4355ff94574158f0b33fb5de8}
+      \strng{authorfullhash}{8f696cfe495e1c32922076be8a26c636}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{European Journal of Operational Research}
+      \field{number}{2}
+      \field{title}{Justification and {RCPSP}: A Technique that Pays}
+      \field{volume}{165}
+      \field{year}{2005}
+      \field{pages}{375\bibrangedash 386}
+      \range{pages}{12}
+      \verb{doi}
+      \verb 10.1016/j.ejor.2004.04.008
+      \endverb
+    \endentry
+    \entry{klein2000bidirectional}{article}{}
+      \name{author}{1}{}{%
+        {{hash=8eb9864e80893a0797e5e28436625910}{%
+           family={Klein},
+           familyi={K\bibinitperiod},
+           given={Robert},
+           giveni={R\bibinitperiod}}}%
+      }
+      \strng{namehash}{8eb9864e80893a0797e5e28436625910}
+      \strng{fullhash}{8eb9864e80893a0797e5e28436625910}
+      \strng{bibnamehash}{8eb9864e80893a0797e5e28436625910}
+      \strng{authorbibnamehash}{8eb9864e80893a0797e5e28436625910}
+      \strng{authornamehash}{8eb9864e80893a0797e5e28436625910}
+      \strng{authorfullhash}{8eb9864e80893a0797e5e28436625910}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{European Journal of Operational Research}
+      \field{number}{3}
+      \field{title}{Bidirectional Planning: Improving Priority Rule-Based Heuristics for Scheduling Resource-Constrained Projects}
+      \field{volume}{127}
+      \field{year}{2000}
+      \field{pages}{619\bibrangedash 638}
+      \range{pages}{20}
+      \verb{doi}
+      \verb 10.1016/S0377-2217(99)00347-1
+      \endverb
+    \endentry
+    \entry{afshar2022ga}{article}{}
+      \name{author}{3}{}{%
+        {{hash=c9b355a694675e7ac3aa8881d9dedcc8}{%
+           family={Afshar},
+           familyi={A\bibinitperiod},
+           given={Mohammad\bibnamedelima Reza},
+           giveni={M\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+        {{hash=c45b42e9a2e80a04f743d3106644f748}{%
+           family={Shahhosseini},
+           familyi={S\bibinitperiod},
+           given={Vahid},
+           giveni={V\bibinitperiod}}}%
+        {{hash=1329f95c64a483be2091e77dad25bbe7}{%
+           family={Sebt},
+           familyi={S\bibinitperiod},
+           given={Mohammad\bibnamedelima Hassan},
+           giveni={M\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+      }
+      \strng{namehash}{d265a16748b1efe7f58926e81acb6b1d}
+      \strng{fullhash}{6c59cd79da9f97b17f3922a3a8dcdf0d}
+      \strng{bibnamehash}{6c59cd79da9f97b17f3922a3a8dcdf0d}
+      \strng{authorbibnamehash}{6c59cd79da9f97b17f3922a3a8dcdf0d}
+      \strng{authornamehash}{d265a16748b1efe7f58926e81acb6b1d}
+      \strng{authorfullhash}{6c59cd79da9f97b17f3922a3a8dcdf0d}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{International Journal of Construction Management}
+      \field{number}{3}
+      \field{title}{A genetic algorithm with a new local search method for solving the multimode resource-constrained project scheduling problem}
+      \field{volume}{22}
+      \field{year}{2022}
+      \field{pages}{357\bibrangedash 365}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.1080/15623599.2019.1637667
+      \endverb
+    \endentry
+    \entry{burke2012automating}{article}{}
+      \name{author}{4}{}{%
+        {{hash=261fd21c11569e6ab51c85474c63d42a}{%
+           family={Burke},
+           familyi={B\bibinitperiod},
+           given={Edmund\bibnamedelima K.},
+           giveni={E\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
+        {{hash=e9e122adedbb73fa73721127c38b1bcc}{%
+           family={Hyde},
+           familyi={H\bibinitperiod},
+           given={Matthew\bibnamedelima R.},
+           giveni={M\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+        {{hash=efb6f4558def9112948d61982965294c}{%
+           family={Kendall},
+           familyi={K\bibinitperiod},
+           given={Graham},
+           giveni={G\bibinitperiod}}}%
+        {{hash=e95d17d70899ded5af1e882149f474d6}{%
+           family={Woodward},
+           familyi={W\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{f2b88ea270e215c8a6df5b8ed7228c82}
+      \strng{fullhash}{5711fdf421fd38285c4fd0efb1ac7f62}
+      \strng{bibnamehash}{5711fdf421fd38285c4fd0efb1ac7f62}
+      \strng{authorbibnamehash}{5711fdf421fd38285c4fd0efb1ac7f62}
+      \strng{authornamehash}{f2b88ea270e215c8a6df5b8ed7228c82}
+      \strng{authorfullhash}{5711fdf421fd38285c4fd0efb1ac7f62}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Evolutionary Computation}
+      \field{number}{1}
+      \field{title}{Automating the Packing Heuristic Design Process with Genetic Programming}
+      \field{volume}{20}
+      \field{year}{2012}
+      \field{pages}{63\bibrangedash 89}
+      \range{pages}{27}
+      \verb{doi}
+      \verb 10.1162/EVCO_a_00044
+      \endverb
+    \endentry
+    \entry{frankola2008evolutionary}{inproceedings}{}
+      \name{author}{3}{}{%
+        {{hash=c7760cd12dc112a295225c2c98c742aa}{%
+           family={Frankola},
+           familyi={F\bibinitperiod},
+           given={Toni},
+           giveni={T\bibinitperiod}}}%
+        {{hash=10f4360f9176e2b3abe8da7e54509ccd}{%
+           family={Golub},
+           familyi={G\bibinitperiod},
+           given={Marin},
+           giveni={M\bibinitperiod}}}%
+        {{hash=88a11898bc29244e6b0faada4993a338}{%
+           family={Jakobović},
+           familyi={J\bibinitperiod},
+           given={Domagoj},
+           giveni={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{3151f73b0fcdfd9679f6e52cf9f351b3}
+      \strng{fullhash}{d66190adb70652ba2eab742b9c82f58e}
+      \strng{bibnamehash}{d66190adb70652ba2eab742b9c82f58e}
+      \strng{authorbibnamehash}{d66190adb70652ba2eab742b9c82f58e}
+      \strng{authornamehash}{3151f73b0fcdfd9679f6e52cf9f351b3}
+      \strng{authorfullhash}{d66190adb70652ba2eab742b9c82f58e}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Proceedings of the ITI 2008 30th International Conference on Information Technology Interfaces}
+      \field{title}{Evolutionary Algorithms for the Resource Constrained Scheduling Problem}
+      \field{year}{2008}
+      \verb{doi}
+      \verb 10.1109/ITI.2008.4588499
+      \endverb
+    \endentry
+    \entry{dumic2018evolving}{article}{}
+      \name{author}{4}{}{%
+        {{hash=08905faefba2b7f1389005fdf2cd7641}{%
+           family={{Đ}umić},
+           familyi={Đ\bibinitperiod},
+           given={Mateja},
+           giveni={M\bibinitperiod}}}%
+        {{hash=cf2e4647ddf248a1190ee52b97e3efa6}{%
+           family={Šišejković},
+           familyi={Š\bibinitperiod},
+           given={Dominik},
+           giveni={D\bibinitperiod}}}%
+        {{hash=ebd4b7d0491570946c01467acd660794}{%
+           family={Čorić},
+           familyi={Č\bibinitperiod},
+           given={Rebeka},
+           giveni={R\bibinitperiod}}}%
+        {{hash=88a11898bc29244e6b0faada4993a338}{%
+           family={Jakobović},
+           familyi={J\bibinitperiod},
+           given={Domagoj},
+           giveni={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{ed81ab8a96a79c148b263e0caf193dc4}
+      \strng{fullhash}{a739eb6bf779fc95741fe9c458e8e5a6}
+      \strng{bibnamehash}{a739eb6bf779fc95741fe9c458e8e5a6}
+      \strng{authorbibnamehash}{a739eb6bf779fc95741fe9c458e8e5a6}
+      \strng{authornamehash}{ed81ab8a96a79c148b263e0caf193dc4}
+      \strng{authorfullhash}{a739eb6bf779fc95741fe9c458e8e5a6}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Future Generation Computer Systems}
+      \field{title}{Evolving Priority Rules for Resource Constrained Project Scheduling Problem with Genetic Programming}
+      \field{volume}{86}
+      \field{year}{2018}
+      \field{pages}{211\bibrangedash 221}
+      \range{pages}{11}
+      \verb{doi}
+      \verb 10.1016/j.future.2018.04.029
+      \endverb
+    \endentry
+    \entry{zhang2019new}{inproceedings}{}
+      \name{author}{3}{}{%
+        {{hash=6afa7de4e83f944cc0eace4e44ad994b}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Fangfang},
+           giveni={F\bibinitperiod}}}%
+        {{hash=a5695b00af8c2a44034c09cd78f0a21d}{%
+           family={Mei},
+           familyi={M\bibinitperiod},
+           given={Yi},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=e678527db27127baf2e337470c642bc4}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Mengjie},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{690b7bda4bfe2917ffd1a5522b71eb44}
+      \strng{fullhash}{c939cc5897cf0a2d3ec82f68dcc3afb5}
+      \strng{bibnamehash}{c939cc5897cf0a2d3ec82f68dcc3afb5}
+      \strng{authorbibnamehash}{c939cc5897cf0a2d3ec82f68dcc3afb5}
+      \strng{authornamehash}{690b7bda4bfe2917ffd1a5522b71eb44}
+      \strng{authorfullhash}{c939cc5897cf0a2d3ec82f68dcc3afb5}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Evolutionary Computation in Combinatorial Optimization (EvoCOP 2019)}
+      \field{series}{Lecture Notes in Computer Science}
+      \field{title}{A New Representation in Genetic Programming for Evolving Dispatching Rules for Dynamic Flexible Job Shop Scheduling}
+      \field{volume}{11452}
+      \field{year}{2019}
+      \field{pages}{33\bibrangedash 49}
+      \range{pages}{17}
+      \verb{doi}
+      \verb 10.1007/978-3-030-16711-0_3
+      \endverb
+    \endentry
+    \entry{servranckx2024preface}{article}{}
+      \name{author}{3}{}{%
+        {{hash=8d3abd8da688e70aca3b358f46844b7b}{%
+           family={Servranckx},
+           familyi={S\bibinitperiod},
+           given={Tom},
+           giveni={T\bibinitperiod}}}%
+        {{hash=45dde9ae2e850f41b1e850d33ae61761}{%
+           family={Coelho},
+           familyi={C\bibinitperiod},
+           given={José},
+           giveni={J\bibinitperiod}}}%
+        {{hash=27cd638f93b277b9fd9605ddcd823524}{%
+           family={Vanhoucke},
+           familyi={V\bibinitperiod},
+           given={Mario},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{20de14ebb4b6b8fce65ae4d28569e233}
+      \strng{fullhash}{ab501195a2469cfaeac9abd3291719a3}
+      \strng{bibnamehash}{ab501195a2469cfaeac9abd3291719a3}
+      \strng{authorbibnamehash}{ab501195a2469cfaeac9abd3291719a3}
+      \strng{authornamehash}{20de14ebb4b6b8fce65ae4d28569e233}
+      \strng{authorfullhash}{ab501195a2469cfaeac9abd3291719a3}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Annals of Operations Research}
+      \field{title}{Project Management and Scheduling 2022}
+      \field{volume}{338}
+      \field{year}{2024}
+      \field{pages}{1\bibrangedash 12}
+      \range{pages}{12}
+      \verb{doi}
+      \verb 10.1007/s10479-024-05971-0
+      \endverb
+    \endentry
+    \entry{spector2012lexicase}{inproceedings}{}
+      \name{author}{1}{}{%
+        {{hash=fe3f8eef1040cb8b2ad70d538beffa66}{%
+           family={Spector},
+           familyi={S\bibinitperiod},
+           given={Lee},
+           giveni={L\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {ACM}%
+      }
+      \strng{namehash}{fe3f8eef1040cb8b2ad70d538beffa66}
+      \strng{fullhash}{fe3f8eef1040cb8b2ad70d538beffa66}
+      \strng{bibnamehash}{fe3f8eef1040cb8b2ad70d538beffa66}
+      \strng{authorbibnamehash}{fe3f8eef1040cb8b2ad70d538beffa66}
+      \strng{authornamehash}{fe3f8eef1040cb8b2ad70d538beffa66}
+      \strng{authorfullhash}{fe3f8eef1040cb8b2ad70d538beffa66}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Proceedings of the 14th Annual Conference Companion on Genetic and Evolutionary Computation (GECCO '12)}
+      \field{title}{Assessment of Problem Modality by Differential Performance of Lexicase Selection in Genetic Programming: A Preliminary Report}
+      \field{year}{2012}
+      \field{pages}{401\bibrangedash 408}
+      \range{pages}{8}
+      \verb{doi}
+      \verb 10.1145/2330784.2330846
+      \endverb
+    \endentry
+    \entry{lacava2016epsilon}{inproceedings}{}
+      \name{author}{3}{}{%
+        {{hash=4e77aa188a998bb89e0f1ca24ee07b34}{%
+           family={La\bibnamedelima Cava},
+           familyi={L\bibinitperiod\bibinitdelim C\bibinitperiod},
+           given={William},
+           giveni={W\bibinitperiod}}}%
+        {{hash=fe3f8eef1040cb8b2ad70d538beffa66}{%
+           family={Spector},
+           familyi={S\bibinitperiod},
+           given={Lee},
+           giveni={L\bibinitperiod}}}%
+        {{hash=51c2197cefeaaee7d955e2e5c5bc8ece}{%
+           family={Danai},
+           familyi={D\bibinitperiod},
+           given={Kourosh},
+           giveni={K\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {ACM}%
+      }
+      \strng{namehash}{1434422842ec6e824e269c29607cfce5}
+      \strng{fullhash}{986e3fabe2e6418ec49b0b55e21d79bb}
+      \strng{bibnamehash}{986e3fabe2e6418ec49b0b55e21d79bb}
+      \strng{authorbibnamehash}{986e3fabe2e6418ec49b0b55e21d79bb}
+      \strng{authornamehash}{1434422842ec6e824e269c29607cfce5}
+      \strng{authorfullhash}{986e3fabe2e6418ec49b0b55e21d79bb}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Proceedings of the Genetic and Evolutionary Computation Conference 2016 (GECCO '16)}
+      \field{title}{Epsilon-Lexicase Selection for Regression}
+      \field{year}{2016}
+      \field{pages}{741\bibrangedash 748}
+      \range{pages}{8}
+      \verb{doi}
+      \verb 10.1145/2908812.2908898
+      \endverb
+    \endentry
+    \entry{derainville2012deap}{inproceedings}{}
+      \name{author}{5}{}{%
+        {{hash=2a8d7a79b78f89e860083e3622125296}{%
+           family={De\bibnamedelima Rainville},
+           familyi={D\bibinitperiod\bibinitdelim R\bibinitperiod},
+           given={François-Michel},
+           giveni={F\bibinithyphendelim M\bibinitperiod}}}%
+        {{hash=cb726dd65ed70d42db90a71456f3ccfc}{%
+           family={Fortin},
+           familyi={F\bibinitperiod},
+           given={Félix-Antoine},
+           giveni={F\bibinithyphendelim A\bibinitperiod}}}%
+        {{hash=3ec3b044bed6d19168fae25d72ae8fd2}{%
+           family={Gardner},
+           familyi={G\bibinitperiod},
+           given={Marc-André},
+           giveni={M\bibinithyphendelim A\bibinitperiod}}}%
+        {{hash=4db4c30a39950c04076d8822a71150b3}{%
+           family={Parizeau},
+           familyi={P\bibinitperiod},
+           given={Marc},
+           giveni={M\bibinitperiod}}}%
+        {{hash=6cf428558c3d4908897307fde7e4f5f4}{%
+           family={Gagné},
+           familyi={G\bibinitperiod},
+           given={Christian},
+           giveni={C\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {ACM}%
+      }
+      \strng{namehash}{d1dcbd34118454e5be9e49a0c9a26ef0}
+      \strng{fullhash}{51f3a4cb175ae77e3b36e1f07a9c487c}
+      \strng{bibnamehash}{51f3a4cb175ae77e3b36e1f07a9c487c}
+      \strng{authorbibnamehash}{51f3a4cb175ae77e3b36e1f07a9c487c}
+      \strng{authornamehash}{d1dcbd34118454e5be9e49a0c9a26ef0}
+      \strng{authorfullhash}{51f3a4cb175ae77e3b36e1f07a9c487c}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Proceedings of the 14th Annual Conference Companion on Genetic and Evolutionary Computation (GECCO '12)}
+      \field{title}{{DEAP}: A {Python} Framework for Evolutionary Algorithms}
+      \field{year}{2012}
+      \field{pages}{85\bibrangedash 92}
+      \range{pages}{8}
+      \verb{doi}
+      \verb 10.1145/2330784.2330799
+      \endverb
+    \endentry
+    \entry{demsar2006}{article}{}
+      \name{author}{1}{}{%
+        {{hash=4f1562f6c926af2ba7e34e919ea14f1d}{%
+           family={Demšar},
+           familyi={D\bibinitperiod},
+           given={Janez},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{4f1562f6c926af2ba7e34e919ea14f1d}
+      \strng{fullhash}{4f1562f6c926af2ba7e34e919ea14f1d}
+      \strng{bibnamehash}{4f1562f6c926af2ba7e34e919ea14f1d}
+      \strng{authorbibnamehash}{4f1562f6c926af2ba7e34e919ea14f1d}
+      \strng{authornamehash}{4f1562f6c926af2ba7e34e919ea14f1d}
+      \strng{authorfullhash}{4f1562f6c926af2ba7e34e919ea14f1d}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of Machine Learning Research}
+      \field{title}{Statistical Comparisons of Classifiers over Multiple Data Sets}
+      \field{volume}{7}
+      \field{year}{2006}
+      \field{pages}{1\bibrangedash 30}
+      \range{pages}{30}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

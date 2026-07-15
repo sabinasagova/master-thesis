@@ -1,16 +1,11 @@
 """
 Targeted power follow-up: serial SGS, baseline vs lexicase only.
 
-The full 60-run sweep (full_mmlib_experiment.py) found, on serial SGS,
-baseline-vs-lexicase test_fitness at p=0.109, r=0.667 (n=10 seeds) -- a
-moderate-large effect that a quick power calculation suggests is likely to
-reach p<0.05 around 14-16 paired seeds. Rather than rerunning the entire
-3-method x 2-SGS x 10-seed matrix, this script reuses
-`full_mmlib_experiment.run_single` (so settings are guaranteed identical) to
-add N_EXTRA_SEEDS new seeds to exactly these two (method, sgs) cells, pools
-them with the existing 10, and reports the updated paired Wilcoxon test.
+Reuses `full_mmlib_experiment.run_single` (identical settings) to add
+N_EXTRA_SEEDS new seeds to the serial/baseline and serial/lexicase cells,
+pools them with the existing records, and reports the updated paired
+Wilcoxon test. Run from the repo root with:
 
-Run with (from the GP_MRCPSP_CEC2024 repo root):
     PYTHONPATH=$(pwd) python -O yuantian/experiments/serial_lexicase_power_followup.py
 """
 import json

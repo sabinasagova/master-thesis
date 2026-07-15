@@ -1,7 +1,6 @@
 """
-Phenotypic-characterisation surrogate (Phase 0, strategy "surrogate").
-Restored from yuantian/custom_ea.py's ``surrogate_assisted_gp`` (deleted in
-commit b595a2d5; see yuantian/exploratory/README.md).
+Phenotypic-characterisation surrogate (exploratory phase, strategy "surrogate").
+Restored from yuantian/custom_ea.py's ``surrogate_assisted_gp`` (provenance in README.md).
 
 Adapted-method baseline (Hildebrandt & Branke, 2015): breeds more offspring
 than the population needs, ranks them with a cheap k-NN surrogate fitted on

@@ -1,43 +1,14 @@
 """
 Heuristic seeding for the GPHH initial population.
 
-Relocated here from yuantian/heuristic_seeding.py. Despite the name overlap
-with the Phase 0 package, this is not a restoration -- it's a real, kept
-extension (gated by `ParametersGPHH.seeding_strategy` / `GPHH.solve()`), not
-something deleted in commit b595a2d5 -- see exploratory/README.md's
-"Restoration notes" for why a from-scratch driver under this name doesn't
-exist in this codebase's history. It was moved into this package because
-its own before/after comparison (yuantian/experiments/
-heuristic_seeding_experiment.py) came back negative -- seeding doesn't beat
-random init on mean fitness and substantially increases variance -- the
-same outcome as most of the nine strategies in this package. `gphh_solver.py`
-still imports `seed_population` from here for the `--seeding_strategy` CLI
-flag, which is the one exception to "nothing in gphh_solver.py imports from
-yuantian/exploratory/" noted in this package's README.
-
-The baseline GPHH (`GPHH.solve`, via `gp_algorithms.standard_gp`) builds
-generation 0 purely at random: `toolbox.population(n=pop_size)` constructs
-every individual with DEAP's ramped half-and-half tree generator
-(`genHalfAndHalf`), so the GP has to rediscover well-known scheduling
-dispatch rules (earliest start, latest finish, minimum slack, shortest
-processing time, ...) from scratch through selection pressure alone.
-
-This module expresses a handful of those textbook priority rules directly
-as GP trees over the *existing* terminal/primitive set (no new primitives
-or terminals are registered, so the search space available to crossover and
-mutation afterwards is unchanged) and mixes them into generation 0.
-
-Two seeding strategies are provided:
-  - "heuristic": insert each textbook rule once, fill the rest of the
-    population at random as before.
-  - "heuristic_mutated": same, plus `n_mutated_clones` mutated copies of
-    each rule, so the seeded region of the search space is a small
-    neighborhood rather than a handful of isolated points.
-
-`seed_then_run` at the bottom is this package's own adapter, letting any
-exploratory driver (or gp_algorithms.standard_gp) start from a seeded
-population instead of its usual random init -- see
-exploratory_sweep_experiment.py's "lexicase_seeded" condition.
+Seeds part of generation 0 with hand-crafted priority rules (earliest
+start, latest finish, minimum slack, shortest duration, and similar)
+instead of purely random ramped half-and-half trees, gated by
+ParametersGPHH.seeding_strategy. Its dedicated before/after comparison
+(experiments/heuristic_seeding_experiment.py) was negative: seeding does
+not beat random initialisation on mean fitness and increases variance.
+gphh_solver.py imports seed_population from here for the
+--seeding_strategy CLI flag.
 """
 from __future__ import annotations
 

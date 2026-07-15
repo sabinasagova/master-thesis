@@ -1,7 +1,5 @@
 """
-Adaptive Operator Selection (Phase 0, strategy "adaptive"). Restored from
-yuantian/custom_ea.py's ``adaptive_operator_gp`` (deleted in commit
-b595a2d5; see yuantian/exploratory/README.md).
+Adaptive Operator Selection (exploratory strategy "adaptive"; provenance in README.md).
 
 Adapted-method baseline: probability matching on credit (reward = fitness
 improvement over the parent) adaptively reweights crossover / mutation /

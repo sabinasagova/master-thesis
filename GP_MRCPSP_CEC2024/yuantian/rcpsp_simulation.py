@@ -431,8 +431,7 @@ class Simulator(object):
         """Returns (res, utilization) for whichever renewable resource is
         most contended right now. Shared by all the RCCP terminals so they
         agree on what "the" bottleneck is at any given point. Returns
-        (None, 0.0) if there are no renewable resources, which shouldn't
-        happen on MMLIB instances but better safe than sorry."""
+        (None, 0.0) if there are no renewable resources."""
         renewable = self.rcpsp_problem.renewable_resources_list
         if not renewable:
             return None, 0.0
@@ -471,19 +470,17 @@ class Simulator(object):
         # slack when the bottleneck resource is tight -- an activity can
         # have zero precedence conflicts and still have to wait because its
         # resource is fully booked. This just discounts slack by how busy
-        # the bottleneck is. Not real resource-leveling (that would mean
-        # solving a sub-problem over the rest of the schedule), just shrinks
-        # slack toward 0 as utilization climbs toward 1.
+        # the bottleneck is. Shrinks slack toward 0 as
+        # utilization climbs toward 1.
         _, utilization = self._rccp_bottleneck_resource()
         return self.feature_cp_slack_score() * (1.0 - utilization)
 
     def feature_rccp_pressure_trend(self) -> Union[int, float]:
         # Forward-looking version of bottleneck_util: sums up what every
         # currently-eligible activity would minimally need from the
-        # bottleneck resource, divided by what's left. >1 means more demand
-        # is queued up than there's room for. Doesn't account for those
-        # activities competing with each other, so it's optimistic, same
-        # idea as NR_BUDGET_PRESSURE.
+        # bottleneck resource, divided by what's left. A value >1 means more demand is
+        # queued than remaining capacity; optimistic, since it ignores
+        # competition among the eligible activities.
         if not self.eligibles:
             return 0.0
         bottleneck_res, _ = self._rccp_bottleneck_resource()
@@ -502,14 +499,8 @@ class Simulator(object):
         return near_term_demand / avail
 
     def feature_rccp_resource_concentration(self) -> Union[int, float]:
-        # Small bundled addition (see rccp_terminals.py): tells apart two
-        # candidates with the same total renewable demand but a different
-        # shape -- all from one resource type (more exposed if that
-        # resource becomes a bottleneck) vs spread across several (more
-        # robust). This is 1 minus normalized Shannon entropy, so higher =
-        # more concentrated = more constrained, matching the rest of this
-        # module's convention (RCCP_SLACK is the one exception, since it
-        # just inherits CP_SLACK_SCORE's sign).
+        # 1 minus normalized Shannon entropy of the mode's renewable demand
+        # distribution: higher = more concentrated on one resource type.
         #
         # Two edge cases handled on purpose: k=1 (only one renewable
         # resource type exists) returns 1.0 instead of dividing by log(1);
@@ -613,7 +604,7 @@ class Simulator(object):
     def feature_mi_activity_pressure(self) -> Union[int, float]:
         # Same idea as constraint_tightening but averaged over the
         # activity's own modes, since we haven't committed to cur_mode yet
-        # at the activity-tree stage. Just one extra loop over ~2-4 modes.
+        # at the activity-tree stage.
         own_modes = self.rcpsp_problem.mode_details[self.cur_act]
         if not own_modes:
             return 0.0
@@ -629,8 +620,7 @@ class Simulator(object):
         # feasibility for every neighbor mode, just checks whether the
         # neighbors' combined cheapest-mode demand already exceeds what's
         # available, for each resource the candidate mode actually needs.
-        # A count/ratio, not a real feasibility check, but a lot cheaper
-        # (see mode_interaction_terminals.py for the timing comparison).
+        # A count, not a full feasibility check.
         if self.cur_mode is None:
             raise ValueError("Mode is not specified.")
         renewable = self.rcpsp_problem.renewable_resources_list

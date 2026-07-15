@@ -1,43 +1,18 @@
 """
-Epsilon-lexicase selection + critical-path local search vs the plain
-baseline (tournament selection, no local search), plus a third arm
-testing gap-aware early stopping/rollback. The gap-aware idea came from
-noticing lexicase's train/val gap stays flat for a while then jumps to a
-higher plateau, with none of the later training gains showing up on
-held-out data.
+Staged comparison of epsilon-lexicase selection + critical-path local
+search ("proposed") against the plain baseline (tournament selection, no
+local search), plus a third arm with gap-aware early stopping/rollback
+(a null result; see gap_aware_stopping.py and readme extension #2).
 
-Gap-aware stopping turned out to be a null result though (see readme.md
-extension #2 and gap_aware_stopping.py) -- tested it both with and
-without a real train-test gap present, no significant test-fitness
-benefit either time, even though the detector itself works fine. Kept the
-condition in this script rather than splitting it into its own experiment
-since the fairest comparison is against "proposed" under the exact same
-settings, which this script already gives for free. The actual gap-aware
-driver got moved to exploratory/ once the result was in.
+All conditions share population size, generations, crossover/mutation
+rates, elitism, and the train/val/test instances; only the selection
+operator, the local search, and (for proposed_gap_aware) the rollback
+differ. --n_classes controls how many stratified MMLIB50 classes back the
+60/20/20 split; --known_gap_split swaps in full_mmlib_experiment.py's
+split. Run with `python -O` (see --dry_run for a time estimate):
 
-All three conditions share population size, generations, crossover/
-mutation rates, elitism, and the train/val/test instances -- only the
-selection operator, local search, and (for proposed_gap_aware) the
-rollback differ.
-
-On validation/test set size: with only 10 held-out instances, the
-model-selection noise turned out to be bigger than the actual effect being
-measured, so --n_classes controls how many stratified MMLIB50 classes
-back the split (default 25, comfortably above the ~20-30 floor that
-seemed to be needed). --known_gap_split swaps in
-full_mmlib_experiment.py's split instead, the one known to actually
-produce a train-test gap.
-
-Run with (from the repo root), same pop=60/gen=20 scale used for the
-validation run before spending real compute on the full paper spec:
-    PYTHONPATH=$(pwd):$(pwd)/yuantian python3 yuantian/experiments/lexicase_local_search_experiment.py
-
-Time estimate without actually running it:
-    PYTHONPATH=$(pwd):$(pwd)/yuantian python3 yuantian/experiments/lexicase_local_search_experiment.py --dry_run
-
-Full paper spec (pop=1000/gen=50), once the small run looks promising:
-    PYTHONPATH=$(pwd):$(pwd)/yuantian python3 yuantian/experiments/lexicase_local_search_experiment.py \\
-        --pop_size 1000 --n_gen 50 --multiprocess
+    PYTHONPATH=$(pwd):$(pwd)/yuantian python3 -O \
+        yuantian/experiments/lexicase_local_search_experiment.py
 """
 import argparse
 import json

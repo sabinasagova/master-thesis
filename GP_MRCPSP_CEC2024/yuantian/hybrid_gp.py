@@ -9,11 +9,8 @@ replacement for it: the baseline condition keeps using `standard_gp`
 conditions therefore only differ in (a) the selection operator and (b) the
 elite local-search step, as required for a fair comparison.
 
-A gap-aware early-stopping variant of `lexicase_memetic_gp` was tried (see
-`yuantian/exploratory/gap_aware_stopping.py`) and moved there after two
-separate validations both came back negative -- see that module's
-docstring and GP_MRCPSP_CEC2024/readme.md, extension #2, for what was
-tried and what the result was.
+A gap-aware early-stopping variant lives in
+exploratory/gap_aware_stopping.py (null result in both validations).
 """
 import random
 from functools import partial

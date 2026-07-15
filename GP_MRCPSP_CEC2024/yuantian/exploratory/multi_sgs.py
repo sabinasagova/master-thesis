@@ -1,6 +1,6 @@
 """
 Multi-SGS evaluation (dual-SGS + double justification). Restored from
-yuantian/custom_ea.py's ``multi_sgs_gp`` (deleted in commit b595a2d5; see
+yuantian/custom_ea.py (see
 yuantian/exploratory/README.md).
 
 Dual-SGS and double justification are complementary post-processing ideas

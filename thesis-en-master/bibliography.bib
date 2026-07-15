@@ -1,0 +1,609 @@
+%
+%  Bibliographical database in BibTeX format, used by biblatex to create
+%  the list of referenced works.
+%
+%  Every entry below corresponds to a PDF held locally in
+%  ../docs/references/ or ../docs/literature-review/ (bibliography/,
+%  critical-path/, non-renewable/, paper-specific/), one directory up from
+%  this thesis-en-master/ subtree, with one explicit exception:
+%  Tian2024GPHH, the CEC 2024 paper that the baseline algorithm of this
+%  thesis is built on and whose source code was provided by its author (see
+%  Acknowledgements). afshar2022ga (one of the three required readings
+%  named in the official thesis assignment, zadani) has its PDF at
+%  ../docs/references/A Genetic Algorithm with a New Local Search Method for
+%  Solving the Multimode Resource-constrained Project Scheduling
+%  Problem.pdf (also mirrored under ../docs/literature-review/bibliography/).
+%
+%  ===========================================================================
+
+% ---------- CPM / PERT foundations ----------
+
+@book{pmbok2021,
+  author    = {{Project Management Institute}},
+  title     = {A Guide to the Project Management Body of Knowledge (PMBOK Guide)},
+  edition   = {7},
+  year      = {2021},
+  publisher = {Project Management Institute},
+  location  = {Newtown Square, PA, USA}
+}
+
+% ---------- RCPSP complexity, classification and surveys ----------
+
+@article{blazewicz1983,
+  author  = {B{\l}a\.{z}ewicz, Jacek and Lenstra, Jan Karel and Rinnooy Kan, Alexander H. G.},
+  title   = {Scheduling Subject to Resource Constraints: Classification and Complexity},
+  journal = {Discrete Applied Mathematics},
+  volume  = {5},
+  number  = {1},
+  pages   = {11--24},
+  year    = {1983},
+  doi     = {10.1016/0166-218X(83)90012-4}
+}
+
+@article{brucker1999,
+  author  = {Brucker, Peter and Drexl, Andreas and M{\"o}hring, Rolf and Neumann, Klaus and Pesch, Erwin},
+  title   = {Resource-Constrained Project Scheduling: Notation, Classification, Models, and Methods},
+  journal = {European Journal of Operational Research},
+  volume  = {112},
+  number  = {1},
+  pages   = {3--41},
+  year    = {1999},
+  doi     = {10.1016/S0377-2217(98)00204-5}
+}
+
+@article{kolisch1997,
+  author  = {Kolisch, Rainer and Sprecher, Arno},
+  title   = {{PSPLIB} -- A Project Scheduling Problem Library},
+  journal = {European Journal of Operational Research},
+  volume  = {96},
+  number  = {1},
+  pages   = {205--216},
+  year    = {1996},
+  doi     = {10.1016/S0377-2217(96)00170-1}
+}
+
+@techreport{kolischdrexl1994,
+  author      = {Kolisch, Rainer and Drexl, Andreas},
+  title       = {Local Search for Nonpreemptive Multi-Mode Resource-Constrained Project Scheduling},
+  institution = {Institut f{\"u}r Betriebswirtschaftslehre, Universit{\"a}t Kiel},
+  series      = {Manuskripte aus den Instituten f{\"u}r Betriebswirtschaftslehre der Universit{\"a}t Kiel},
+  number      = {360},
+  year        = {1994}
+}
+
+@article{kolisch2006,
+  author  = {Kolisch, Rainer and Hartmann, S{\"o}nke},
+  title   = {Experimental Investigation of Heuristics for Resource-Constrained Project Scheduling: An Update},
+  journal = {European Journal of Operational Research},
+  volume  = {174},
+  number  = {1},
+  pages   = {23--37},
+  year    = {2006},
+  doi     = {10.1016/j.ejor.2005.01.065}
+}
+
+@article{hartmann2010survey,
+  author  = {Hartmann, S{\"o}nke and Briskorn, Dirk},
+  title   = {A Survey of Variants and Extensions of the Resource-Constrained Project Scheduling Problem},
+  journal = {European Journal of Operational Research},
+  volume  = {207},
+  number  = {1},
+  pages   = {1--14},
+  year    = {2010},
+  doi     = {10.1016/j.ejor.2009.11.005}
+}
+
+@inproceedings{ganian2020complexity,
+  author    = {Ganian, Robert and Hamm, Thekla and Mescoff, Guillaume},
+  title     = {The Complexity Landscape of Resource-Constrained Scheduling},
+  booktitle = {Proceedings of the Twenty-Ninth International Joint Conference on Artificial Intelligence (IJCAI-20)},
+  year      = {2020},
+  pages     = {1741--1747},
+  publisher = {International Joint Conferences on Artificial Intelligence Organization},
+  doi       = {10.24963/ijcai.2020/241}
+}
+
+% ---------- Books and broader references ----------
+
+@book{demeulemeester2002,
+  author    = {Demeulemeester, Erik L. and Herroelen, Willy S.},
+  title     = {Project Scheduling: A Research Handbook},
+  year      = {2002},
+  publisher = {Kluwer Academic Publishers},
+  location  = {Boston, MA, USA},
+  series    = {International Series in Operations Research \& Management Science},
+  doi     = {10.1007/b101924}
+}
+
+@article{herroelen2005,
+  author  = {Herroelen, Willy and Leus, Roel},
+  title   = {Project Scheduling under Uncertainty: Survey and Research Potentials},
+  journal = {European Journal of Operational Research},
+  volume  = {165},
+  number  = {2},
+  pages   = {289--306},
+  year    = {2005},
+  doi     = {10.1016/j.ejor.2004.04.002}
+}
+
+% ---------- Evolutionary algorithms for (M)RCPSP ----------
+
+@article{hartmann1998,
+  author  = {Hartmann, S{\"o}nke},
+  title   = {A Competitive Genetic Algorithm for Resource-Constrained Project Scheduling},
+  journal = {Naval Research Logistics},
+  volume  = {45},
+  number  = {7},
+  pages   = {733--750},
+  year    = {1998},
+  doi     = {10.1002/(SICI)1520-6750(199810)45:7<733::AID-NAV5>3.0.CO;2-C}
+}
+
+@article{hartmann2002,
+  author  = {Hartmann, S{\"o}nke},
+  title   = {A Self-Adapting Genetic Algorithm for Project Scheduling under Resource Constraints},
+  journal = {Naval Research Logistics},
+  volume  = {49},
+  number  = {5},
+  pages   = {433--448},
+  year    = {2002},
+  doi     = {10.1002/nav.10029}
+}
+
+@article{vanpeteghem2010,
+  author  = {Van Peteghem, Vincent and Vanhoucke, Mario},
+  title   = {A Genetic Algorithm for the Preemptive and Non-Preemptive Multi-Mode Resource-Constrained Project Scheduling Problem},
+  journal = {European Journal of Operational Research},
+  volume  = {201},
+  number  = {2},
+  pages   = {409--418},
+  year    = {2010},
+  doi     = {10.1016/j.ejor.2009.03.034}
+}
+
+@article{VanDerBeek2024,
+  author  = {van der Beek, T. and Souravlias, D. and van Essen, J. T. and Pruyn, J. and Aardal, K.},
+  title   = {Hybrid differential evolution algorithm for the resource constrained project scheduling problem with a flexible project structure and consumption and production of resources},
+  journal = {European Journal of Operational Research},
+  volume  = {313},
+  pages   = {92--111},
+  year    = {2024},
+  doi     = {10.1016/j.ejor.2023.07.043}
+}
+
+@article{afshar2022ga,
+  author  = {Afshar, Mohammad Reza and Shahhosseini, Vahid and Sebt, Mohammad Hassan},
+  title   = {A genetic algorithm with a new local search method for solving the multimode resource-constrained project scheduling problem},
+  journal = {International Journal of Construction Management},
+  volume  = {22},
+  number  = {3},
+  pages   = {357--365},
+  year    = {2022},
+  doi     = {10.1080/15623599.2019.1637667}
+}
+
+@article{vanpeteghem2014,
+  author  = {Van Peteghem, Vincent and Vanhoucke, Mario},
+  title   = {An Experimental Investigation of Metaheuristics for the Multi-Mode Resource-Constrained Project Scheduling Problem on New Dataset Instances},
+  journal = {European Journal of Operational Research},
+  volume  = {235},
+  number  = {1},
+  pages   = {62--72},
+  year    = {2014},
+  doi     = {10.1016/j.ejor.2013.10.012}
+}
+
+@inproceedings{Tian2024GPHH,
+  author    = {Tian, Yuan and Mei, Yi and Zhang, Mengjie},
+  booktitle = {2024 {IEEE} Congress on Evolutionary Computation ({CEC})},
+  title     = {Learning Heuristics via Genetic Programming for Multi-Mode Resource-Constrained Project Scheduling},
+  year      = {2024},
+  pages     = {1--8},
+  doi       = {10.1109/CEC60901.2024.10612172}
+}
+
+@article{khajesaeedi2025review,
+  author  = {Khajesaeedi, Sahar and Sadjadi, Seyed Jafar and Barzinpour, Farnaz and Tavakkoli-Moghaddam, Reza},
+  title   = {Resource-constrained project scheduling problem: Review of recent developments},
+  journal = {Journal of Project Management},
+  year    = {2025},
+  volume  = {10},
+  number  = {1},
+  pages   = {1--26},
+  doi     = {10.5267/j.jpm.2024.12.002}
+}
+
+@online{dokeroglu2025metaheuristics,
+  author      = {Dokeroglu, Tansel and Canturk, Deniz and Kucukyilmaz, Tayfun},
+  title       = {A survey on pioneering metaheuristic algorithms between 2019 and 2024},
+  year        = {2025},
+  eprint      = {2501.14769},
+  eprinttype  = {arxiv},
+  eprintclass = {cs.NE},
+  doi         = {10.48550/arXiv.2501.14769}
+}
+
+@article{tian2022multiskill,
+  author  = {Tian, Yuan and Xiong, Tifan and Liu, Zhenyuan and Mei, Yi and Wan, Li},
+  title   = {Multi-objective multi-skill resource-constrained project scheduling problem with skill switches: Model and evolutionary approaches},
+  journal = {Computers \& Industrial Engineering},
+  year    = {2022},
+  volume  = {167},
+  pages   = {107897},
+  doi     = {10.1016/j.cie.2021.107897}
+}
+
+@article{yang2024biobjective,
+  author  = {Yang, Hongbing and Wang, Ziyang and Gao, Yue and Zhou, Wei},
+  title   = {Bi-objective multi-mode resource-constrained multi-project scheduling using combined {NSGA II} and {Q}-learning algorithm},
+  journal = {Applied Soft Computing},
+  year    = {2024},
+  volume  = {152},
+  pages   = {111201},
+  doi     = {10.1016/j.asoc.2023.111201}
+}
+
+@article{ramos2023stochastic,
+  author  = {Ramos, Alfredo S. and Miranda-Gonz{\'a}lez, Pablo A. and Nucamendi-Guill{\'e}n, Samuel and Olivares-Benitez, Elias},
+  title   = {A Formulation for the Stochastic Multi-Mode Resource-Constrained Project Scheduling Problem Solved with a Multi-Start Iterated Local Search Metaheuristic},
+  journal = {Mathematics},
+  year    = {2023},
+  volume  = {11},
+  number  = {2},
+  pages   = {337},
+  doi     = {10.3390/math11020337}
+}
+
+% ---------- Schedule generation, local search and exact methods (chapter 2) ----------
+
+@article{kolisch1996sgs,
+  author  = {Kolisch, Rainer},
+  title   = {Serial and Parallel Resource-Constrained Project Scheduling Methods Revisited: Theory and Computation},
+  journal = {European Journal of Operational Research},
+  volume  = {90},
+  number  = {2},
+  pages   = {320--333},
+  year    = {1996},
+  doi     = {10.1016/0377-2217(95)00357-6}
+}
+
+@article{valls2005justification,
+  author  = {Valls, Vicente and Ballest{\'i}n, Francisco and Quintanilla, Sacramento},
+  title   = {Justification and {RCPSP}: A Technique that Pays},
+  journal = {European Journal of Operational Research},
+  volume  = {165},
+  number  = {2},
+  pages   = {375--386},
+  year    = {2005},
+  doi     = {10.1016/j.ejor.2004.04.008}
+}
+
+@article{bartusch1988,
+  author  = {Bartusch, Michael and M{\"o}hring, Rolf H. and Radermacher, Franz J.},
+  title   = {Scheduling Project Networks with Resource Constraints and Time Windows},
+  journal = {Annals of Operations Research},
+  volume  = {16},
+  number  = {1},
+  pages   = {199--240},
+  year    = {1988},
+  doi     = {10.1007/BF02283745}
+}
+
+% ---------- Evolutionary algorithm and genetic programming fundamentals ----------
+
+@article{branke2016gphh,
+  author  = {Branke, J{\"u}rgen and Nguyen, Su and Pickardt, Christoph W. and Zhang, Mengjie},
+  title   = {Automated Design of Production Scheduling Heuristics: A Review},
+  journal = {IEEE Transactions on Evolutionary Computation},
+  volume  = {20},
+  number  = {1},
+  pages   = {110--124},
+  year    = {2016},
+  doi     = {10.1109/TEVC.2015.2429314}
+}
+
+% ---------- Recent (2022+) algorithmic approaches for (M)RCPSP ----------
+
+@article{cai2024rlgnn,
+  author  = {Cai, Hongxia and Bian, Yunqi and Liu, Lilan},
+  title   = {Deep Reinforcement Learning for Solving Resource Constrained Project Scheduling Problems with Resource Disruptions},
+  journal = {Robotics and Computer-Integrated Manufacturing},
+  volume  = {85},
+  pages   = {102628},
+  year    = {2024},
+  doi     = {10.1016/j.rcim.2023.102628}
+}
+
+@article{peng2023quantumpso,
+  author  = {Peng, Jun Long and Liu, Xiao and Peng, Chao and Shao, Yu},
+  title   = {Multi-Skill Resource-Constrained Multi-Modal Project Scheduling Problem Based on Hybrid Quantum Algorithm},
+  journal = {Scientific Reports},
+  volume  = {13},
+  pages   = {18502},
+  year    = {2023},
+  doi     = {10.1038/s41598-023-45970-y}
+}
+
+@inproceedings{tian2025multitree,
+  author    = {Tian, Yuan and Mei, Yi and Zhang, Mengjie},
+  title     = {Scalable Knee-Point Guided Activity Group Selection in Multi-Tree Genetic Programming for Dynamic Multi-Mode Project Scheduling},
+  booktitle = {Pacific Rim International Conference on Artificial Intelligence (PRICAI 2025)},
+  year      = {2025},
+  doi     = {10.1007/978-981-95-7081-2_40}
+}
+
+% ---------- GP / hyper-heuristic foundations (docs/literature-review/paper-specific/) ----------
+
+@article{koza1994gp,
+  author  = {Koza, John R.},
+  title   = {Genetic Programming as a Means for Programming Computers by Natural Selection},
+  journal = {Statistics and Computing},
+  volume  = {4},
+  pages   = {87--112},
+  year    = {1994},
+  doi     = {10.1007/BF00175355}
+}
+
+@inproceedings{derainville2012deap,
+  author    = {De Rainville, Fran\c{c}ois-Michel and Fortin, F{\'e}lix-Antoine and Gardner, Marc-Andr{\'e} and Parizeau, Marc and Gagn{\'e}, Christian},
+  title     = {{DEAP}: A {Python} Framework for Evolutionary Algorithms},
+  booktitle = {Proceedings of the 14th Annual Conference Companion on Genetic and Evolutionary Computation (GECCO '12)},
+  pages     = {85--92},
+  year      = {2012},
+  publisher = {ACM},
+  doi       = {10.1145/2330784.2330799}
+}
+
+@article{lova2006mrcpsp,
+  author  = {Lova, Antonio and Tormos, Pilar and Barber, Federico},
+  title   = {Multi-Mode Resource Constrained Project Scheduling: Scheduling Schemes, Priority Rules and Mode Selection Rules},
+  journal = {Inteligencia Artificial. Revista Iberoamericana de Inteligencia Artificial},
+  volume  = {10},
+  number  = {30},
+  pages   = {69--86},
+  year    = {2006},
+  doi     = {10.4114/ia.v10i30.947}
+}
+
+% ---------- Additional literature from docs/literature-review/paper-specific/ ----------
+% Every entry below was verified directly against its PDF (title, authors, and at
+% least the year confirmed from the document itself). Two exceptions are noted
+% inline where the venue could not be read off the PDF page itself.
+
+@article{burke2012automating,
+  author  = {Burke, Edmund K. and Hyde, Matthew R. and Kendall, Graham and Woodward, John},
+  title   = {Automating the Packing Heuristic Design Process with Genetic Programming},
+  journal = {Evolutionary Computation},
+  year    = {2012},
+  volume  = {20},
+  number  = {1},
+  pages   = {63--89},
+  doi     = {10.1162/EVCO_a_00044}
+}
+
+% Venue/year not printed on the PDF itself (no header/footer with proceedings
+% info); inferred from the source filename (iti2008_v03.pdf) as the 30th
+% International Conference on Information Technology Interfaces (ITI), 2008.
+@inproceedings{frankola2008evolutionary,
+  author    = {Frankola, Toni and Golub, Marin and Jakobovi{\'c}, Domagoj},
+  title     = {Evolutionary Algorithms for the Resource Constrained Scheduling Problem},
+  booktitle = {Proceedings of the ITI 2008 30th International Conference on Information Technology Interfaces},
+  year      = {2008},
+  doi     = {10.1109/ITI.2008.4588499}
+}
+
+% Read from the authors' preprint copy; year confirmed from the preprint
+% footer (``October 6, 2018''), journal/volume/pages not printed on that copy.
+@article{dumic2018evolving,
+  author  = {{\DJ}umi{\'c}, Mateja and {\v S}i{\v s}ejkovi{\'c}, Dominik and {\v C}ori{\'c}, Rebeka and Jakobovi{\'c}, Domagoj},
+  title   = {Evolving Priority Rules for Resource Constrained Project Scheduling Problem with Genetic Programming},
+  journal = {Future Generation Computer Systems},
+  volume  = {86},
+  pages   = {211--221},
+  year    = {2018},
+  doi     = {10.1016/j.future.2018.04.029}
+}
+
+@inproceedings{zhang2019new,
+  author    = {Zhang, Fangfang and Mei, Yi and Zhang, Mengjie},
+  title     = {A New Representation in Genetic Programming for Evolving Dispatching Rules for Dynamic Flexible Job Shop Scheduling},
+  booktitle = {Evolutionary Computation in Combinatorial Optimization (EvoCOP 2019)},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {11452},
+  pages     = {33--49},
+  year      = {2019},
+  publisher = {Springer},
+  doi       = {10.1007/978-3-030-16711-0_3}
+}
+
+@article{boctor1996new,
+  author  = {Boctor, Fayez F.},
+  title   = {A New and Efficient Heuristic for Scheduling Projects with Resource Restrictions and Multiple Execution Modes},
+  journal = {European Journal of Operational Research},
+  volume  = {90},
+  pages   = {349--361},
+  year    = {1996},
+  doi     = {10.1016/0377-2217(95)00359-2}
+}
+
+@article{vanhoucke2024reducing,
+  author  = {Vanhoucke, Mario and Coelho, Jos{\'e}},
+  title   = {Reducing the Feasible Solution Space of Resource-Constrained Project Instances},
+  journal = {Computers \& Operations Research},
+  volume  = {165},
+  pages   = {106567},
+  year    = {2024},
+  doi     = {10.1016/j.cor.2024.106567}
+}
+
+@article{zamani2019mirror,
+  author  = {Zamani, Reza},
+  title   = {An Effective Mirror-Based Genetic Algorithm for Scheduling Multi-Mode Resource-Constrained Projects},
+  journal = {Computers \& Industrial Engineering},
+  volume  = {127},
+  pages   = {914--924},
+  year    = {2019},
+  doi     = {10.1016/j.cie.2018.11.031}
+}
+
+@article{buddhakulsomsiri2007,
+  author  = {Buddhakulsomsiri, Jirachai and Kim, David S.},
+  title   = {Priority Rule-Based Heuristic for Multi-Mode Resource-Constrained Project Scheduling Problems with Resource Vacations and Activity Splitting},
+  journal = {European Journal of Operational Research},
+  volume  = {178},
+  number  = {1},
+  pages   = {374--390},
+  year    = {2007},
+  doi     = {10.1016/j.ejor.2006.02.010}
+}
+
+@article{vanhoucke2024matheuristic,
+  author  = {Vanhoucke, Mario and Coelho, Jos{\'e}},
+  title   = {A Matheuristic for the Resource-Constrained Project Scheduling Problem},
+  journal = {European Journal of Operational Research},
+  volume  = {319},
+  pages   = {711--725},
+  year    = {2024},
+  doi     = {10.1016/j.ejor.2024.07.016}
+}
+
+@article{klein2000bidirectional,
+  author  = {Klein, Robert},
+  title   = {Bidirectional Planning: Improving Priority Rule-Based Heuristics for Scheduling Resource-Constrained Projects},
+  journal = {European Journal of Operational Research},
+  volume  = {127},
+  number  = {3},
+  pages   = {619--638},
+  year    = {2000},
+  doi     = {10.1016/S0377-2217(99)00347-1}
+}
+
+@article{cheng2016fcde,
+  author  = {Cheng, Min-Yuan and Tran, Duc-Hoc},
+  title   = {An Efficient Hybrid Differential Evolution Based Serial Method for Multimode Resource-Constrained Project Scheduling},
+  journal = {KSCE Journal of Civil Engineering},
+  volume  = {20},
+  number  = {1},
+  pages   = {90--100},
+  year    = {2016},
+  doi     = {10.1007/s12205-015-0414-0}
+}
+
+@incollection{mika2015mrcpsp,
+  author    = {Mika, Marek and Waligóra, Grzegorz and W{\k{e}}glarz, Jan},
+  title     = {Overview and State of the Art},
+  booktitle = {Handbook on Project Management and Scheduling Vol.\ 1},
+  editor    = {Schwindt, Christoph and Zimmermann, J{\"u}rgen},
+  series    = {International Handbooks on Information Systems},
+  publisher = {Springer},
+  year      = {2015},
+  chapter   = {21},
+  pages     = {445--490},
+  doi     = {10.1007/978-3-319-05443-8_21}
+}
+
+@techreport{kolisch1994priority,
+  author      = {Kolisch, Rainer},
+  title       = {Efficient Priority Rules for the Resource-Constrained Project Scheduling Problem},
+  institution = {Universit{\"a}t Kiel, Institut f{\"u}r Betriebswirtschaftslehre},
+  series      = {Manuskripte aus den Instituten f{\"u}r Betriebswirtschaftslehre der Universit{\"a}t Kiel},
+  number      = {350},
+  year        = {1994}
+}
+
+@article{servranckx2024preface,
+  author  = {Servranckx, Tom and Coelho, Jos{\'e} and Vanhoucke, Mario},
+  title   = {Project Management and Scheduling 2022},
+  journal = {Annals of Operations Research},
+  volume  = {338},
+  pages   = {1--12},
+  year    = {2024},
+  doi     = {10.1007/s10479-024-05971-0}
+}
+
+@article{adamu2019priority,
+  author  = {Adamu, Patience I. and Okagbue, Hilary I. and Oguntunde, Pelumi E.},
+  title   = {A New Priority Rule for Solving Project Scheduling Problems},
+  journal = {Wireless Personal Communications},
+  volume  = {106},
+  pages   = {681--699},
+  year    = {2019},
+  doi     = {10.1007/s11277-019-06185-5}
+}
+
+@article{ruhlusarac2022dynamic,
+  author  = {Ruhlusarac, Murat and {\c C}al{\i}{\c s}kan, Filiz},
+  title   = {Dynamic Multi-Mode Resource-Constrained Multi-Project Scheduling Problem with Weighted Earliness and Tardiness: A Real-Life Boutique Furniture Implementation},
+  journal = {Business and Management Studies: An International Journal (BMIJ)},
+  volume  = {10},
+  number  = {3},
+  pages   = {1095--1117},
+  year    = {2022},
+  doi     = {10.15295/bmij.v10i3.2111}
+}
+
+@inproceedings{chakrabortty2014event,
+  author    = {Chakrabortty, Ripon Kumar and Sarker, Ruhul Amin and Essam, Daryl L.},
+  title     = {Event Based Approaches for Solving Multi-mode Resource Constraints Project Scheduling Problem},
+  booktitle = {Computer Information Systems and Industrial Management (CISIM 2014)},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {8838},
+  pages     = {375--386},
+  year      = {2014},
+  editor    = {Saeed, Khalid and Sn{\'a}{\v s}el, V{\'a}clav},
+  publisher = {Springer},
+  doi     = {10.1007/978-3-662-45237-0_35}
+}
+
+% ---------- GP selection / surrogates / QD / statistics (methodology of Ch. 4-5) ----------
+% Citation-only entries (no local PDF in docs/): standard, widely available
+% methodology references cited for the pilot-sweep strategies and the
+% critical-difference methodology.
+
+@inproceedings{spector2012lexicase,
+  author    = {Spector, Lee},
+  title     = {Assessment of Problem Modality by Differential Performance of Lexicase Selection in Genetic Programming: A Preliminary Report},
+  booktitle = {Proceedings of the 14th Annual Conference Companion on Genetic and Evolutionary Computation (GECCO '12)},
+  pages     = {401--408},
+  publisher = {ACM},
+  year      = {2012},
+  doi       = {10.1145/2330784.2330846}
+}
+
+@inproceedings{lacava2016epsilon,
+  author    = {La Cava, William and Spector, Lee and Danai, Kourosh},
+  title     = {Epsilon-Lexicase Selection for Regression},
+  booktitle = {Proceedings of the Genetic and Evolutionary Computation Conference 2016 (GECCO '16)},
+  pages     = {741--748},
+  publisher = {ACM},
+  year      = {2016},
+  doi       = {10.1145/2908812.2908898}
+}
+
+@article{hildebrandt2015surrogate,
+  author  = {Hildebrandt, Torsten and Branke, J{\"u}rgen},
+  title   = {On Using Surrogates with Genetic Programming},
+  journal = {Evolutionary Computation},
+  volume  = {23},
+  number  = {3},
+  pages   = {343--367},
+  year    = {2015},
+  doi     = {10.1162/EVCO_a_00133}
+}
+
+@online{mouret2015mapelites,
+  author = {Mouret, Jean-Baptiste and Clune, Jeff},
+  title  = {Illuminating Search Spaces by Mapping Elites},
+  year   = {2015},
+  url    = {https://arxiv.org/abs/1504.04909},
+  doi     = {10.48550/arXiv.1504.04909}
+}
+
+@article{demsar2006,
+  author  = {Dem{\v{s}}ar, Janez},
+  title   = {Statistical Comparisons of Classifiers over Multiple Data Sets},
+  journal = {Journal of Machine Learning Research},
+  volume  = {7},
+  pages   = {1--30},
+  year    = {2006}
+}

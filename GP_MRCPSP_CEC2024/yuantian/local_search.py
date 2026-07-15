@@ -1,7 +1,7 @@
 """
 Elite-refinement strategies for GPHH individuals.
 
-Refinement is a Lamarckian, fitness-level step: it improves the *schedule*
+Refinement is a Baldwinian, fitness-level step: it improves the *schedule*
 an elite individual's priority rule produces, then writes the improved
 fitness back onto that individual. The GP tree (genotype) is never
 modified, satisfying the "representation stays the same" constraint.

@@ -1,17 +1,17 @@
 """
 Diagnostic Modification-Graft Evolution (DMGE) and its two dependent drivers.
-Restored from yuantian/custom_ea.py (deleted in commit b595a2d5; see
+The three diagnosis-driven variation schemes (see
 yuantian/exploratory/README.md):
 
-  modification_integrated_gp   Phase 0 strategy "mod_integrated" -- the
-                     flagship. Every offspring is grafted with a phase-aware
+  modification_integrated_gp   strategy "mod_integrated" -- the main
+                     scheme. Every offspring is grafted with a phase-aware
                      if_else block selected from its parent's SGS-trace
                      diagnosis (NR-infeasible / CP-blind / renewable-
                      contention-blind).
-  trace_directed_gp Phase 0 strategy "trace_directed" -- variation
+  trace_directed_gp strategy "trace_directed" -- variation
                      conditioned on a parent's NR-feasibility only (a
                      simpler precursor to the diagnostic graft above).
-  decision_trace_illumination_gp  Phase 0 strategy "decision_trace" -- a
+  decision_trace_illumination_gp  strategy "decision_trace" -- a
                      CP-respect x NR-frugality behavioural descriptor
                      driving a quality-diversity illumination loop (does
                      not use the graft operator; grouped here because it
@@ -461,7 +461,7 @@ def modification_integrated_gp(
     max_height: int = 8,
     enabled_grafts=("NR", "CP", "RENEWABLE"),
 ) -> tuple:
-    """Diagnostic Modification-Graft Evolution (DMGE), the flagship Phase 0
+    """Diagnostic Modification-Graft Evolution (DMGE), the main graft-based
     strategy. Call ``install_graft_terminals`` on this GPHH instance's
     pset/simulator first, or the grafts are no-ops. ``enabled_grafts``
     restricts which diagnosis grafts are active (leave-one-out ablation)."""

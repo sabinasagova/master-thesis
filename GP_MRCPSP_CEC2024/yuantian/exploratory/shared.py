@@ -1,9 +1,9 @@
 """
-Shared bookkeeping for the Phase 0 exploratory drivers.
+Shared bookkeeping for the exploratory strategies.
 
-Restored from yuantian/custom_ea.py (deleted in commit b595a2d5 when the
+Originally in yuantian/custom_ea.py (removed when the
 repo was restructured into cp_propagation.py / hybrid_gp.py / local_search.py
--- recovered via ``git show b595a2d5^:GP_Algorithm/yuantian/custom_ea.py``).
+-- see exploratory/README.md for provenance).
 Every driver in this package reproduces ``gp_algorithms.standard_gp``'s
 bookkeeping contract: update the hall-of-fame, append a clone snapshot to
 ``pop_archive`` each generation, return ``(population, logbook)`` with the

@@ -1,45 +1,19 @@
 """
-Gap-aware early stopping, moved here after it didn't actually help (same
-deal as heuristic_seeding.py -- a real idea I tried, not one of the
-restored Phase 0 strategies, that got moved to exploratory/ once its own
-before/after comparison came back negative).
+Gap-aware early stopping / rollback for the lexicase + local-search loop.
 
-Why I tried this: while looking at lexicase's train/val curves I noticed
-the train->validation gap stays flat for a while and then jumps up to a
-higher plateau, and training fitness keeps improving past that point
-without any of it showing up on held-out data. detect_gap_onset below
-tries to catch that flat-to-rising transition as it happens (from the
-run's own validation curve, not some fixed generation number), and
-lexicase_memetic_gp_gap_aware either rolls back to whichever generation
-was best on validation, or stops the run early once it's confirmed.
+detect_gap_onset watches the run's own train/validation trajectory for the
+onset of a sustained generalisation gap; lexicase_memetic_gp_gap_aware
+then either rolls back to the best-on-validation generation or stops the
+run early. Evaluated twice with negative results: once on a split with no
+real train/test gap (proposed vs proposed_gap_aware on test, p=0.109) and
+once on the known-gap split of full_mmlib_experiment.py, where onset was
+detected and rollback happened (to ~generation 7 of 20 on average) but
+test fitness did not improve (p=0.734) and the gap barely moved
+(2.40 vs 2.37). The validation signal (10-25 instances) is too noisy to
+select the generation that generalises best.
 
-Tested this twice and both times it didn't help:
-
-1. At lexicase_local_search_experiment.py's normal settings (25 classes,
-   1 train instance per class), test fitness actually came out better than
-   training fitness for every condition -- so there wasn't really a gap to
-   catch in the first place. proposed vs proposed_gap_aware on test
-   fitness: p=0.109, not significant (if anything plain proposed was
-   slightly better).
-
-2. Reran with --known_gap_split (the split from full_mmlib_experiment.py
-   that's known to produce an actual gap, ~18-19 test fitness). This time
-   there really was a gap (test clearly worse than train for everyone).
-   The mechanism did detect onset in most runs and rolled back to roughly
-   generation 7 out of 20 on average. Still no significant difference on
-   test fitness though (p=0.734), and the generalization gap barely
-   moved (2.40 vs 2.37).
-
-So the detector itself seems to work fine -- it picks up on a real,
-sustained gap when one exists -- but rolling back to whatever generation
-looked best on a small validation set doesn't reliably pick the
-generation that'll actually do best on a separate held-out test set.
-Validation fitness with only 10-25 instances is just noisy enough that
-the signal isn't precise enough to act on.
-
-Not used by gphh_solver.py or hybrid_gp.py anymore, only by
-lexicase_local_search_experiment.py's "proposed_gap_aware" condition and
-its own tests.
+Used only by lexicase_local_search_experiment.py's "proposed_gap_aware"
+condition and its own tests.
 """
 import random
 from functools import partial

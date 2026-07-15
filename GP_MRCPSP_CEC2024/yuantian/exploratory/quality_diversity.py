@@ -1,6 +1,5 @@
 """
-MAP-Elites / Quality-Diversity (Phase 0, strategy "map_elites"). Restored
-from yuantian/custom_ea.py's ``map_elites_gp`` (deleted in commit b595a2d5;
+MAP-Elites / Quality-Diversity (exploratory strategy "map_elites";
 see yuantian/exploratory/README.md).
 
 Adapted-method baseline (Mouret & Clune, 2015): illuminates a CP-reliance x

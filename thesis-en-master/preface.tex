@@ -1,0 +1,62 @@
+% Acknowledgements moved into \Dedication in metadata.tex (printed on the
+% dedication page, right after the signed declaration in title.tex).
+
+\chapter*{Introduction}
+\addcontentsline{toc}{chapter}{Introduction}
+\label{chap:introduction}
+
+Every project, from building a bridge to releasing a piece of software,
+ultimately comes down to the same question: in what order should the work
+get done? \changed{The answer can rarely be chosen freely.} Activities depend on one another, since
+the foundation has to be poured before the walls go up, and the people,
+machines and budget available to do the work are finite. A project
+\emph{schedule} is a concrete answer to this question: an assignment of a
+start time, and sometimes a choice of \emph{how} an activity is to be
+carried out, to every piece of work in the project, consistent with both
+kinds of constraint. Getting it right matters in a very direct, practical
+sense, since a better schedule finishes the same project sooner, or finishes
+it with the resources actually on hand, without changing what has to be
+built or who is available to build it.
+
+What makes this question hard is not any one constraint in isolation, but
+the way they interact. Adding more activities, more dependencies, or more
+ways of carrying out each activity does not make the problem grow
+gracefully; it makes the space of possible schedules grow combinatorially,
+to the point where even a modern computer cannot examine every option for
+all but the smallest projects. This is true even in the simplest version of
+the problem, where every activity has only one way of being done; allowing
+multiple \emph{modes}, for instance finishing a task faster by paying for
+more labour, or slower with less, only deepens the difficulty, since now a
+schedule must also choose, for every activity, which mode to use. This is
+the \emph{multi-mode resource-constrained project scheduling problem}
+(MRCPSP), the subject of this thesis, and it is provably among the hardest
+problems in combinatorial optimisation: no known algorithm can guarantee an
+optimal schedule for realistically sized instances within a practical
+amount of time.
+
+This is precisely the kind of problem that \emph{evolutionary algorithms}
+were designed for. Rather than searching for a guaranteed-optimal answer, an
+evolutionary algorithm maintains and improves a population of candidate
+solutions over many generations, borrowing the mechanics of natural
+selection, namely variation, competition, and survival of the fitter, to
+explore an otherwise unmanageable search space. They do not need the
+problem to have any convenient mathematical structure, which makes them
+well suited to a problem like the MRCPSP, where the constraints that make
+exact methods struggle are exactly the constraints an evolutionary search
+can simply evaluate, rather than solve, for every candidate it considers.
+This thesis pursues one specific evolutionary approach in this family: a
+\emph{genetic-programming hyper-heuristic}, which does not evolve a
+schedule directly but instead evolves the \emph{rule} that builds one,
+decision by decision, as the project unfolds.
+
+The chapters that follow develop this idea. Chapter~\ref{chap:theoretical-background}
+introduces the classical theory of project scheduling and the
+single-mode resource-constrained problem it builds on.
+Chapter~\ref{chap:overview} extends this to the multi-mode case and surveys
+the evolutionary and exact methods applied to it, including
+the baseline this thesis builds on directly. Chapter~\ref{chap:dataset}
+describes the benchmark datasets and the metrics used to judge a schedule's
+quality. Chapter~\ref{chap:approach}
+presents the proposed algorithm, and Chapter~\ref{chap:experiments} reports
+how it performs against the baseline. \nameref{chap:conclusion} closes the thesis with what was learned
+and what remains open.

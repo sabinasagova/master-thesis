@@ -1,7 +1,5 @@
 """
-Diverse-partner crossover (Phase 0, strategy "diverse"). Restored from
-yuantian/custom_ea.py's ``diverse_partner_gp`` (deleted in commit b595a2d5;
-see yuantian/exploratory/README.md).
+Diverse-partner crossover (exploratory strategy "diverse"; provenance in README.md).
 
 Adapted-method baseline: crossover mates a tournament winner with the most
 behaviourally distant candidate from a small random pool (RMS difference of

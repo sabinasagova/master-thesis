@@ -5,8 +5,8 @@ matters most here.
 mode_interaction_terminals.py is asking a different question than the
 other resource-aware extensions: not "how much is left" (nr_terminals.py)
 or "who's contending for the bottleneck right now" (rccp_terminals.py),
-but "if I pick this mode, how much does that squeeze the other activities'
-mode options later." It's also the shakiest extension literature-wise (see
+but a consequence signal: how much a mode choice squeezes the other activities'
+mode options later. It is also the least literature-established extension (see
 that module's docstring), so this is the first real evidence either way.
 
 Four conditions:

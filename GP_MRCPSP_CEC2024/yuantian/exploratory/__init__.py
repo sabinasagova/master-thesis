@@ -1,11 +1,11 @@
 """
-Phase 0: the exploratory evolutionary-algorithm sweep that preceded and
+The exploratory evolutionary-algorithm strategies that preceded and
 motivated the three refined extensions (cp_propagation.py, hybrid_gp.py +
 local_search.py, nr_terminals.py). See README.md in this directory for what
 each strategy is, what it found, and why only "lexicase" was carried
 forward.
 
-Restored from yuantian/custom_ea.py, deleted in commit b595a2d5 when the
+Originally in yuantian/custom_ea.py, removed when the
 repo was restructured -- see README.md's "Restoration notes" section.
 
 Self-contained: nothing here is imported by gphh_solver.py or by the three

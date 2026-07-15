@@ -1,0 +1,134 @@
+\chapter*{Conclusion}
+\addcontentsline{toc}{chapter}{Conclusion}
+\label{chap:conclusion}
+
+This thesis set out to improve a genetic-programming hyper-heuristic (GPHH)
+baseline for the multi-mode resource-constrained project scheduling
+problem, and pursued that goal through a two-stage methodology: a broad,
+cheap exploratory screen of \changed{candidate algorithmic modifications}
+(Section~\ref{sec:parameter-sensitivity}), followed by a fully powered,
+comprehensive evaluation on MMLIB50 and, as a full-scale scalability check,
+MMLIB100 (Section~\ref{sec:operator-evaluation}). \changed{Of the screened variants,
+only epsilon-lexicase selection produced a positive signal that survived
+dedicated, escalating follow-up experiments; the others, including all
+three diagnosis-driven, graft-based DMGE-family variation schemes, did not
+outperform the baseline and were set aside, verdicts an
+independent-seed replication subsequently confirmed.} Against an
+already-tuned, published baseline this is an unsurprising base rate, and
+the screen's value lay in establishing it cheaply before the comprehensive
+budget was committed, leaving lexicase selection to be carried forward on
+the strength of its dedicated experiments, alongside two independently
+motivated extensions: critical-path local search and non-renewable (NR)
+resource terminals.
+
+\changed{The comprehensive stage produced three distinct results.} NR
+terminals deliver a large, statistically significant improvement in both
+schedule quality and feasibility across the entire MMLIB50 grid, and the
+effect replicates on MMLIB100 in \changed{four of the six combinations of
+schedule generation scheme and decision strategy}, losing significance
+only under parallel/activity-first and
+parallel/mode-first. This is the thesis's strongest and most consistently
+replicated result: giving the GP explicit visibility into a resource
+constraint it previously could not see converts a substantial share of
+otherwise-infeasible schedules into feasible ones while also improving
+quality. \changedB{A final re-evaluation of every evolved rule on the
+complete 108-class held-out test set (Section~\ref{subsec:full108})
+sharpens this verdict in one respect: the schedule-quality advantage holds
+in all twelve benchmark cells at full test scale, but the feasibility gain
+proves largely confined to the instance classes seen during training, so
+the quality improvement is the part of the result that generalises.}
+Lexicase selection reliably improves training-set fitness on both
+benchmark sizes, but the advantage does not transfer reliably to held-out
+test fitness, and under serial SGS it can reverse into a significant loss,
+more pronouncedly so on MMLIB100; the most plausible reading is
+selection-induced overfitting, and this thesis's contribution is to show
+that the trade-off is not just present but SGS-dependent and strengthens
+under scaling. \changedC{Critical-path local search does improve the
+baseline at MMLIB50's instance size: it produces a significant win under
+parallel SGS and the best average test-fitness rank of the four jointly
+ranked conditions, so for problems at that scale it is a worthwhile
+extension. Its benefit is, however, specific to that scale: on MMLIB100 the
+significant improvement disappears and its rank falls from best to worst.}
+\changed{This comparison shows directly that a fully powered
+result obtained on one benchmark cannot be assumed to hold at another
+scale until it has been checked there.} Combining lexicase and local search naively, finally,
+underperforms both components individually and is not recommended by this
+evidence.
+
+Read against the research questions: a staged,
+exploratory-then-comprehensive methodology did reliably narrow a large
+field of candidates to a small set worth rigorous evaluation, with the
+caveat that a cheap screen speaks to its own precision, not to whether it
+missed a genuine effect among the ideas it ruled out. Epsilon-lexicase
+selection does not, on this combined evidence, improve generalised schedule
+quality across the tested grid, despite a real and scale-persistent
+training-fitness advantage. \changedC{Critical-path local search improves
+generalised schedule quality on MMLIB50-sized instances, but the advantage
+does not carry to MMLIB100.} Exposing non-renewable resource state
+to the GP terminal set does improve schedule quality relative to a matched
+baseline, robustly across scale for four of six strategy/SGS combinations.
+
+This evidence carries the usual qualifications of a controlled
+computational study. Internal validity is protected by every condition
+sharing one code base and differing only in the mechanism under test,
+though the stratified ten-class subsample ties the absolute numbers to
+that particular sample. External validity is where the evidence is most
+direct: two instance scales sufficed to show that scale-independence is
+not a safe default for any of the three mechanisms, but not to establish a
+trend, and generalisation beyond the MMLIB family is not established here.
+\phantomsection\label{subsec:threats-construct}
+Construct validity rests on ARD\% against an unconstrained CPM lower
+bound, which is systematically looser on the NR-preserving instances than
+on the renewable-only ones, so ARD\% magnitudes are never compared across
+that instance-set boundary.
+\phantomsection\label{subsec:threats-stat}
+Statistical conclusion validity is qualified by the absence of a
+multiple-comparisons correction across the thirty-six pairwise Wilcoxon
+tests, under which one or two isolated significant cells are expected by
+chance alone, and by the joint-ranking Friedman test's low block count,
+which limits its power and makes its MMLIB100 non-significance weak
+evidence of no difference.
+
+Three broader implications follow. For scheduling research, a
+resource-visibility gap in a hyper-heuristic's terminal set is worth
+checking for and closing before reaching for elaborate search-side
+modifications: the largest effect here came from giving the GP information
+it lacked, not from changing how it searched. For genetic programming more
+broadly, the SGS-dependent lexicase gap is a concrete data point in the
+ongoing conversation about selection pressure and generalisation, worth
+checking whenever lexicase is applied to a multi-instance training regime.
+For experimental methodology, the two-stage design with an explicit
+scalability check is offered as a template for GPHH studies facing a large
+candidate space under a bounded compute budget.
+
+\phantomsection\label{sec:future-work}
+Several follow-ups are motivated directly by what this evidence left open;
+both benchmarks are already evaluated at full scale, so all of them are
+about explaining or extending what the evidence shows. The most
+consequential open question is why local search's MMLIB50 benefit
+vanished at MMLIB100, best answered by instrumenting the hill-climb's
+accepted-move statistics on both benchmarks side by side. The two
+non-replicating NR-terminal cells invite a direct test of the split-tree
+coordination account proposed in Section~\ref{subsec:nr-eval}, for
+instance via a decision-strategy-specific NR terminal. Evaluating on
+MMLIB+, whose tighter non-renewable budgets are exactly the setting NR
+terminals target, would extend the preliminary check already made there.
+Local search could be made SGS-adaptive once instrumentation shows where
+its budget is productive. The DMGE family's two candidate failure
+explanations, category coarseness and graft disruptiveness, remain to be
+distinguished, cheaply screenable with the same pilot methodology.
+Lexicase's generalisation gap deserves direct study via per-seed
+training/validation trajectories. And the hybrid's underperformance rules out
+one naive combination, not the idea of combining selection-side and
+search-side mechanisms more selectively.
+
+Many ideas were investigated over the course of this thesis, and most did
+not improve on the baseline. Systematic, staged experimentation, rather
+than intuition or a single exhaustive sweep, is what separated the
+directions genuinely worth pursuing from a much larger field of
+plausible-looking alternatives, and what allowed one of them, non-renewable
+resource terminals, to be confirmed as the thesis's strongest and most
+consistent result. \changed{The final contribution is a carefully evaluated
+and reproducible set of findings: one extension that robustly improves the
+baseline across benchmark scales, and a documented account of which other
+directions do not.}

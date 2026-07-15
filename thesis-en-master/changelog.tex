@@ -1,0 +1,54 @@
+%%% Temporary changelog for supervisor review. This page is only printed
+%%% while \showchangestrue is set in macros.tex; it is not part of the
+%%% final thesis.
+
+\chapter*{Changelog (revision of 15 July 2026)}
+
+This revision responds to the fourth round of annotations. Passages added
+or rewritten in this round are printed \changedD{in this green colour};
+everything in black is unchanged from the previously annotated version
+(the highlighting of the earlier rounds has been reverted to normal
+text). Changes that cannot be highlighted in place, deletions and changes
+outside the text, are listed here.
+
+\subsection*{Chapter 5}
+\begin{itemize}
+  \item Section~5.3.2: the term \emph{intron} is no longer introduced.
+        The duplicated $\max(\texttt{LS}, \texttt{LS})$ of Figure~5.10's
+        activity tree is now described plainly as simplifying to
+        \texttt{LS}, both in the text and in the figure caption.
+  \item Section~5.3.3: ``the instances it failed on are not folded into
+        the mean'' now reads ``are not included in the mean''; the second
+        use of the same phrasing (``cannot be folded into the same
+        six-cell ranking'') was aligned with it.
+  \item Section~5.3.3: in the discussion of Figure~5.15, the
+        parenthetical ``(an \emph{intron})'' was deleted; the code is
+        described only as functionally neutral. The two remaining uses of
+        ``load-bearing'' were reworded (``the two remaining references'',
+        ``at important positions in the rule'').
+  \item Section~5.4.2: the ten-class versus 108-class ARD\% shift is now
+        called a \emph{sampling} effect rather than a composition effect.
+  \item Section~5.4.2: a new paragraph after Table~5.29 adds the
+        annotated observation on its feasibility rates: as RS grows, the
+        NR-terminal condition's feasibility rises (on MMLIB100 from
+        $81\%$ to $96\%$) while \texttt{baseline\_nr}'s does not progress,
+        which is what the terminals' mechanism predicts once the
+        non-renewable budget becomes the binding constraint. On MMLIB50
+        both conditions rise at a similar rate, and the text says so.
+\end{itemize}
+
+\subsection*{Conclusion}
+\begin{itemize}
+  \item The clause ``which is what makes it the most instructive result
+        of the three'' was deleted from the local-search verdict; the
+        sentence now goes directly from the scale-specificity to the
+        MMLIB100 outcome.
+\end{itemize}
+
+\subsection*{Attachments}
+\begin{itemize}
+  \item Appendix~A.1 now states what the electronic attachment (the ZIP
+        archive uploaded to SIS) contains: the thesis PDF and the
+        complete source code of the project, identical in content to the
+        GitHub repository.
+\end{itemize}

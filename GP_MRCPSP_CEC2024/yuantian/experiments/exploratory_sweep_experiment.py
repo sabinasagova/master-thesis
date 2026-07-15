@@ -1,8 +1,8 @@
 """
-Experiment: Phase 0 exploratory sweep vs baseline GPHH.
+Experiment: exploratory strategy sweep vs baseline GPHH.
 
 Runs the published GPHH baseline (gp_algorithms.standard_gp) plus all nine
-restored Phase 0 strategies (yuantian/exploratory/) under identical GP
+restored exploratory strategies (yuantian/exploratory/) under identical GP
 settings (population size, generations, crossover/mutation rates,
 elitism), and one additional combo condition (lexicase + heuristic seeding,
 matching how the original sweep tested the lexicase driver together with

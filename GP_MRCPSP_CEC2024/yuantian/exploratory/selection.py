@@ -1,13 +1,10 @@
 """
-Epsilon-lexicase selection + ERCs + mini-batch rotation (Phase 0, strategy
-"lexicase"). Restored from yuantian/custom_ea.py's ``lexicase_gp`` (deleted
-in commit b595a2d5; see yuantian/exploratory/README.md).
+Epsilon-lexicase selection + ERCs + mini-batch rotation (exploratory
+strategy "lexicase"; provenance in README.md).
 
-This is the one Phase 0 strategy that was promising enough to be developed
-further: it directly motivated yuantian/hybrid_gp.py's epsilon-lexicase
-selection + memetic local search extension. The two are not the same
-driver -- this one only changes selection/evaluation (no local search on
-elites) -- but the lexicase mechanism here is the ancestor of the one in
+This strategy motivated yuantian/hybrid_gp.py's epsilon-lexicase +
+local-search extension; this module only changes selection/evaluation (no
+local search on elites), and its lexicase mechanism is the ancestor of the one in
 hybrid_gp.epsilon_lexicase_selection.
 
 Three independent improvements from the GP literature, combined into one driver:
